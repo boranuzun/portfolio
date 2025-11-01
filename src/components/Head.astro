@@ -88,30 +88,58 @@ const { title, description, image = "/nano.png" } = Astro.props;
     backToPrev?.addEventListener("click", () => window.history.back());
 
     const lightThemeButton = document.getElementById("light-theme-button");
-    lightThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "light");
-      toggleTheme(false);
-    });
-
     const darkThemeButton = document.getElementById("dark-theme-button");
-    darkThemeButton?.addEventListener("click", () => {
+
+    function updateThemeButtons(isDark) {
+      if (!lightThemeButton || !darkThemeButton) return;
+      if (isDark) {
+        // Show dark button (current), hide light
+        darkThemeButton.classList.remove("hidden");
+        darkThemeButton.classList.add("flex");
+        lightThemeButton.classList.add("hidden");
+        lightThemeButton.classList.remove("flex");
+      } else {
+        // Show light button (current), hide dark
+        lightThemeButton.classList.remove("hidden");
+        lightThemeButton.classList.add("flex");
+        darkThemeButton.classList.add("hidden");
+        darkThemeButton.classList.remove("flex");
+      }
+    }
+
+    function getEffectiveDark() {
+      const t = localStorage.getItem("theme");
+      if (t === "dark") return true;
+      if (t === "light") return false;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    // Initial button state based on effective theme (system by default)
+    updateThemeButtons(getEffectiveDark());
+
+    lightThemeButton?.addEventListener("click", () => {
+      // Toggle from light to dark
       localStorage.setItem("theme", "dark");
       toggleTheme(true);
+      updateThemeButtons(true);
     });
 
-    const systemThemeButton = document.getElementById("system-theme-button");
-    systemThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "system");
-      toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+    darkThemeButton?.addEventListener("click", () => {
+      // Toggle from dark to light
+      localStorage.setItem("theme", "light");
+      toggleTheme(false);
+      updateThemeButtons(false);
     });
 
     window.matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", event => {
-        if (localStorage.theme === "system" || !localStorage.theme) {
+        // Only react to system changes if user hasn't explicitly chosen light/dark
+        const t = localStorage.getItem("theme");
+        if (t !== "light" && t !== "dark") {
           toggleTheme(event.matches);
+          updateThemeButtons(event.matches);
         }
-      }
-    );
+      });
 
     document.addEventListener("scroll", onScroll);
   }
@@ -172,10 +200,10 @@ function toggleTheme(dark) {
 
   function preloadTheme() {
     const userTheme = localStorage.theme;
-
     if (userTheme === "light" || userTheme === "dark") {
       toggleTheme(userTheme === "dark");
     } else {
+      // Default to system preference without storing a value
       toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
     }
   }

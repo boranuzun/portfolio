@@ -33,13 +33,22 @@ const work = await Promise.all(
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
     <h4 class="animate font-semibold text-black dark:text-white">
-      Hi, I'm Boran <span class="text-xl">👋🏻</span>
+      <div class="text-3xl font-bold">
+        Hi, I'm Boran&nbsp;<span class="text-3xl">👋🏻</span>
+      </div>
+      <div class="text-lg text-gray-600 dark:text-gray-200 font-medium">
+        Aspiring DevOps Engineer · Network & System Administrator
+      </div>
+      <div class="text-sm flex gap-3 text-gray-600 dark:text-gray-200 font-extralight italic">
+          <Link href="/cv">🇫🇷 CV en Français</Link>
+          <Link href="/cv/en">🇬🇧 CV in English</Link>
+      </div>
     </h4>
     <div class="space-y-16">
       <section>
         <article class="space-y-4">
           <p class="animate">
-            I'm recently graduated with a Bachelor of Science HES-SO in Business Information Technology, I am looking to start my career in the field of DevOps or network and system administration.
+            Recent graduate with a HES-SO BSc in Business Information Technology, eager to begin a career in DevOps or network and systems administration.
           </p>
           <p class="animate">
             My Bachelor’s thesis, “Conception et déploiement automatisé d’un Operating System as Code à l’aide de pratiques Infrastructure as Code” strengthened my interest in automation, infrastructure management, and modern CI/CD practices.
@@ -80,14 +89,14 @@ const work = await Promise.all(
         <ul class="flex flex-col space-y-4">
           {work.map(entry => (
             <li>
-              <div class="text-sm opacity-75">
-                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
-              </div>
               <div class="font-semibold text-black dark:text-white">
                 {entry.data.company}
               </div>
               <div class="text-sm opacity-75">
                 {entry.data.role}
+              </div>
+              <div class="text-sm opacity-75">
+                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
               </div>
               <article>
                 <entry.Content />
@@ -134,7 +143,10 @@ const work = await Promise.all(
               {"/"}
             </li>
           ))}
-          <li class="line-clamp-1">
+          <li
+            class="line-clamp-1 blur-[3px] hover:blur-none transition-all duration-700 ease-in-out cursor-pointer select-none"
+            onclick="this.classList.remove('blur-[3px]')"
+          >
             <Link href={`mailto:${SITE.EMAIL}`} aria-label={`Email ${SITE.NAME}`}>
               {SITE.EMAIL}
             </Link>
