@@ -2,10 +2,10 @@ import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import astro from "eslint-plugin-astro";
 
-/** @type {import("eslint").Linter.FlatConfig[]} */
+/** @type {import("eslint").FlatConfig[]} */
 export default [
   {
-    ignores: [".vscode/", "dist/", "node_modules/", "public/"],
+    ignores: [".vscode/", "dist/", "node_modules/", "public/", ".astro/"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

@@ -8,8 +8,19 @@ import { SITE } from "@consts";
   <Container>
     <div class="flex flex-wrap gap-y-2 justify-between">
       <Link href="/" underline={false}>
-        <div class="font-semibold">
-          {SITE.NAME}
+        <div class="flex items-center gap-2 font-semibold">
+          <!-- Light mode icon -->
+          <img
+            src="/B_black@1x.png"
+            alt={SITE.NAME}
+            class="h-8 w-8 object-contain dark:hidden"
+          />
+          <!-- Dark mode icon -->
+          <img
+            src="/B_white@1x.png"
+            alt={SITE.NAME}
+            class="h-8 w-8 object-contain hidden dark:block"
+          />
         </div>
       </Link>
       <nav class="flex gap-1">
