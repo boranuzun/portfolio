@@ -23,8 +23,6 @@
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "clsx": "^2.1.1",
-    "eslint": "^9.38.0",
-    "eslint-plugin-astro": "^1.4.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "sharp": "^0.34.4",
     "tailwind-merge": "^3.3.1",
@@ -32,7 +30,11 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.0",
     "@tailwindcss/vite": "^4.1.16",
-    "astro": "^5.15.3"
+    "astro": "^5.15.3",
+    "eslint": "^9.39.0",
+    "eslint-plugin-astro": "^1.4.0",
+    "typescript-eslint": "^8.46.2"
   }
 }
