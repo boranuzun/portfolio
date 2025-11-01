@@ -5,10 +5,9 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://boranuzun.github.io/portfolio/",
+  base: "/portfolio/",
   integrations: [mdx(), sitemap()],
-
   vite: {
     plugins: [tailwindcss()],
   },
-
 });
