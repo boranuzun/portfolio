@@ -1,11 +1,11 @@
 ---
-company: "Hôpitaux Universitaires de Genève"
+company: "Geneva University Hospitals (HUG)"
 role: "IT Support Level 1"
 dateStart: "01/08/2017"
 dateEnd: "01/08/2018"
 ---
 
-During my internship at Hôpitaux Universitaires de Genève, I was responsible for providing Level 1 IT support to hospital staff. My key responsibilities included:
+During my internship at Geneva University Hospitals, I was responsible for providing Level 1 IT support to hospital staff. My key responsibilities included:
 
 - Providing technical assistance and support for incoming queries and issues related to the Learning Management System (LMS) and other internal applications.
 - Resolving user issues efficiently to ensure minimal disruption to employees' work.
