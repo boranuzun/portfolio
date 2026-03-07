@@ -1,0 +1,352 @@
+---
+// src/components/Chatbot.astro
+---
+
+<div id="portfolio-chatbot" class="fixed bottom-6 right-4 sm:right-6 z-50 font-sans flex flex-col items-end">
+  
+  {/* Chat Window Panel */}
+  <div id="chat-panel" class="w-[calc(100vw-2rem)] sm:w-[420px] max-h-[70vh] bg-neutral-100 dark:bg-neutral-900 border border-black/15 dark:border-white/20 rounded-2xl shadow-2xl flex-col overflow-hidden" style="display: none;">
+    <div class="bg-neutral-200/80 dark:bg-neutral-800/80 backdrop-blur-sm p-4 flex items-center justify-between border-b border-black/10 dark:border-white/15 shrink-0">
+      <div class="flex items-center gap-2">
+        <div class="bg-black/10 dark:bg-white/10 p-1.5 rounded-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/70 dark:text-white/70" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-black dark:text-white">Ask AI Assistant</h3>
+          <p class="text-xs text-black/50 dark:text-white/50">Powered by Gemini 3.1 Flash Lite</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-1">
+        <button id="clear-chat-btn" title="Clear Chat" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors duration-300 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" aria-label="Clear Chat">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+        </button>
+        <button id="close-chat-btn" title="Close Chat" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors duration-300 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" aria-label="Close Chat">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+    </div>
+    
+    <div id="chat-messages" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 scrollbar-hide bg-neutral-50/50 dark:bg-neutral-900/50 scroll-smooth">
+      <div class="flex gap-3 flex-row shrink-0">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black/10 dark:bg-white/10 mt-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/60 dark:text-white/60" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        </div>
+        <div class="max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed bg-neutral-200/80 dark:bg-neutral-800 text-black/75 dark:text-white/75 border border-black/10 dark:border-white/15 rounded-tl-sm break-words">
+          Hello! I am an AI assistant trained on Boran's background. Ask me about his work on any topics related to web development, projects, and skills!
+        </div>
+      </div>
+    </div>
+    
+    <div id="chat-disclaimer" class="px-3 pt-2 bg-neutral-200/60 dark:bg-neutral-800/60 border-t border-black/10 dark:border-white/15 shrink-0 animate-fade-in-up">
+      <div class="flex items-center gap-1.5 bg-amber-100/80 dark:bg-amber-900/30 border border-amber-300/50 dark:border-amber-600/30 rounded-xl px-3 py-1.5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600 dark:text-amber-400 flex-shrink-0" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+        <p class="text-[11px] leading-tight text-amber-800/80 dark:text-amber-300/80">Content sent & generated may be used by Google per their <a href="https://ai.google.dev/gemini-api/terms#data-use-unpaid" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-amber-900 dark:hover:text-amber-200 transition-colors">terms</a>.</p>
+        <button id="dismiss-disclaimer" class="ml-auto text-amber-700/60 dark:text-amber-400/60 hover:text-amber-900 dark:hover:text-amber-200 transition-colors flex-shrink-0 p-0.5" aria-label="Dismiss disclaimer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+    </div>
+    <form id="chat-form" class="p-3 bg-neutral-200/60 dark:bg-neutral-800/60 border-black/10 dark:border-white/15 shrink-0">
+      <div class="relative">
+        <input id="chat-input" placeholder="Ask about Boran's skills..." class="w-full bg-white dark:bg-neutral-800 border border-black/15 dark:border-white/20 text-black dark:text-white text-sm rounded-xl py-3 pl-4 pr-12 focus:outline-none focus:border-black/30 dark:focus:border-white/40 focus:ring-1 focus:ring-black/10 dark:focus:ring-white/10 transition-all duration-300 placeholder:text-black/35 dark:placeholder:text-white/35" type="text" autocomplete="off" required>
+        <button id="chat-submit" type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-black/80 dark:hover:bg-white/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300" aria-label="Send message">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  {/* Chat Toggle Button */}
+  <button 
+    id="toggle-chat-btn" 
+    class="transition-all duration-300 bg-black dark:bg-white text-white dark:text-black p-4 rounded-3xl shadow-lg shadow-black/10 dark:shadow-white/5 group hover:bg-black/80 dark:hover:bg-white/80 hover:shadow-xl"
+    aria-label="Toggle AI Assistant"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:scale-110 transition-transform" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+  </button>
+</div>
+
+<script>
+  // DOM Elements
+  const chatPanel = document.getElementById('chat-panel');
+  const toggleBtn = document.getElementById('toggle-chat-btn');
+  const closeBtn = document.getElementById('close-chat-btn');
+  const chatForm = document.getElementById('chat-form') as HTMLFormElement;
+  const chatInput = document.getElementById('chat-input') as HTMLInputElement;
+  const chatMessages = document.getElementById('chat-messages');
+  const chatSubmitBtn = document.getElementById('chat-submit') as HTMLButtonElement;
+
+  // Cloudflare Worker URL - Note: Update this if the worker is deployed
+  // Defaulting to the local wrangler dev port (8787)
+  const API_URL = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787';
+
+  let isOpen = false;
+  let isThinking = false;
+  const messageHistory: string[] = [];
+  let historyIndex = -1;
+
+  // Lightweight markdown-to-HTML for bot messages
+  const renderMarkdown = (text: string): string => {
+    let html = text
+      // Escape HTML
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      // Bold: **text**
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      // Italic: *text*
+      .replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>')
+      // Inline code: `code`
+      .replace(/`(.+?)`/g, '<code class="bg-black/10 dark:bg-white/10 px-1 py-0.5 rounded text-xs">$1</code>')
+      // Markdown links: [text](url) - supports https and mailto
+      .replace(/\[([^\]]+)\]\(((https?:\/\/|mailto:)[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 decoration-black/25 dark:decoration-white/40 hover:text-black dark:hover:text-white transition-colors">$1</a>')
+      // Bare URLs (not already inside an href)
+      .replace(/(?<!href=")(https?:\/\/[^\s<)"]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 decoration-black/25 dark:decoration-white/40 hover:text-black dark:hover:text-white transition-colors">$1</a>');
+
+    // Split into lines and process bullet lists
+    const lines = html.split('\n');
+    const result: string[] = [];
+    let inList = false;
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      const bulletMatch = trimmed.match(/^[\*\-•]\s+(.+)/);
+      if (bulletMatch) {
+        if (!inList) { result.push('<ul class="list-disc list-inside space-y-1 my-1">'); inList = true; }
+        result.push(`<li>${bulletMatch[1]}</li>`);
+      } else {
+        if (inList) { result.push('</ul>'); inList = false; }
+        if (trimmed === '') {
+          result.push('<br/>');
+        } else {
+          result.push(`<p class="my-0.5">${trimmed}</p>`);
+        }
+      }
+    }
+    if (inList) result.push('</ul>');
+
+    return result.join('');
+  };
+
+  // UI State toggling functions
+  const toggleChat = () => {
+    isOpen = !isOpen;
+    if (isOpen && chatPanel) {
+      chatPanel.style.display = 'flex';
+      if (toggleBtn) toggleBtn.style.display = 'none';
+      setTimeout(() => {
+        chatPanel.classList.remove('opacity-0', 'scale-95');
+        chatPanel.classList.add('opacity-100', 'scale-100');
+        chatInput?.focus();
+      }, 10);
+    } else if (chatPanel) {
+      chatPanel.classList.remove('opacity-100', 'scale-100');
+      chatPanel.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => {
+        chatPanel.style.display = 'none';
+        if (toggleBtn) toggleBtn.style.display = '';
+      }, 300);
+    }
+  };
+
+  // Event Listeners
+  toggleBtn?.addEventListener('click', toggleChat);
+  closeBtn?.addEventListener('click', toggleChat);
+
+  // Helper to add messages to the DOM
+  const addMessage = (text: string, isUser: boolean) => {
+    if (!chatMessages) return;
+
+    const messageDiv = document.createElement('div');
+
+    if (isUser) {
+      messageDiv.className = `flex gap-3 flex-row-reverse animate-fade-in-up mt-2`;
+      messageDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black dark:bg-white shadow-sm mt-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white dark:text-black" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </div>
+        <div class="max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed bg-black dark:bg-white text-white dark:text-black rounded-tr-sm break-words shadow-sm">
+          ${text}
+        </div>
+      `;
+    } else {
+      const renderedHtml = renderMarkdown(text);
+      messageDiv.className = `flex gap-3 flex-row animate-fade-in-up mt-2`;
+      messageDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black/10 dark:bg-white/10 shadow-sm mt-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/60 dark:text-white/60" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        </div>
+        <div class="max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed bg-neutral-200/80 dark:bg-neutral-800 text-black/75 dark:text-white/75 border border-black/10 dark:border-white/15 rounded-tl-sm break-words shadow-sm">
+          ${renderedHtml}
+        </div>
+      `;
+    }
+    chatMessages.appendChild(messageDiv);
+    requestAnimationFrame(() => {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+  };
+
+  // Helper to manage loading state UI
+  const setLoading = (loading: boolean) => {
+    isThinking = loading;
+    if (!chatMessages || !chatInput || !chatSubmitBtn) return;
+
+    chatInput.disabled = loading;
+    chatSubmitBtn.disabled = loading;
+
+    if (loading) {
+      const thinkingDiv = document.createElement('div');
+      thinkingDiv.id = 'typing-indicator';
+      thinkingDiv.className = 'flex gap-3 flex-row max-w-[85%] mt-2';
+      thinkingDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black/10 dark:bg-white/10 shadow-sm mt-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/60 dark:text-white/60" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        </div>
+        <div class="bg-neutral-200/80 dark:bg-neutral-800 border border-black/10 dark:border-white/15 p-3 rounded-2xl rounded-tl-sm shadow-sm flex items-center gap-1.5 h-[46px]">
+          <div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+          <div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+          <div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+        </div>
+      `;
+      chatMessages.appendChild(thinkingDiv);
+      requestAnimationFrame(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+    } else {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) {
+        indicator.remove();
+      }
+    }
+  };
+
+  // Handle disclaimer
+  const disclaimerEl = document.getElementById('chat-disclaimer');
+  const dismissBtn = document.getElementById('dismiss-disclaimer');
+
+  // Hide disclaimer if previously dismissed this session
+  if (disclaimerEl && sessionStorage.getItem('chatDisclaimerDismissed')) {
+    disclaimerEl.style.display = 'none';
+  }
+
+  dismissBtn?.addEventListener('click', () => {
+    if (disclaimerEl) {
+      disclaimerEl.style.opacity = '0';
+      disclaimerEl.style.transition = 'opacity 0.2s ease';
+      setTimeout(() => {
+        disclaimerEl.style.display = 'none';
+      }, 200);
+      sessionStorage.setItem('chatDisclaimerDismissed', '1');
+    }
+  });
+
+  // Handle clear chat
+  const clearChatBtn = document.getElementById('clear-chat-btn');
+  clearChatBtn?.addEventListener('click', () => {
+    if (!chatMessages) return;
+    
+    // Animate removal of all messages except the first welcome message
+    const children = Array.from(chatMessages.children);
+    // keeping only the first welcome element
+    for (let i = 1; i < children.length; i++) {
+        const child = children[i] as HTMLElement;
+        child.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+        setTimeout(() => child.remove(), 300);
+    }
+  });
+
+  // Handle Form Submission
+  chatForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (isThinking) return;
+
+    const userText = chatInput.value.trim();
+    if (!userText) return;
+
+    // Track message history
+    messageHistory.push(userText);
+    historyIndex = messageHistory.length;
+
+    // Auto-dismiss disclaimer on first query
+    if (disclaimerEl && disclaimerEl.style.display !== 'none') {
+      disclaimerEl.style.opacity = '0';
+      disclaimerEl.style.transition = 'opacity 0.2s ease';
+      setTimeout(() => { disclaimerEl.style.display = 'none'; }, 200);
+      sessionStorage.setItem('chatDisclaimerDismissed', '1');
+    }
+
+    // 1. Add User Message
+    addMessage(userText, true);
+    chatInput.value = '';
+
+    // 2. Set Loading State
+    setLoading(true);
+
+    // 3. Fetch from API
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userText }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      
+      // 4. Handle rendering response
+      setLoading(false);
+      addMessage(data.reply || "Something went wrong, please try again.", false);
+      chatInput?.focus();
+      
+    } catch (error) {
+      console.error("Chat Error:", error);
+      setLoading(false);
+      addMessage("Sorry, I could not connect to the server. Please try again later.", false);
+      chatInput?.focus();
+    }
+  });
+
+  // Up/Down arrow key to cycle through message history
+  chatInput?.addEventListener('keydown', (e) => {
+    if (messageHistory.length === 0) return;
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex--;
+        chatInput.value = messageHistory[historyIndex];
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex < messageHistory.length - 1) {
+        historyIndex++;
+        chatInput.value = messageHistory[historyIndex];
+      } else {
+        historyIndex = messageHistory.length;
+        chatInput.value = '';
+      }
+    }
+  });
+
+</script>
+
+<style>
+  /* Custom Animations not in standard Tailwind */
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+</style>
