@@ -1,0 +1,73 @@
+---
+import Container from "@components/Container.astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import { SITE } from "@consts";
+---
+
+<PageLayout title="Privacy Policy" description="Privacy Policy for the portfolio website of Boran.">
+  <Container>
+    <div class="animate space-y-6">
+      <h1 class="font-semibold text-black dark:text-white text-2xl">
+        Privacy Policy
+      </h1>
+      <p class="text-sm opacity-75">Last updated: March 7, 2026</p>
+
+      <section class="space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-lg">Introduction</h2>
+        <p>
+          Welcome to {SITE.NAME}'s portfolio website. Your privacy is important to me. This Privacy Policy explains how I collect, use, and protect your information when you visit this website.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-lg">Information I Collect</h2>
+        <p>
+          This website is a personal portfolio and does not require any registration or login. The only data collected is through the AI chatbot feature:
+        </p>
+        <ul class="list-disc list-inside space-y-2 ml-4">
+          <li><strong>Chatbot queries:</strong> When you use the AI chatbot, your messages are sent to a Cloudflare Worker which forwards them to the Google Gemini API for processing. Your queries are visible in the Cloudflare Workers observability logs.</li>
+        </ul>
+        <p>
+          No analytics, tracking cookies, or other forms of data collection are used on this website.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-lg">Data Retention &amp; Deletion</h2>
+        <ul class="list-disc list-inside space-y-2 ml-4">
+          <li><strong>Cloudflare:</strong> Your queries are retained in Cloudflare Workers observability logs for a limited period (typically a few days, depending on the plan). No additional long-term storage is configured.</li>
+          <li><strong>Google:</strong> Since the chatbot uses the unpaid Google Gemini API, Google may use the content you submit and the generated responses to provide, improve, and develop Google products, services, and machine learning technologies. Human reviewers at Google may read, annotate, and process your queries and the chatbot's responses. Google states that it disconnects this data from identifiable accounts before review. For full details, see <a href="https://ai.google.dev/gemini-api/terms#data-use-unpaid" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Google's Data Use Terms for Unpaid Services</a>.</li>
+        </ul>
+        <p>
+          It is not possible to opt out of this data collection when using the chatbot, nor to request deletion of submitted queries. If you do not wish for your queries to be processed in this way, please refrain from using the chatbot feature. <strong>Do not submit sensitive, confidential, or personal information through the chatbot.</strong>
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-lg">Third-Party Services</h2>
+        <p>
+          The chatbot feature relies on the following third-party services, each with their own privacy policies:
+        </p>
+        <ul class="list-disc list-inside space-y-2 ml-4">
+          <li><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Cloudflare Privacy Policy</a></li>
+          <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Google Privacy Policy</a></li>
+          <li><a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Google Gemini API Terms of Service</a></li>
+        </ul>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-lg">Contact</h2>
+        <p>
+          If you have any questions about this Privacy Policy, feel free to reach out at <a href={`mailto:${SITE.EMAIL}`} class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">{SITE.EMAIL}</a>.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-lg">Changes to This Policy</h2>
+        <p>
+          I may update this Privacy Policy from time to time. Any changes will be reflected on this page with an updated date.
+        </p>
+      </section>
+    </div>
+  </Container>
+</PageLayout>
