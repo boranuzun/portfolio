@@ -9,19 +9,19 @@
     <div class="bg-neutral-200/80 dark:bg-neutral-800/80 backdrop-blur-sm p-4 flex items-center justify-between border-b border-black/10 dark:border-white/15 shrink-0">
       <div class="flex items-center gap-2">
         <div class="bg-black/10 dark:bg-white/10 p-1.5 rounded-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/70 dark:text-white/70" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-icon lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
         </div>
         <div>
-          <h3 class="text-sm font-semibold text-black dark:text-white">Ask AI Assistant</h3>
+          <h3 class="text-sm font-semibold text-black dark:text-white">Chat with Boran's AI</h3>
           <p class="text-xs text-black/50 dark:text-white/50">Powered by Gemini 3.1 Flash Lite</p>
         </div>
       </div>
       <div class="flex items-center space-x-1">
         <button id="clear-chat-btn" title="Clear Chat" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors duration-300 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" aria-label="Clear Chat">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
         </button>
         <button id="close-chat-btn" title="Close Chat" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors duration-300 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" aria-label="Close Chat">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
       </div>
     </div>
@@ -29,7 +29,7 @@
     <div id="chat-messages" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 scrollbar-hide bg-neutral-50/50 dark:bg-neutral-900/50 scroll-smooth">
       <div class="flex gap-3 flex-row shrink-0">
         <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black/10 dark:bg-white/10 mt-0.5">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/60 dark:text-white/60" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-icon lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
         </div>
         <div class="max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed bg-neutral-200/80 dark:bg-neutral-800 text-black/75 dark:text-white/75 border border-black/10 dark:border-white/15 rounded-tl-sm break-words">
           Hey! 👋 I know all about Boran's experience, projects, and skills. What would you like to know?
@@ -50,7 +50,7 @@
       <div class="relative">
         <input id="chat-input" placeholder="Ask me anything..." class="w-full bg-white dark:bg-neutral-800 border border-black/15 dark:border-white/20 text-black dark:text-white text-sm rounded-xl py-3 pl-4 pr-12 focus:outline-none focus:border-black/30 dark:focus:border-white/40 focus:ring-1 focus:ring-black/10 dark:focus:ring-white/10 transition-all duration-300 placeholder:text-black/35 dark:placeholder:text-white/35" type="text" autocomplete="off" required>
         <button id="chat-submit" type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-black/80 dark:hover:bg-white/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300" aria-label="Send message">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-icon lucide-send"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
         </button>
       </div>
     </form>
@@ -59,10 +59,10 @@
   {/* Chat Toggle Button */}
   <button 
     id="toggle-chat-btn" 
-    class="transition-all duration-300 bg-black dark:bg-white text-white dark:text-black p-4 rounded-3xl shadow-lg shadow-black/10 dark:shadow-white/5 group hover:bg-black/80 dark:hover:bg-white/80 hover:shadow-xl"
+    class="transition-all duration-300 bg-black dark:bg-white text-white dark:text-black p-4 rounded-3xl shadow-lg shadow-black/10 dark:shadow-white/5 group hover:bg-black/80 dark:hover:bg-white/80 hover:shadow-xl opacity-100 scale-100"
     aria-label="Toggle AI Assistant"
   >
-    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:scale-110 transition-transform" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-message-square-icon lucide-bot-message-square"><path d="M12 6V2H8"/><path d="M15 11v2"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M20 16a2 2 0 0 1-2 2H8.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 4 20.286V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M9 11v2"/></svg>
   </button>
 </div>
 
@@ -130,20 +130,34 @@
   const toggleChat = () => {
     isOpen = !isOpen;
     if (isOpen && chatPanel) {
-      chatPanel.style.display = 'flex';
-      if (toggleBtn) toggleBtn.style.display = 'none';
+      // Fade out button, then show panel
+      if (toggleBtn) {
+        toggleBtn.classList.add('opacity-0', 'scale-75');
+        toggleBtn.classList.remove('opacity-100', 'scale-100');
+      }
       setTimeout(() => {
-        chatPanel.classList.remove('opacity-0', 'scale-95');
-        chatPanel.classList.add('opacity-100', 'scale-100');
-        chatInput?.focus();
-      }, 10);
+        if (toggleBtn) toggleBtn.style.display = 'none';
+        chatPanel.style.display = 'flex';
+        setTimeout(() => {
+          chatPanel.classList.remove('opacity-0', 'scale-95');
+          chatPanel.classList.add('opacity-100', 'scale-100');
+          chatInput?.focus();
+        }, 10);
+      }, 200);
     } else if (chatPanel) {
+      // Close panel, then fade in button
       chatPanel.classList.remove('opacity-100', 'scale-100');
       chatPanel.classList.add('opacity-0', 'scale-95');
       setTimeout(() => {
         chatPanel.style.display = 'none';
-        if (toggleBtn) toggleBtn.style.display = '';
-      }, 300);
+        if (toggleBtn) {
+          toggleBtn.style.display = '';
+          // Force reflow before removing classes
+          toggleBtn.offsetHeight;
+          toggleBtn.classList.remove('opacity-0', 'scale-75');
+          toggleBtn.classList.add('opacity-100', 'scale-100');
+        }
+      }, 250);
     }
   };
 
