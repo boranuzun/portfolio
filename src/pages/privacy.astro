@@ -24,7 +24,7 @@ import { SITE } from "@consts";
         <p>
           This website is a personal portfolio and does not require any registration or login. The only data collected is through the AI chatbot feature:
         </p>
-        <ul class="list-disc list-inside space-y-2 ml-4">
+        <ul class="list-disc list-outside space-y-2 pl-6">
           <li><strong>Chatbot queries:</strong> When you use the AI chatbot, your messages are sent to a Cloudflare Worker which forwards them to the Google Gemini API for processing. Your queries are visible in the Cloudflare Workers observability logs.</li>
         </ul>
         <p>
@@ -34,7 +34,7 @@ import { SITE } from "@consts";
 
       <section class="animate space-y-4">
         <h2 class="font-semibold text-black dark:text-white text-lg">Data Retention &amp; Deletion</h2>
-        <ul class="list-disc list-inside space-y-2 ml-4">
+        <ul class="list-disc list-outside space-y-2 pl-6">
           <li><strong>Cloudflare:</strong> Your queries are retained in Cloudflare Workers observability logs for a limited period (typically a few days, depending on the plan). No additional long-term storage is configured.</li>
           <li><strong>Google:</strong> Since the chatbot uses the unpaid Google Gemini API, Google may use the content you submit and the generated responses to provide, improve, and develop Google products, services, and machine learning technologies. Human reviewers at Google may read, annotate, and process your queries and the chatbot's responses. Google states that it disconnects this data from identifiable accounts before review. For full details, see <a href="https://ai.google.dev/gemini-api/terms#data-use-unpaid" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Google's Data Use Terms for Unpaid Services</a>.</li>
         </ul>
@@ -48,7 +48,7 @@ import { SITE } from "@consts";
         <p>
           The chatbot feature relies on the following third-party services, each with their own privacy policies:
         </p>
-        <ul class="list-disc list-inside space-y-2 ml-4">
+        <ul class="list-disc list-outside space-y-2 pl-6">
           <li><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Cloudflare Privacy Policy</a></li>
           <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Google Privacy Policy</a></li>
           <li><a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Google Gemini API Terms of Service</a></li>
