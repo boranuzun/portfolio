@@ -4,10 +4,15 @@ export interface Env {
 	GEMINI_API_KEY: string;
 }
 
-const corsHeaders = {
-	'Access-Control-Allow-Origin': '*', // In production, replace '*' with your GitHub Pages URL (e.g., 'https://boranuzun.github.io/portfolio -> https://boranuzun.ch')
-	'Access-Control-Allow-Methods': 'POST, OPTIONS',
-	'Access-Control-Allow-Headers': 'Content-Type',
+const allowedOrigins = ['https://boranuzun.ch', 'http://localhost:4321'];
+
+const getCorsHeaders = (request: Request) => {
+	const origin = request.headers.get('Origin') || '';
+	return {
+		'Access-Control-Allow-Origin': allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
+		'Access-Control-Allow-Methods': 'POST, OPTIONS',
+		'Access-Control-Allow-Headers': 'Content-Type',
+	};
 };
 
 // This is where you put everything the bot needs to know about you.
@@ -62,12 +67,12 @@ export default {
 		// Handle CORS preflight requests
 		if (request.method === 'OPTIONS') {
 			return new Response(null, {
-				headers: corsHeaders,
+				headers: getCorsHeaders(request),
 			});
 		}
 
 		if (request.method !== 'POST') {
-			return new Response('Method Not Allowed', { status: 405, headers: corsHeaders });
+			return new Response('Method Not Allowed', { status: 405, headers: getCorsHeaders(request) });
 		}
 
 		try {
@@ -84,7 +89,7 @@ export default {
 			if (!userMessage) {
 				return new Response(JSON.stringify({ error: 'Message is required' }), {
 					status: 400,
-					headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+					headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
 				});
 			}
 
@@ -99,14 +104,14 @@ export default {
 
 			return new Response(JSON.stringify({ reply: responseText }), {
 				status: 200,
-				headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+				headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
 			});
 
 		} catch (error: any) {
 			console.error('Error in chatbot worker:', error);
 			return new Response(JSON.stringify({ error: error.message || 'Internal Server Error' }), {
 				status: 500,
-				headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+				headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
 			});
 		}
 	},
