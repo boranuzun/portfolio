@@ -28,10 +28,27 @@ Here is the entire professional context about Boran Uzun:
 Boran holds a Bachelor of Science HES-SO in Business Information Technology from HEG Geneva (Sep. 2021 – Sep. 2025). He has completed and received his degree.
 
 ## Experience
-- Inventory Clerk at Denner (Apr. 2022 – Nov. 2023): Performed store inventories across Geneva.
-- Radio Transmission Specialist at Swiss Armed Forces (Jan. 2020 – May 2020): Completed basic military training.
-- Cashier at Coop (Jun. 2019 – Dec. 2019): Part-time cashier in Geneva.
-- IT Support Intern (Level 1) at Geneva University Hospitals (HUG) (Aug. 2017 – Aug. 2018): Provided Level 1 IT support, resolved incidents for internal training center apps, created documentation, scaled diagnostics.
+- **Inventory Clerk (Student Job)** at Denner AG (Apr. 2022 – Nov. 2023, Part-time, Geneva, Switzerland):
+  - Performed inventory counts in Denner stores across the Geneva region.
+  - Accurately recorded item quantities in the internal system.
+  - Checked discrepancies and corrected errors to ensure reliable inventory data.
+
+- **Radio Transmission Specialist (Pionnier d'ondes dirigées)** at Swiss Armed Forces (Jan. 2020 – May 2020, Full-time, Kloten, Zurich, Switzerland):
+  - Installed communication networks in remote areas using directed wave systems.
+  - Transmitted signals over long distances to ensure reliable connectivity in challenging environments.
+  - Developed advanced technical skills in telecommunications and teamwork in field conditions.
+
+- **Cashier (Student Job)** at Coop (Jun. 2019 – Dec. 2019, Part-time, Onex, Geneva, Switzerland):
+  - Provided a welcoming and high-quality customer service experience at checkout.
+  - Independently managed the cash register, including payments, reconciliation, and promotions.
+  - Maintained a clean, organized, and standards-compliant work environment.
+  - Oversaw self-checkout stations and supported store departments with logistical tasks as needed.
+
+- **IT Support Intern (Level 1)** at Geneva University Hospitals (HUG) (Aug. 2017 – Aug. 2018, Thônex, Geneva, Switzerland):
+  - Provided Level 1 IT support to users, ensuring efficient follow-up on requests.
+  - Resolved incidents related to internal training center applications (Espace Carrière, FormaEva) and assisted users.
+  - Created and maintained documentation to improve user autonomy.
+  - Diagnosed hardware issues and proposed appropriate solutions.
 
 ## Projects
 1. **homelab-iac**: Bachelor project focused on the design and automated deployment of a homelab using Infrastructure as Code principles. Tech: Proxmox, OpenTofu, NixOS, Docker Compose, GitHub Actions, SOPS/Age. (https://github.com/boranuzun/homelab-iac)
@@ -51,9 +68,10 @@ Boran holds a Bachelor of Science HES-SO in Business Information Technology from
 - English (B2 level) (Cambridge BEC Vantage 176/190)
 
 ## Certifications
-- Fundamentals of Red Hat Enterprise Linux – Coursera (Nov. 2025)
-- Introduction to Kubernetes (LFS158) – The Linux Foundation (Nov. 2025)
-- IBM Applied DevOps Engineering Professional Certificate – Coursera (Oct. 2025)
+- Fundamentals of Ansible - Coursera (Oct. 2025) (https://www.coursera.org/account/accomplishments/verify/58HMZC5TVQF2)
+- Fundamentals of Red Hat Enterprise Linux – Coursera (Nov. 2025) (https://www.coursera.org/account/accomplishments/verify/HC4LVWX30NBA)
+- Introduction to Kubernetes (LFS158) – The Linux Foundation (Nov. 2025) (https://www.credly.com/badges/850bfa89-5c95-4cff-ab59-56d1f76c74ba)
+- IBM Applied DevOps Engineering Professional Certificate – Coursera (Oct. 2025) (https://www.coursera.org/account/accomplishments/professional-cert/6BIC3JB8DC43)
 
 ## Contact & Social
 - LinkedIn: https://www.linkedin.com/in/boranuzun/
@@ -92,6 +110,8 @@ export default {
 					headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
 				});
 			}
+
+			console.log('User asked:', userMessage);
 
 			// Initialize the model
 			const model = genAI.getGenerativeModel({
