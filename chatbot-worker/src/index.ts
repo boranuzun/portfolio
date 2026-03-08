@@ -2,6 +2,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export interface Env {
 	GEMINI_API_KEY: string;
+	CF_AIG_TOKEN?: string;
+	CF_ACCOUNT_ID?: string;
+	CF_GATEWAY_ID?: string;
 }
 
 const allowedOrigins = ['https://boranuzun.ch', 'http://localhost:4321'];
@@ -103,9 +106,12 @@ Boran holds a Bachelor of Science HES-SO in Business Information Technology from
 - Email: contact@boranuzun.ch
 - Portfolio: https://boranuzun.ch
 
-## AI Guardrails (Behavioral Instructions)
-- **Out of Scope Queries:** You are strictly forbidden from writing code, solving math problems, generating creative content, or discussing topics unrelated to Boran's professional profile. If asked, state clearly that you are limited to discussing Boran's professional background and redirect the conversation.
-- **Salary/Compensation:** Refuse to state a salary expectation range. Explicitly state that compensation is open to discussion and redirect the user to schedule a personal interview with Boran.
+## AI Guardrails & Strict Rules
+1. ROLE LIMITATION: You are strictly limited to discussing Boran's professional background, skills, education, and portfolio projects. 
+2. OFF-TOPIC REJECTION: If the user asks about ANYTHING else (e.g., math like "1+1", coding, general knowledge, jokes), you MUST immediately refuse to answer. 
+3. NO PARTIAL ANSWERS: NEVER answer the off-topic question. You must ONLY provide the refusal and redirect.
+   - Example off-topic response: "I am an AI assistant for Boran's portfolio and cannot answer math questions. But I'd be happy to tell you about his DevOps projects or IT support experience!"
+4. SALARY: Do not give a salary expectation. Say it is open to discussion and suggest scheduling an interview with Boran.
 `;
 
 export default {
@@ -140,13 +146,32 @@ export default {
 				});
 			}
 
-			console.log('User asked:', userMessage);
-
 			// Initialize the model
-			const model = genAI.getGenerativeModel({
-				model: 'gemini-3.1-flash-lite-preview',
-				systemInstruction: systemPrompt,
-			});
+			let requestOptions: any = {};
+			if (env.CF_ACCOUNT_ID && env.CF_GATEWAY_ID) {
+				requestOptions = {
+					baseUrl: `https://gateway.ai.cloudflare.com/v1/${env.CF_ACCOUNT_ID}/${env.CF_GATEWAY_ID}/google-ai-studio`,
+				};
+				if (env.CF_AIG_TOKEN) {
+					requestOptions.customHeaders = {
+						'cf-aig-authorization': `Bearer ${env.CF_AIG_TOKEN}`,
+						'cf-aig-cache-ttl': '3600', // Cache responses for 1 hour to speed up latency
+					};
+				} else {
+					requestOptions.customHeaders = {
+						'cf-aig-cache-ttl': '3600', // Cache responses for 1 hour to speed up latency
+					};
+				}
+				console.log('Using Cloudflare AI Gateway');
+			}
+
+			const model = genAI.getGenerativeModel(
+				{
+					model: 'gemini-3.1-flash-lite-preview',
+					systemInstruction: systemPrompt,
+				},
+				requestOptions
+			);
 
 			const formattedHistory = history.map((msg: any) => ({
 				role: msg.role,
@@ -154,12 +179,36 @@ export default {
 			}));
 
 			const chat = model.startChat({ history: formattedHistory });
-			const result = await chat.sendMessage(userMessage);
-			const responseText = result.response.text();
+			const result = await chat.sendMessageStream(userMessage);
 
-			return new Response(JSON.stringify({ reply: responseText }), {
+			// Set up a TransformStream to stream the response to the client
+			const { readable, writable } = new TransformStream();
+			const writer = writable.getWriter();
+
+			// Process the stream in the background
+			ctx.waitUntil((async () => {
+				try {
+					for await (const chunk of result.stream) {
+						const chunkText = chunk.text();
+						if (chunkText) {
+							await writer.write(new TextEncoder().encode(chunkText));
+						}
+					}
+					await writer.close();
+				} catch (e: any) {
+					console.error('Streaming error:', e);
+					await writer.abort(e);
+				}
+			})());
+
+			return new Response(readable, {
 				status: 200,
-				headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
+				headers: { 
+					...getCorsHeaders(request), 
+					'Content-Type': 'text/plain',
+					'Cache-Control': 'no-cache',
+					'Connection': 'keep-alive'
+				},
 			});
 
 		} catch (error: any) {

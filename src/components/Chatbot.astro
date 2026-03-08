@@ -281,7 +281,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
         setLoading(true);
 
         try {
-          var currentHistory = JSON.parse(JSON.stringify(state.apiHistory)); // clone before sending
+          var currentHistory = JSON.parse(JSON.stringify(state.apiHistory));
           var response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -293,19 +293,52 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
 
           if (!response.ok) throw new Error('Network response was not ok');
 
-          var data = await response.json();
+          // Remove loading indicator immediately when stream begins
           setLoading(false);
-          addMessage(data.reply || "Something went wrong, please try again.", false);
+          chatInput.disabled = false;
+          chatSubmitBtn.disabled = false;
+
+          // Create standard message template
+          var messageDiv = document.createElement('div');
+          messageDiv.className = 'flex gap-3 flex-row animate-fade-in-up mt-2';
           
-          if (data.reply) {
-            state.apiHistory.push({ role: 'user', content: userText });
-            state.apiHistory.push({ role: 'model', content: data.reply });
+          var innerHTML = '<div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black/10 dark:bg-white/10 shadow-sm mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/60 dark:text-white/60" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg></div><div class="max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed bg-neutral-200/80 dark:bg-neutral-800 text-black/75 dark:text-white/75 border border-black/10 dark:border-white/15 rounded-tl-sm break-words shadow-sm chatbot-msg-content"></div>';
+          messageDiv.innerHTML = innerHTML;
+          chatMessages.appendChild(messageDiv);
+          var contentTarget = messageDiv.querySelector('.chatbot-msg-content');
+
+          // Stream reading logic
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder("utf-8");
+          let fullReply = "";
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            const chunk = decoder.decode(value, { stream: true });
+            fullReply += chunk;
+            contentTarget.innerHTML = renderMarkdown(fullReply);
+            
+            requestAnimationFrame(function() {
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
           }
+
+          if (fullReply.trim()) {
+            state.apiHistory.push({ role: 'user', content: userText });
+            state.apiHistory.push({ role: 'model', content: fullReply });
+          } else {
+             contentTarget.innerHTML = "Something went wrong, please try again.";
+          }
+
           if (chatInput) chatInput.focus();
         } catch (error) {
           console.error("Chat Error:", error);
           setLoading(false);
-          addMessage("Sorry, I could not connect to the server. Please try again later.", false);
+          chatInput.disabled = false;
+          chatSubmitBtn.disabled = false;
+          addMessage([error.message, "Sorry, I could not connect to the server. Please try again later."].join(" "), false);
           if (chatInput) chatInput.focus();
         }
       }, { signal: signal });
