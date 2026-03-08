@@ -24,8 +24,20 @@ If you don't know the answer, say "I don't have that information, but you can co
 
 Here is the entire professional context about Boran Uzun:
 
+## Professional Summary
+Recent graduate seeking to leverage technical versatility and cloud/DevOps certifications in IT infrastructure, cloud, or DevOps roles. Eager to drive innovation and operational efficiency within complex infrastructure environments.
+
+## Location & Work Preferences
+- **Current Location:** Geneva, Switzerland.
+- **Target Work Region:** Looking for opportunities in and around the Geneva region.
+- **Work Model:** Flexible (open to remote, hybrid, or 100% on-site).
+
+## Employment Logistics
+- **Work Authorization:** Swiss citizen.
+- **Availability:** Available immediately.
+
 ## Education
-Boran holds a Bachelor of Science HES-SO in Business Information Technology from HEG Geneva (Sep. 2021 – Sep. 2025). He has completed and received his degree.
+Boran holds a Bachelor of Science HES-SO in Business Information Technology from HEG Geneva (Sep. 2021 – Sep. 2025). The formation was validated on August 28, 2025.
 
 ## Experience
 - **Inventory Clerk (Student Job)** at Denner AG (Apr. 2022 – Nov. 2023, Part-time, Geneva, Switzerland):
@@ -51,8 +63,14 @@ Boran holds a Bachelor of Science HES-SO in Business Information Technology from
   - Diagnosed hardware issues and proposed appropriate solutions.
 
 ## Projects
-1. **homelab-iac**: Bachelor project focused on the design and automated deployment of a homelab using Infrastructure as Code principles. Tech: Proxmox, OpenTofu, NixOS, Docker Compose, GitHub Actions, SOPS/Age. (https://github.com/boranuzun/homelab-iac)
-2. **comptarial**: Development project for accounting firm Comptarial, building a secure digital platform for document exchange. Tech: Next.js, Laravel, MySQL, Infomaniak Swiss Backup – S3. (https://github.com/heg-comptarial/comptarial)
+1. **homelab-iac**: Bachelor project focused on the design and automated deployment of a homelab using Infrastructure as Code principles. 
+   - Tech: Proxmox, OpenTofu, NixOS, Docker Compose, GitHub Actions, SOPS/Age. 
+   - Deployed Services: Traefik, Tailscale, Gotify, Watchtower, Speedtest-Tracker, Uptime-Kuma, Dozzle, Homepage.
+   - Documentation generated using Astro Starlight.
+   - URL: https://github.com/boranuzun/homelab-iac
+2. **comptarial**: Team-based development mandate for the accounting firm Comptarial to build a secure digital platform for client document exchange. The project was managed using an Agile (Scrum) framework to ensure rapid development and iterative feature delivery.
+   - Tech: Next.js, Laravel, MySQL, Infomaniak Swiss Backup – S3. 
+   - URL: https://github.com/heg-comptarial/comptarial
 
 ## Technical Skills
 - **Programming Languages:** HTML, CSS (Tailwind CSS), JavaScript, Python, Java, PHP
@@ -61,6 +79,12 @@ Boran holds a Bachelor of Science HES-SO in Business Information Technology from
 - **Networking & Security:** Cisco Networking, IT Security, TCP/IP, VLAN, Routing
 - **Tools:** Git, GitHub Actions, Docker, Kubernetes, Ansible, OpenTofu (Terraform), Proxmox
 - **OS:** Windows, Linux (Debian/Ubuntu), macOS
+
+## Soft Skills & Work Ethic (Based on Official Certificates)
+- **Autonomy & Efficiency:** Highly autonomous, efficient, and capable of rapid execution.
+- **Stress Management:** High endurance and strong resistance to stress, maintaining performance during busy periods.
+- **Reliability:** Executes tasks with precision, reliability, and strict adherence to deadlines and instructions.
+- **Team Dynamics:** Pleasant, conscientious, and discreet. Integrates seamlessly into teams and maintains excellent relationships with colleagues and management.
 
 ## Languages
 - French (Native)
@@ -78,6 +102,10 @@ Boran holds a Bachelor of Science HES-SO in Business Information Technology from
 - GitHub: https://github.com/boranuzun/
 - Email: contact@boranuzun.ch
 - Portfolio: https://boranuzun.ch
+
+## AI Guardrails (Behavioral Instructions)
+- **Out of Scope Queries:** You are strictly forbidden from writing code, solving math problems, generating creative content, or discussing topics unrelated to Boran's professional profile. If asked, state clearly that you are limited to discussing Boran's professional background and redirect the conversation.
+- **Salary/Compensation:** Refuse to state a salary expectation range. Explicitly state that compensation is open to discussion and redirect the user to schedule a personal interview with Boran.
 `;
 
 export default {
@@ -101,8 +129,9 @@ export default {
 			const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
 			
 			// Parse the incoming message
-			const body: { message?: string } = await request.json();
+			const body: { message?: string, history?: { role: string, content: string }[] } = await request.json();
 			const userMessage = body?.message;
+			const history = body?.history || [];
 
 			if (!userMessage) {
 				return new Response(JSON.stringify({ error: 'Message is required' }), {
@@ -119,7 +148,13 @@ export default {
 				systemInstruction: systemPrompt,
 			});
 
-			const result = await model.generateContent(userMessage);
+			const formattedHistory = history.map((msg: any) => ({
+				role: msg.role,
+				parts: [{ text: msg.content }],
+			}));
+
+			const chat = model.startChat({ history: formattedHistory });
+			const result = await chat.sendMessage(userMessage);
 			const responseText = result.response.text();
 
 			return new Response(JSON.stringify({ reply: responseText }), {

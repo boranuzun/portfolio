@@ -72,8 +72,9 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
   window.__chatbotState = window.__chatbotState || {
     isOpen: false,
     isThinking: false,
-    messageHistory: [],
+    messageHistory: [], // For up/down arrow cycling
     historyIndex: -1,
+    apiHistory: [] // Real conversation history for Gemini context
   };
 
   // Track the current AbortController to clean up old listeners
@@ -246,6 +247,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
     if (clearChatBtn) {
       clearChatBtn.addEventListener('click', function() {
         if (!chatMessages) return;
+        state.apiHistory = []; // Reset context
         var children = Array.from(chatMessages.children);
         for (var i = 1; i < children.length; i++) {
           var child = children[i];
@@ -279,10 +281,14 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
         setLoading(true);
 
         try {
+          var currentHistory = JSON.parse(JSON.stringify(state.apiHistory)); // clone before sending
           var response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: userText }),
+            body: JSON.stringify({ 
+              message: userText,
+              history: currentHistory
+            }),
           });
 
           if (!response.ok) throw new Error('Network response was not ok');
@@ -290,6 +296,11 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
           var data = await response.json();
           setLoading(false);
           addMessage(data.reply || "Something went wrong, please try again.", false);
+          
+          if (data.reply) {
+            state.apiHistory.push({ role: 'user', content: userText });
+            state.apiHistory.push({ role: 'model', content: data.reply });
+          }
           if (chatInput) chatInput.focus();
         } catch (error) {
           console.error("Chat Error:", error);
