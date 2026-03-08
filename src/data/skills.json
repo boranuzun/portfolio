@@ -1,0 +1,43 @@
+{
+  "categories": [
+    {
+      "category": "Languages",
+      "skills": [
+        "HTML",
+        "CSS (Tailwind CSS)",
+        "JavaScript",
+        "Python",
+        "Java",
+        "PHP"
+      ]
+    },
+    {
+      "category": "Frameworks",
+      "skills": ["Vue.js/Nuxt.js", "React/Next.js", "Spring Boot", "Laravel"]
+    },
+    {
+      "category": "Databases & Modeling",
+      "skills": ["PL/SQL", "MySQL", "MongoDB", "UML", "BPMN"]
+    },
+    {
+      "category": "Networking & Security",
+      "skills": ["Cisco Networking", "IT Security", "TCP/IP", "VLAN", "Routing"]
+    },
+    {
+      "category": "Tools",
+      "skills": [
+        "Git",
+        "GitHub Actions",
+        "Docker",
+        "Kubernetes",
+        "Ansible",
+        "OpenTofu",
+        "Proxmox"
+      ]
+    },
+    {
+      "category": "Operating Systems",
+      "skills": ["Windows", "Linux (Debian/Ubuntu)", "macOS"]
+    }
+  ]
+}

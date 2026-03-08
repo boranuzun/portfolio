@@ -6,6 +6,7 @@ import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
 import { dateRange } from "@lib/utils";
 import { SITE, HOME, SOCIALS } from "@consts";
+import skillsData from "@data/skills.json";
 
 const blog = (await getCollection("blog"))
   .filter(post => !post.data.draft)
@@ -64,30 +65,14 @@ const work = await Promise.all(
           Skills & Technologies
         </h5>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-          <div>
-            <span class="font-medium text-black dark:text-white">Languages</span>
-            <p>HTML, CSS (Tailwind CSS), JavaScript, Python, Java, PHP</p>
-          </div>
-          <div>
-            <span class="font-medium text-black dark:text-white">Frameworks</span>
-            <p>Vue.js/Nuxt.js, React/Next.js, Spring Boot, Laravel</p>
-          </div>
-          <div>
-            <span class="font-medium text-black dark:text-white">Databases & Modeling</span>
-            <p>PL/SQL, MySQL, MongoDB, UML, BPMN</p>
-          </div>
-          <div>
-            <span class="font-medium text-black dark:text-white">Networking & Security</span>
-            <p>Cisco Networking, IT Security, TCP/IP, VLAN, Routing</p>
-          </div>
-          <div>
-            <span class="font-medium text-black dark:text-white">Tools</span>
-            <p>Git, GitHub Actions, Docker, Kubernetes, Ansible, OpenTofu, Proxmox</p>
-          </div>
-          <div>
-            <span class="font-medium text-black dark:text-white">Operating Systems</span>
-            <p>Windows, Linux (Debian/Ubuntu), macOS</p>
-          </div>
+          {skillsData.categories.map(category => (
+            <div>
+              <span class="font-medium text-black dark:text-white">
+                {category.category}
+              </span>
+              <p>{category.skills.join(", ")}</p>
+            </div>
+          ))}
         </div>
       </section>
 
