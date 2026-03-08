@@ -151,11 +151,13 @@ const { title, description, image = "/B_black@1x.png" } = Astro.props;
 
   function animate() {
     const animateElements = document.querySelectorAll(".animate");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const staggerDelay = prefersReducedMotion ? 0 : 150;
 
     animateElements.forEach((element, index) => {
       setTimeout(() => {
         element.classList.add("show");
-      }, index * 150);
+      }, index * staggerDelay);
     });
   }
 
@@ -169,9 +171,10 @@ const { title, description, image = "/B_black@1x.png" } = Astro.props;
 
   function scrollToTop(event) {
     event.preventDefault();
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: prefersReducedMotion ? "auto" : "smooth"
     });
   }
 

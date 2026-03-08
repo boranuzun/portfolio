@@ -98,6 +98,29 @@ html #back-to-top {
   @apply opacity-0 pointer-events-none;
 }
 
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .animate.show {
+    @apply opacity-100 translate-y-0;
+  }
+
+  html #back-to-top {
+    @apply opacity-0;
+  }
+}
+
 html.scrolled #back-to-top {
   @apply opacity-100 pointer-events-auto;
 }
