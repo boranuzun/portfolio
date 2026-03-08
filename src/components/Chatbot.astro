@@ -6,52 +6,45 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
 <div id="portfolio-chatbot" class="fixed bottom-6 right-4 sm:right-6 z-50 font-sans flex flex-col items-end" data-api-url={chatbotUrl} transition:persist>
   
   {/* Chat Window Panel */}
-  <div id="chat-panel" class="w-[calc(100vw-2rem)] sm:w-[420px] max-h-[70vh] bg-neutral-100 dark:bg-neutral-900 border border-black/15 dark:border-white/20 rounded-2xl shadow-2xl flex-col overflow-hidden" style="display: none;">
-    <div class="bg-neutral-200/80 dark:bg-neutral-800/80 backdrop-blur-sm p-4 flex items-center justify-between border-b border-black/10 dark:border-white/15 shrink-0">
-      <div class="flex items-center gap-2">
-        <div class="bg-black/10 dark:bg-white/10 p-1.5 rounded-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-icon lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-        </div>
+  <div id="chat-panel" class="w-[calc(100vw-2rem)] sm:w-[420px] max-h-[70vh] bg-white/95 dark:bg-neutral-800/95 backdrop-blur-2xl border border-black/10 dark:border-white/10 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-black flex-col overflow-hidden" style="display: none;">
+    <div class="p-5 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-3">
         <div>
-          <h3 class="text-sm font-semibold text-black dark:text-white">Chat with Boran's AI</h3>
-          <p class="text-xs text-black/50 dark:text-white/50">Powered by Gemini 3.1 Flash Lite</p>
+          <h3 class="text-lg font-serif font-medium text-black dark:text-white tracking-tight">Chat with Boran's AI</h3>
+          <p class="text-[11px] uppercase tracking-wider text-black/40 dark:text-white/40 mt-0.5">Powered by Gemini 3.1 Flash-Lite</p>
         </div>
       </div>
       <div class="flex items-center space-x-1">
-        <button id="clear-chat-btn" title="Clear Chat" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors duration-300 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" aria-label="Clear Chat">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush-cleaning-icon lucide-brush-cleaning"><path d="m16 22-1-4"/><path d="M19 14a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2h-3a1 1 0 0 1-1-1V4a2 2 0 0 0-4 0v5a1 1 0 0 1-1 1H6a2 2 0 0 0-2 2v1a1 1 0 0 0 1 1"/><path d="M19 14H5l-1.973 6.767A1 1 0 0 0 4 22h16a1 1 0 0 0 .973-1.233z"/><path d="m8 22 1-4"/></svg>
+        <button id="clear-chat-btn" title="Clear Chat" class="cursor-pointer text-black/30 dark:text-white/30 hover:text-black hover:bg-black/5 dark:hover:text-white dark:hover:bg-white/5 transition-colors duration-200 p-1.5 rounded-full" aria-label="Clear Chat">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush-cleaning-icon lucide-brush-cleaning"><path d="m16 22-1-4"/><path d="M19 14a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2h-3a1 1 0 0 1-1-1V4a2 2 0 0 0-4 0v5a1 1 0 0 1-1 1H6a2 2 0 0 0-2 2v1a1 1 0 0 0 1 1"/><path d="M19 14H5l-1.973 6.767A1 1 0 0 0 4 22h16a1 1 0 0 0 .973-1.233z"/><path d="m8 22 1-4"/></svg>
         </button>
-        <button id="close-chat-btn" title="Close Chat" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors duration-300 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" aria-label="Close Chat">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        <button id="close-chat-btn" title="Close Chat" class="cursor-pointer text-black/30 dark:text-white/30 hover:text-black hover:bg-black/5 dark:hover:text-white dark:hover:bg-white/5 transition-colors duration-200 p-1.5 rounded-full" aria-label="Close Chat">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
       </div>
     </div>
     
-    <div id="chat-messages" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 scrollbar-hide bg-neutral-50/50 dark:bg-neutral-900/50 scroll-smooth">
-      <div class="flex gap-3 flex-row shrink-0">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black/10 dark:bg-white/10 mt-0.5">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-icon lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-        </div>
-        <div class="max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed bg-neutral-200/80 dark:bg-neutral-800 text-black/75 dark:text-white/75 border border-black/10 dark:border-white/15 rounded-tl-sm break-words">
+    <div id="chat-messages" class="flex-1 min-h-0 overflow-y-auto px-5 pb-2 pt-0 space-y-5 scrollbar-hide scroll-smooth">
+      <div class="flex flex-row shrink-0 mt-2">
+        <div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black/5 dark:bg-white/5 text-black/80 dark:text-white/80 border-l-2 border-l-black/20 dark:border-l-white/20 break-words rounded-tl-sm shadow-sm">
           Hey! 👋 I know all about Boran's experience, projects, and skills. What would you like to know?
         </div>
       </div>
     </div>
     
-    <div id="chat-disclaimer" class="px-3 pt-2 bg-neutral-200/60 dark:bg-neutral-800/60 border-t border-black/10 dark:border-white/15 shrink-0 animate-fade-in-up">
-      <div class="flex items-center gap-1.5 bg-amber-100/80 dark:bg-amber-900/30 border border-amber-300/50 dark:border-amber-600/30 rounded-xl px-3 py-1.5">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600 dark:text-amber-400 flex-shrink-0" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
-        <p class="text-[11px] leading-tight text-amber-800/80 dark:text-amber-300/80">Content sent & generated may be used by Google per their <a href="https://ai.google.dev/gemini-api/terms#data-use-unpaid" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-amber-900 dark:hover:text-amber-200 transition-colors">terms</a>.</p>
-        <button id="dismiss-disclaimer" class="ml-auto text-amber-700/60 dark:text-amber-400/60 hover:text-amber-900 dark:hover:text-amber-200 transition-colors flex-shrink-0 p-0.5" aria-label="Dismiss disclaimer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+    <div id="chat-disclaimer" class="px-5 pb-0 pt-2 shrink-0 flex justify-center animate-fade-in-up relative z-10 -mb-1">
+      <div class="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity duration-200">
+        <p class="text-[11px] leading-tight text-black/50 dark:text-white/50 text-center">AI content may be inaccurate. Review Google's <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer" class="underline hover:text-black/70 dark:hover:text-white/70 transition-colors">terms</a>.</p>
+        <button id="dismiss-disclaimer" class="cursor-pointer ml-1 text-black/40 dark:text-white/40 hover:text-black/70 dark:hover:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors flex-shrink-0 p-1.5 -mr-1.5" aria-label="Dismiss disclaimer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
         </button>
       </div>
     </div>
-    <form id="chat-form" class="p-3 bg-neutral-200/60 dark:bg-neutral-800/60 border-black/10 dark:border-white/15 shrink-0">
+    <form id="chat-form" class="p-4 shrink-0 relative z-20">
       <div class="relative">
-        <input id="chat-input" placeholder="Ask me anything..." class="w-full bg-white dark:bg-neutral-800 border border-black/15 dark:border-white/20 text-black dark:text-white text-base sm:text-sm rounded-xl py-3 pl-4 pr-12 focus:outline-none focus:border-black/30 dark:focus:border-white/40 focus:ring-1 focus:ring-black/10 dark:focus:ring-white/10 transition-all duration-300 placeholder:text-black/35 dark:placeholder:text-white/35" type="text" autocomplete="off" required>
-        <button id="chat-submit" type="submit" disabled class="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-black/80 dark:hover:bg-white/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300" aria-label="Send message">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-icon lucide-send"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+        <input id="chat-input" placeholder="Ask me anything..." class="w-full bg-white dark:bg-black border border-black/10 dark:border-white/10 text-black dark:text-white text-base sm:text-sm rounded-full py-3.5 pl-5 pr-14 focus:outline-none focus:border-black/20 dark:focus:border-white/20 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(255,255,255,0.04)] transition-all duration-200 placeholder:text-black/30 dark:placeholder:text-white/30" type="text" autocomplete="off" required>
+        <button id="chat-submit" type="submit" disabled class="cursor-pointer absolute right-1.5 top-1/2 -translate-y-1/2 p-2 bg-black dark:bg-white text-white dark:text-black rounded-full hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-200" aria-label="Send message">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
         </button>
       </div>
     </form>
@@ -162,7 +155,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
             chatPanel.classList.add('opacity-100', 'scale-100');
             if (chatInput) chatInput.focus();
           }, 10);
-        }, 200);
+        }, 150);
       } else if (chatPanel) {
         chatPanel.classList.remove('opacity-100', 'scale-100');
         chatPanel.classList.add('opacity-0', 'scale-95');
@@ -172,7 +165,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
           toggleBtn.offsetHeight; // force reflow
           toggleBtn.classList.remove('opacity-0', 'scale-75');
           toggleBtn.classList.add('opacity-100', 'scale-100');
-        }, 250);
+        }, 150);
       }
     }
 
@@ -192,12 +185,12 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
       var messageDiv = document.createElement('div');
 
       if (isUser) {
-        messageDiv.className = 'flex gap-3 flex-row-reverse animate-fade-in-up mt-2';
-        messageDiv.innerHTML = '<div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black dark:bg-white shadow-sm mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white dark:text-black" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed bg-black dark:bg-white text-white dark:text-black rounded-tr-sm break-words shadow-sm">' + text + '</div>';
+        messageDiv.className = 'flex flex-row-reverse animate-fade-in-up mt-2';
+        messageDiv.innerHTML = '<div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black dark:bg-white text-white dark:text-black rounded-tr-sm break-words shadow-sm">' + text + '</div>';
       } else {
         var renderedHtml = renderMarkdown(text);
-        messageDiv.className = 'flex gap-3 flex-row animate-fade-in-up mt-2';
-        messageDiv.innerHTML = '<div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black/10 dark:bg-white/10 shadow-sm mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/60 dark:text-white/60" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg></div><div class="max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed bg-neutral-200/80 dark:bg-neutral-800 text-black/75 dark:text-white/75 border border-black/10 dark:border-white/15 rounded-tl-sm break-words shadow-sm">' + renderedHtml + '</div>';
+        messageDiv.className = 'flex flex-row animate-fade-in-up mt-2';
+        messageDiv.innerHTML = '<div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black/5 dark:bg-white/5 text-black/80 dark:text-white/80 border-l-2 border-l-black/20 dark:border-l-white/20 break-words rounded-tl-sm shadow-sm">' + renderedHtml + '</div>';
       }
       chatMessages.appendChild(messageDiv);
       requestAnimationFrame(function() {
@@ -215,8 +208,8 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
       if (loading) {
         var thinkingDiv = document.createElement('div');
         thinkingDiv.id = 'typing-indicator';
-        thinkingDiv.className = 'flex gap-3 flex-row max-w-[85%] mt-2';
-        thinkingDiv.innerHTML = '<div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black/10 dark:bg-white/10 shadow-sm mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/60 dark:text-white/60" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg></div><div class="bg-neutral-200/80 dark:bg-neutral-800 border border-black/10 dark:border-white/15 p-3 rounded-2xl rounded-tl-sm shadow-sm flex items-center gap-1.5 h-[46px]"><div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 0ms"></div><div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 150ms"></div><div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 300ms"></div></div>';
+        thinkingDiv.className = 'flex flex-row max-w-[85%] mt-2';
+        thinkingDiv.innerHTML = '<div class="bg-black/5 dark:bg-white/5 border-l-2 border-l-black/20 dark:border-l-white/20 py-3 px-4 rounded-2xl rounded-tl-sm shadow-sm flex items-center gap-1.5 h-[46px]"><div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 0ms"></div><div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 150ms"></div><div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 300ms"></div></div>';
         chatMessages.appendChild(thinkingDiv);
         requestAnimationFrame(function() {
           chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -304,9 +297,9 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
 
           // Create standard message template
           var messageDiv = document.createElement('div');
-          messageDiv.className = 'flex gap-3 flex-row animate-fade-in-up mt-2';
+          messageDiv.className = 'flex flex-row animate-fade-in-up mt-2';
           
-          var innerHTML = '<div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-black/10 dark:bg-white/10 shadow-sm mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black/60 dark:text-white/60" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg></div><div class="max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed bg-neutral-200/80 dark:bg-neutral-800 text-black/75 dark:text-white/75 border border-black/10 dark:border-white/15 rounded-tl-sm break-words shadow-sm chatbot-msg-content"></div>';
+          var innerHTML = '<div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black/5 dark:bg-white/5 text-black/80 dark:text-white/80 border-l-2 border-l-black/20 dark:border-l-white/20 break-words rounded-tl-sm shadow-sm chatbot-msg-content"></div>';
           messageDiv.innerHTML = innerHTML;
           chatMessages.appendChild(messageDiv);
           var contentTarget = messageDiv.querySelector('.chatbot-msg-content');
@@ -392,6 +385,6 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
     }
   }
   .animate-fade-in-up {
-    animation: fade-in-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fade-in-up 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 </style>
