@@ -2,6 +2,7 @@
 title: "Homelab"
 description: "Self-hosted infrastructure for experimentation and services."
 date: "Jan 1 2025"
+technologies: ["Docker", "Proxmox VE", "Ubuntu", "Bash"]
 ---
 
 A personal homelab environment used for experimenting with virtualization, containers, and self-hosted services.

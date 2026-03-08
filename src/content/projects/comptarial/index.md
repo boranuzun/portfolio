@@ -3,6 +3,17 @@ title: "Comptarial"
 description: "Secure digital platform for client document exchange for an accounting firm."
 date: "Jun 1 2024"
 repoURL: "https://github.com/heg-comptarial/comptarial"
+technologies:
+  [
+    "TypeScript",
+    "JavaScript",
+    "React",
+    "Next.js",
+    "PHP",
+    "Laravel",
+    "MySQL",
+    "Tailwind CSS",
+  ]
 ---
 
 A team-based development mandate for the accounting firm Comptarial to build a secure digital platform for client document exchange. The project was managed using an Agile (Scrum) framework to ensure rapid development and iterative feature delivery.

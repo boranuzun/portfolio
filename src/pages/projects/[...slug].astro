@@ -6,6 +6,8 @@ import FormattedDate from "@components/FormattedDate.astro";
 import { readingTime } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
 import Link from "@components/Link.astro";
+import Schema from "@components/Schema.astro";
+import { generateProjectSchema } from "@lib/schema";
 
 export async function getStaticPaths() {
   const projects = (await getCollection("projects"))
@@ -20,7 +22,10 @@ type Props = CollectionEntry<"projects">;
 
 const project = Astro.props;
 const { Content } = await project.render();
+const projectSchema = generateProjectSchema(project.data, Astro.url);
 ---
+
+<Schema schema={projectSchema} />
 
 <PageLayout title={project.data.title} description={project.data.description}>
   <Container>

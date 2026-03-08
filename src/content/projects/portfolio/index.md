@@ -3,6 +3,7 @@ title: "Portfolio Website"
 description: "Portfolio and blog build with Astro."
 date: "Nov 1 2025"
 repoURL: "https://github.com/boranuzun/portfolio"
+technologies: ["TypeScript", "JavaScript", "Astro", "Tailwind CSS"]
 ---
 
 This is my personal portfolio and blog website built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/). It uses the [Astro Nano theme](https://astro.build/themes/details/astronano/) from [Mark Horn](https://github.com/markhorn-dev) as a starting point, and I've customized it to showcase my projects, blog posts, and professional profile.
@@ -12,7 +13,7 @@ This is my personal portfolio and blog website built with [Astro](https://astro.
 - **Framework:** Astro 5 with View Transitions (SPA-like navigation)
 - **Styling:** Tailwind CSS v4
 - **AI Chatbot:** Cloudflare Workers, Google Gemini API
-- **Deployment:** Cloudflare Pages
+- **Deployment:** Github Pages
 - **Other:** TypeScript, RSS feed, SEO optimizations
 
 ## Key Features

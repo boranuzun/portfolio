@@ -5,6 +5,8 @@ import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import { readingTime } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
+import Schema from "@components/Schema.astro";
+import { generateBlogPostingSchema } from "@lib/schema";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
@@ -19,7 +21,10 @@ type Props = CollectionEntry<"blog">;
 
 const post = Astro.props;
 const { Content } = await post.render();
+const blogSchema = generateBlogPostingSchema(post.data, Astro.url);
 ---
+
+<Schema schema={blogSchema} />
 
 <PageLayout title={post.data.title} description={post.data.description}>
   <Container>

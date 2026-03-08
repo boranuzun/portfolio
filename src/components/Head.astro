@@ -11,6 +11,8 @@ import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2";
 
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "@consts";
+import Schema from "@components/Schema.astro";
+import { generatePersonSchema } from "@lib/schema";
 
 interface Props {
   title: string;
@@ -63,6 +65,9 @@ const { title, description, image = "/B_black@1x.png" } = Astro.props;
 
 <!-- RSS Link -->
 <link rel="alternate" type="application/rss+xml" title={SITE.NAME} href={new URL("rss.xml", Astro.site)} />
+
+<!-- JSON-LD Schema for Person -->
+<Schema schema={generatePersonSchema(Astro.url)} />
 
 <script>
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
