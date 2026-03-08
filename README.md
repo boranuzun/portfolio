@@ -13,6 +13,7 @@ Live site: https://boranuzun.ch/
 - RSS feed that aggregates blog posts and projects (`/rss.xml`)
 - Automatic sitemap and `robots.txt`
 - Accessible, lightweight UI components
+- AI Chatbot powered by Google Gemini, Cloudflare Workers, and Cloudflare AI Gateway
 
 ## Tech stack
 
@@ -21,6 +22,8 @@ Live site: https://boranuzun.ch/
 - Tailwind CSS 4 (`@tailwindcss/vite`)
 - MDX (`@astrojs/mdx`)
 - Content Collections (`astro:content`)
+- Cloudflare Workers & AI Gateway (Chatbot backend)
+- Google Gemini API (`@google/generative-ai`)
 - SEO utilities: `@astrojs/sitemap`, `@astrojs/rss`
 - ESLint (flat config) for Astro/TS/JS
 
@@ -46,6 +49,27 @@ To expose the dev server on your local network:
 npm run dev:network
 ```
 
+### Chatbot Backend
+
+To run the chatbot locally, you need to set up the Cloudflare Worker in the `chatbot-worker` directory.
+
+```bash
+cd chatbot-worker
+npm install
+```
+
+Create a `.dev.vars` file in `chatbot-worker` and add your Google Gemini API key:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+Then start the worker development server:
+
+```bash
+npm run dev
+```
+
 ## Scripts
 
 - `npm run dev` — Start the development server
@@ -63,6 +87,7 @@ astro.config.mjs
 eslint.config.js
 package.json
 tsconfig.json
+chatbot-worker/   # Cloudflare Worker for AI Chatbot backend
 public/
 	cv/               # PDF CVs, served as-is
 	fonts/
@@ -156,6 +181,7 @@ Frontmatter schema:
 	demoURL?: string;
 	repoURL?: string;
 	websiteURL?: string;
+	technologies?: string[];
 }
 ```
 

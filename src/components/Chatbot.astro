@@ -60,10 +60,14 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
   {/* Chat Toggle Button */}
   <button 
     id="toggle-chat-btn" 
-    class="transition-all duration-300 bg-black dark:bg-white text-white dark:text-black p-4 rounded-3xl shadow-lg shadow-black/10 dark:shadow-white/5 group hover:bg-black/80 dark:hover:bg-white/80 hover:shadow-xl opacity-100 scale-100"
+    class="group relative flex h-14 w-14 sm:w-auto items-center justify-center gap-2.5 overflow-hidden rounded-full bg-neutral-950/90 shadow-lg shadow-black/20 backdrop-blur-md transition duration-200 ease-out hover:scale-[1.04] active:scale-95 dark:bg-white/95 dark:shadow-white/5 sm:px-6 opacity-100 scale-100"
     aria-label="Toggle AI Assistant"
   >
-    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-message-square-icon lucide-bot-message-square"><path d="M12 6V2H8"/><path d="M15 11v2"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M20 16a2 2 0 0 1-2 2H8.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 4 20.286V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M9 11v2"/></svg>
+    <div class="pointer-events-none absolute inset-0 rounded-full ring-1 ring-inset ring-white/15 dark:ring-black/10"></div>
+    <div class="relative flex items-center justify-center text-white dark:text-black">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200 ease-out group-hover:rotate-12 group-hover:scale-110"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+    </div>
+    <span class="hidden font-sans text-sm font-medium tracking-tight text-white dark:text-black sm:inline-block">Ask AI</span>
   </button>
 </div>
 

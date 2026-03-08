@@ -155,11 +155,11 @@ export default {
 				if (env.CF_AIG_TOKEN) {
 					requestOptions.customHeaders = {
 						'cf-aig-authorization': `Bearer ${env.CF_AIG_TOKEN}`,
-						'cf-aig-cache-ttl': '3600', // Cache responses for 1 hour to speed up latency
+						'cf-aig-cache-ttl': '604800', // Cache responses for 1 week to speed up latency and save costs
 					};
 				} else {
 					requestOptions.customHeaders = {
-						'cf-aig-cache-ttl': '3600', // Cache responses for 1 hour to speed up latency
+						'cf-aig-cache-ttl': '604800', // Cache responses for 1 week to speed up latency and save costs
 					};
 				}
 				console.log('Using Cloudflare AI Gateway');

@@ -10,7 +10,7 @@ import { SITE } from "@consts";
       <h1 class="animate font-semibold text-black dark:text-white text-2xl">
         Privacy Policy
       </h1>
-      <p class="animate text-sm opacity-75">Last updated: March 7, 2026</p>
+      <p class="animate text-sm opacity-75">Last updated: March 8, 2026</p>
 
       <section class="animate space-y-4">
         <h2 class="font-semibold text-black dark:text-white text-lg">Introduction</h2>
@@ -25,7 +25,7 @@ import { SITE } from "@consts";
           This website is a personal portfolio and does not require any registration or login. The only data collected is through the AI chatbot feature:
         </p>
         <ul class="list-disc list-outside space-y-2 pl-6">
-          <li><strong>Chatbot queries:</strong> When you use the AI chatbot, your messages are sent to a Cloudflare Worker which forwards them to the Google Gemini API for processing. Your queries are visible in the Cloudflare Workers observability logs.</li>
+          <li><strong>Chatbot queries:</strong> When you use the AI chatbot, your messages are sent to a Cloudflare Worker and routed through the Cloudflare AI Gateway to the Google Gemini API for processing. Your queries, responses, and metadata (like latency and token usage) are visible in the Cloudflare AI Gateway observability logs.</li>
         </ul>
         <p>
           No analytics, tracking cookies, or other forms of data collection are used on this website.
@@ -35,7 +35,7 @@ import { SITE } from "@consts";
       <section class="animate space-y-4">
         <h2 class="font-semibold text-black dark:text-white text-lg">Data Retention &amp; Deletion</h2>
         <ul class="list-disc list-outside space-y-2 pl-6">
-          <li><strong>Cloudflare:</strong> Your queries are retained in Cloudflare Workers observability logs for a limited period (typically a few days, depending on the plan). No additional long-term storage is configured.</li>
+          <li><strong>Cloudflare:</strong> Your queries are retained in Cloudflare AI Gateway and Worker observability logs for a limited period (request logs may be stored depending on Gateway settings, typically up to a few weeks) to monitor performance and issues. No additional long-term storage is configured by the site owner.</li>
           <li><strong>Google:</strong> Since the chatbot uses the unpaid Google Gemini API, Google may use the content you submit and the generated responses to provide, improve, and develop Google products, services, and machine learning technologies. Human reviewers at Google may read, annotate, and process your queries and the chatbot's responses. Google states that it disconnects this data from identifiable accounts before review. For full details, see <a href="https://ai.google.dev/gemini-api/terms#data-use-unpaid" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Google's Data Use Terms for Unpaid Services</a>.</li>
         </ul>
         <p>
