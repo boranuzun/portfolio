@@ -7,11 +7,11 @@ export function generatePersonSchema(url: URL) {
     "@id": url.origin,
     name: SITE.NAME,
     email: `mailto:${SITE.EMAIL}`,
-    jobTitle: "DevOps Engineer",
+    jobTitle: "Aspiring DevOps Engineer · Network & Systems Administrator",
     description:
-      "Recent graduate with a HES-SO BSc in Business Information Technology, aspiring DevOps engineer and network systems administrator",
+      "Recent graduate with a HES-SO BSc in Business Information Technology, eager to begin a career in DevOps or network and systems administration.",
     url: url.origin,
-    image: new URL("/B_black@1x.png", url.origin).toString(),
+    image: new URL("/avatar.png", url.origin).toString(),
     sameAs: SOCIALS.map((social) => social.HREF),
   };
 }
@@ -38,8 +38,8 @@ export function generateBlogPostingSchema(
       url: url.origin,
     },
     url: url.toString(),
-    mainEntity: {
-      "@type": "BlogPosting",
+    mainEntityOfPage: {
+      "@type": "WebPage",
       "@id": url.toString(),
     },
   };

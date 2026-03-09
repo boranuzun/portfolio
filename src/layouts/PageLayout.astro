@@ -3,6 +3,7 @@ import Head from "@components/Head.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Chatbot from "@components/Chatbot.astro";
+import MermaidSetup from "@components/MermaidSetup.astro";
 import { SITE } from "@consts";
 
 type Props = {
@@ -25,5 +26,6 @@ const { title, description } = Astro.props;
     </main>
     <Footer />
     <Chatbot />
+    <MermaidSetup />
   </body>
 </html>
