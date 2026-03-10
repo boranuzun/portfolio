@@ -94,25 +94,7 @@ const { title, description, image = "/og-image.png" } = Astro.props;
     const backToPrev = document.getElementById("back-to-prev");
     backToPrev?.addEventListener("click", () => window.history.back());
 
-    const lightThemeButton = document.getElementById("light-theme-button");
-    const darkThemeButton = document.getElementById("dark-theme-button");
-
-    function updateThemeButtons(isDark) {
-      if (!lightThemeButton || !darkThemeButton) return;
-      if (isDark) {
-        // Show dark button (current), hide light
-        darkThemeButton.classList.remove("hidden");
-        darkThemeButton.classList.add("flex");
-        lightThemeButton.classList.add("hidden");
-        lightThemeButton.classList.remove("flex");
-      } else {
-        // Show light button (current), hide dark
-        lightThemeButton.classList.remove("hidden");
-        lightThemeButton.classList.add("flex");
-        darkThemeButton.classList.add("hidden");
-        darkThemeButton.classList.remove("flex");
-      }
-    }
+    const themeButton = document.getElementById("theme-button");
 
     function getEffectiveDark() {
       const t = localStorage.getItem("theme");
@@ -121,21 +103,11 @@ const { title, description, image = "/og-image.png" } = Astro.props;
       return window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
 
-    // Initial button state based on effective theme (system by default)
-    updateThemeButtons(getEffectiveDark());
-
-    lightThemeButton?.addEventListener("click", () => {
-      // Toggle from light to dark
-      localStorage.setItem("theme", "dark");
-      toggleTheme(true);
-      updateThemeButtons(true);
-    });
-
-    darkThemeButton?.addEventListener("click", () => {
-      // Toggle from dark to light
-      localStorage.setItem("theme", "light");
-      toggleTheme(false);
-      updateThemeButtons(false);
+    themeButton?.addEventListener("click", () => {
+      const isDark = getEffectiveDark();
+      const nextTheme = isDark ? "light" : "dark";
+      localStorage.setItem("theme", nextTheme);
+      toggleTheme(!isDark);
     });
 
     window.matchMedia("(prefers-color-scheme: dark)")
@@ -144,7 +116,6 @@ const { title, description, image = "/og-image.png" } = Astro.props;
         const t = localStorage.getItem("theme");
         if (t !== "light" && t !== "dark") {
           toggleTheme(event.matches);
-          updateThemeButtons(event.matches);
         }
       });
 
@@ -185,7 +156,7 @@ function toggleTheme(dark) {
 
     css.appendChild(
       document.createTextNode(
-        `* {
+        `*:not(#theme-button):not(#theme-button *) {
              -webkit-transition: none !important;
              -moz-transition: none !important;
              -o-transition: none !important;
