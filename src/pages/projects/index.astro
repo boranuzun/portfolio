@@ -16,10 +16,10 @@ const projects = (await getCollection("projects"))
       <div class="animate font-semibold text-black dark:text-white">
         Projects
       </div>
-      <ul class="animate flex flex-col gap-4">
+      <ul class="animate flex flex-col list-none pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
         {
           projects.map((project) => (
-            <li>
+            <li class="group relative">
               <ArrowCard entry={project}/>
             </li>
           ))

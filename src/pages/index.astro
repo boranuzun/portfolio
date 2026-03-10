@@ -114,9 +114,9 @@ const work = await Promise.all(
             See all projects
           </Link>
         </div>
-        <ul class="flex flex-col gap-4">
+        <ul class="flex flex-col list-none pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
           {projects.map(project => (
-            <li>
+            <li class="group relative">
               <ArrowCard entry={project} />
             </li>
           ))}
@@ -132,9 +132,9 @@ const work = await Promise.all(
             See all posts
           </Link>
         </div>
-        <ul class="flex flex-col gap-4">
+        <ul class="flex flex-col list-none pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
           {blog.map(post => (
-            <li>
+            <li class="group relative">
               <ArrowCard entry={post} />
             </li>
           ))}

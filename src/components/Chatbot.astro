@@ -6,7 +6,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
 <div id="portfolio-chatbot" class="fixed bottom-6 right-4 sm:right-6 z-50 font-sans flex flex-col items-end" data-api-url={chatbotUrl} transition:persist>
   
   {/* Chat Window Panel */}
-  <div id="chat-panel" class="w-[calc(100vw-2rem)] sm:w-[420px] max-h-[70vh] bg-white/95 dark:bg-neutral-800/95 backdrop-blur-2xl border border-black/10 dark:border-white/10 rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-black flex-col overflow-hidden" style="display: none;">
+  <div id="chat-panel" class="w-[calc(100vw-2rem)] sm:w-[420px] max-h-[70vh] bg-white/95 dark:bg-neutral-800/95 backdrop-blur-2xl border border-black/10 dark:border-white/10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-black flex-col overflow-hidden" style="display: none;">
     <div class="p-5 flex items-center justify-between shrink-0">
       <div class="flex items-center gap-3">
         <div>
@@ -26,7 +26,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
     
     <div id="chat-messages" class="flex-1 min-h-0 overflow-y-auto px-5 pb-2 pt-0 space-y-5 scrollbar-hide scroll-smooth">
       <div class="flex flex-row shrink-0 mt-2">
-        <div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black/5 dark:bg-white/5 text-black/80 dark:text-white/80 border-l-2 border-l-black/20 dark:border-l-white/20 break-words rounded-tl-sm shadow-sm">
+        <div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black/5 dark:bg-white/5 text-black/80 dark:text-white/80 border-l-2 border-l-black/20 dark:border-l-white/20 wrap-break-words rounded-tl-sm shadow-sm">
           Hey! 👋 I know all about Boran's experience, projects, and skills. What would you like to know?
         </div>
       </div>
@@ -35,7 +35,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
     <div id="chat-disclaimer" class="px-5 pb-0 pt-2 shrink-0 flex justify-center animate-fade-in-up relative z-10 -mb-1">
       <div class="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity duration-200">
         <p class="text-[11px] leading-tight text-black/50 dark:text-white/50 text-center">AI content may be inaccurate. Review Google's <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer" class="underline hover:text-black/70 dark:hover:text-white/70 transition-colors">terms</a>.</p>
-        <button id="dismiss-disclaimer" class="cursor-pointer ml-1 text-black/40 dark:text-white/40 hover:text-black/70 dark:hover:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors flex-shrink-0 p-1.5 -mr-1.5" aria-label="Dismiss disclaimer">
+        <button id="dismiss-disclaimer" class="cursor-pointer ml-1 text-black/40 dark:text-white/40 hover:text-black/70 dark:hover:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors shrink-0 p-1.5 -mr-1.5" aria-label="Dismiss disclaimer">
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
         </button>
       </div>

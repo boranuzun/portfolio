@@ -38,10 +38,10 @@ const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
               {year}
             </div>
             <div>
-              <ul class="flex flex-col gap-4">
+              <ul class="flex flex-col list-none pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
                 {
                   posts[year].map((post) => (
-                    <li>
+                    <li class="group relative">
                       <ArrowCard entry={post}/>
                     </li>
                   ))
