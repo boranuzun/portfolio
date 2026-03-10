@@ -6,13 +6,13 @@ repoURL: "https://github.com/boranuzun/portfolio"
 technologies: ["TypeScript", "JavaScript", "Astro", "Tailwind CSS", "Cloudflare Workers", "Gemini AI"]
 ---
 
-This documentation outlines the engineering and architectural decisions behind my personal portfolio website. Originally built upon the [Astro Nano theme](https://astro.build/themes/details/astronano/) by [Mark Horn](https://github.com/markhorn-dev), the underlying framework has been extended to support dynamic AI features and rigorous search engine optimization. 
+This is how I built my portfolio. I started with [Mark Horn's Astro Nano theme](https://astro.build/themes/details/astronano/) but ended up modifying it heavily to add an AI chatbot and structured SEO data.
 
-My primary objective is to present a professional profile that is completely statically generated for edge-network speed, yet interactive enough to provide real-time information to recruiters and visitors.
+My goal was simple: serve a static site for maximum speed, but add just enough interactivity so people can ask questions about my work without needing to email me.
 
-## High-Level Architecture
+## Architecture
 
-The platform uses Astro as its main static site generator, combining lightweight UI components with a scalable serverless backend. To visually document the system design within this portfolio, I implemented a custom client-side integration for Mermaid diagrams. Using Astro's dynamic client scripts `(/src/components/MermaidSetup.astro)`, standard markdown codeblocks are intercepted and rendered to reactive SVGs on the fly, fully supporting Astro's View Transitions and dynamic light/dark mode toggling.
+The site uses Astro to generate static HTML, combined with a lightweight serverless backend. Since I like documenting my work, I also built a custom integration to render Mermaid diagrams right from markdown blocks. Using Astro's dynamic client scripts (`/src/components/MermaidSetup.astro`), it intercepts the code blocks and converts them to SVG on the client side, keeping them fully functional across Astro's View Transitions and dark mode switches.
 
 ```mermaid
 graph TD
@@ -37,17 +37,17 @@ graph TD
     Pages --> Head
 ```
 
-## The Serverless AI Chatbot
+## The AI Chatbot
 
-Providing visitors with an interactive method to query my experience requires a resilient and context-aware chatbot system.
+I built a simple chatbot so visitors can query my experience directly.
 
-### Frontend Integration
+### Frontend
 
-The user interface resides in `(/src/components/Chatbot.astro)`. It uses an internal browser state variable to retain conversation history across page navigation, leveraging Astro's native View Transitions. When a user submits a query, the component fires a `POST` request containing both the immediate prompt and the stored conversation context. To maintain an uninterrupted user experience, the response leverages a stream reader and transforms into HTML incrementally.
+The UI lives in `/src/components/Chatbot.astro`. I used a browser state variable to keep the conversation history intact while you navigate between pages. When you hit send, it fires off a `POST` request with your prompt and the context. The response streams back incrementally so there's no awkward loading pause.
 
-### Backend and Guardrails
+### Backend
 
-The server-side proxy is a Cloudflare Worker `(/chatbot-worker/src/index.ts:fetch)`. It initializes the Google Generative AI client and intercepts queries to enforce strict operational guardrails. A detailed system prompt confines the model to solely answering questions related to my professional background, actively turning away off-topic inquiries.
+The backend is a Cloudflare Worker (`/chatbot-worker/src/index.ts:fetch`) acting as a proxy. It initializes the Google Gemini client with a rigid system prompt—basically telling the model to only talk about my professional background and refuse everything else.
 
 ```mermaid
 sequenceDiagram
@@ -66,11 +66,11 @@ sequenceDiagram
     W-->>U: TransformStream to client
 ```
 
-By routing the API calls through the Cloudflare AI Gateway, the worker achieves request caching utilizing `cf-aig-cache-ttl`. This protects against redundant user queries and dramatically lowers subsequent Google API costs.
+I routed the calls through Cloudflare's AI Gateway to take advantage of request caching (`cf-aig-cache-ttl`). If someone asks a common question, the gateway serves the cached response instead of pinging the Gemini API again, which keeps costs down.
 
 ## Structured JSON-LD Data for SEO
 
-To maximize organic discoverability, the site dynamically outputs structured schema data. This approach guarantees search engine crawlers can precisely catalog entities, such as blog posts and specific projects, within rich search results.
+To help search engines actually understand the content, the site generates dynamic JSON-LD schema data. It makes sure blog posts and projects get indexed correctly for rich search results.
 
 ```mermaid
 sequenceDiagram
@@ -87,5 +87,5 @@ sequenceDiagram
     Schema-->>Route: Render html tag application/ld+json
 ```
 
-As demonstrated in `(/src/lib/schema.ts:generatePersonSchema)` and `(/src/lib/schema.ts:generateBlogPostingSchema)`, the application builds strict JavaScript objects compliant with Schema.org specifications. The `(/src/components/Head.astro)` component invokes these functions during build time, feeding the localized data into `(/src/components/Schema.astro)`. This ultimately appends the corresponding JSON-LD script block directly into the HTML `<head>` tag.
+In `/src/lib/schema.ts`, I have a few functions that build Schema.org-compliant JavaScript objects. During the build process, `/src/components/Head.astro` calls these functions and feeds the output to `/src/components/Schema.astro`. That component then injects the final JSON-LD block directly into the HTML `<head>`.
 
