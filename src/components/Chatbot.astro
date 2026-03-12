@@ -96,8 +96,8 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
     if (!chatPanel || !toggleBtn) return;
 
     // Cloudflare Worker URL
-    var chatbotEl = document.getElementById('portfolio-chatbot');
-    var API_URL = chatbotEl ? chatbotEl.getAttribute('data-api-url') : 'http://127.0.0.1:8787';
+    const chatbotEl = document.getElementById('portfolio-chatbot');
+    const API_URL = chatbotEl ? chatbotEl.getAttribute('data-api-url') : 'http://127.0.0.1:8787';
 
     const state = window.__chatbotState;
 
@@ -111,20 +111,24 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
 
     // Lightweight markdown-to-HTML for bot messages
     function renderMarkdown(text) {
-      var html = text
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      const html = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/`(.+?)`/g, '<code class="bg-black/10 dark:bg-white/10 px-1 py-0.5 rounded text-xs">$1</code>')
         .replace(/\[([^\]]+)\]\(((https?:\/\/|mailto:)[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 decoration-black/25 dark:decoration-white/40 hover:text-black dark:hover:text-white transition-colors">$1</a>')
         .replace(/(?<!href=")(https?:\/\/[^\s<)"]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 decoration-black/25 dark:decoration-white/40 hover:text-black dark:hover:text-white transition-colors">$1</a>');
 
-      var lines = html.split('\n');
-      var result = [];
-      var inList = false;
+      const lines = html.split('\n');
+      const result = [];
+      let inList = false;
 
-      for (var i = 0; i < lines.length; i++) {
-        var trimmed = lines[i].trim();
-        var bulletMatch = trimmed.match(/^[\*\-•]\s+(.+)/);
+      for (let i = 0; i < lines.length; i++) {
+        const trimmed = lines[i].trim();
+        const bulletMatch = trimmed.match(/^[*•-]\s+(.+)/);
         if (bulletMatch) {
           if (!inList) { result.push('<ul class="list-disc list-inside space-y-1 my-1">'); inList = true; }
           result.push('<li>' + bulletMatch[1] + '</li>');
@@ -162,7 +166,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
         setTimeout(function() {
           chatPanel.style.display = 'none';
           toggleBtn.style.display = '';
-          toggleBtn.offsetHeight; // force reflow
+          void toggleBtn.offsetHeight; // force reflow
           toggleBtn.classList.remove('opacity-0', 'scale-75');
           toggleBtn.classList.add('opacity-100', 'scale-100');
         }, 150);
@@ -182,13 +186,16 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
     // Helper to add messages to the DOM
     function addMessage(text, isUser) {
       if (!chatMessages) return;
-      var messageDiv = document.createElement('div');
+      const messageDiv = document.createElement('div');
 
       if (isUser) {
         messageDiv.className = 'flex flex-row-reverse animate-fade-in-up mt-2';
-        messageDiv.innerHTML = '<div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black dark:bg-white text-white dark:text-black rounded-tr-sm break-words shadow-sm">' + text + '</div>';
+        const innerDiv = document.createElement('div');
+        innerDiv.className = 'max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black dark:bg-white text-white dark:text-black rounded-tr-sm break-words shadow-sm';
+        innerDiv.textContent = text;
+        messageDiv.appendChild(innerDiv);
       } else {
-        var renderedHtml = renderMarkdown(text);
+        const renderedHtml = renderMarkdown(text);
         messageDiv.className = 'flex flex-row animate-fade-in-up mt-2';
         messageDiv.innerHTML = '<div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black/5 dark:bg-white/5 text-black/80 dark:text-white/80 border-l-2 border-l-black/20 dark:border-l-white/20 break-words rounded-tl-sm shadow-sm">' + renderedHtml + '</div>';
       }
@@ -206,7 +213,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
       chatSubmitBtn.disabled = loading;
 
       if (loading) {
-        var thinkingDiv = document.createElement('div');
+        const thinkingDiv = document.createElement('div');
         thinkingDiv.id = 'typing-indicator';
         thinkingDiv.className = 'flex flex-row max-w-[85%] mt-2';
         thinkingDiv.innerHTML = '<div class="bg-black/5 dark:bg-white/5 border-l-2 border-l-black/20 dark:border-l-white/20 py-3 px-4 rounded-2xl rounded-tl-sm shadow-sm flex items-center gap-1.5 h-[46px]"><div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 0ms"></div><div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 150ms"></div><div class="w-1.5 h-1.5 bg-black/40 dark:bg-white/40 rounded-full animate-bounce" style="animation-delay: 300ms"></div></div>';
@@ -215,14 +222,14 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
           chatMessages.scrollTop = chatMessages.scrollHeight;
         });
       } else {
-        var indicator = document.getElementById('typing-indicator');
+        const indicator = document.getElementById('typing-indicator');
         if (indicator) indicator.remove();
       }
     }
 
     // Handle disclaimer
-    var disclaimerEl = document.getElementById('chat-disclaimer');
-    var dismissBtn = document.getElementById('dismiss-disclaimer');
+    const disclaimerEl = document.getElementById('chat-disclaimer');
+    const dismissBtn = document.getElementById('dismiss-disclaimer');
 
     if (disclaimerEl && sessionStorage.getItem('chatDisclaimerDismissed')) {
       disclaimerEl.style.display = 'none';
@@ -240,14 +247,14 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
     }
 
     // Handle clear chat
-    var clearChatBtn = document.getElementById('clear-chat-btn');
+    const clearChatBtn = document.getElementById('clear-chat-btn');
     if (clearChatBtn) {
       clearChatBtn.addEventListener('click', function() {
         if (!chatMessages) return;
         state.apiHistory = []; // Reset context
-        var children = Array.from(chatMessages.children);
-        for (var i = 1; i < children.length; i++) {
-          var child = children[i];
+        const children = Array.from(chatMessages.children);
+        for (let i = 1; i < children.length; i++) {
+          const child = children[i];
           child.classList.add('opacity-0', 'transition-opacity', 'duration-300');
           setTimeout(function(el) { el.remove(); }, 300, child);
         }
@@ -260,7 +267,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
         e.preventDefault();
         if (state.isThinking) return;
 
-        var userText = chatInput.value.trim();
+        const userText = chatInput.value.trim();
         if (!userText) return;
 
         state.messageHistory.push(userText);
@@ -278,8 +285,8 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
         setLoading(true);
 
         try {
-          var currentHistory = JSON.parse(JSON.stringify(state.apiHistory));
-          var response = await fetch(API_URL, {
+          const currentHistory = JSON.parse(JSON.stringify(state.apiHistory));
+          const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -296,13 +303,13 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
           chatSubmitBtn.disabled = false;
 
           // Create standard message template
-          var messageDiv = document.createElement('div');
+          const messageDiv = document.createElement('div');
           messageDiv.className = 'flex flex-row animate-fade-in-up mt-2';
           
-          var innerHTML = '<div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black/5 dark:bg-white/5 text-black/80 dark:text-white/80 border-l-2 border-l-black/20 dark:border-l-white/20 break-words rounded-tl-sm shadow-sm chatbot-msg-content"></div>';
+          const innerHTML = '<div class="max-w-[85%] py-3 px-4 rounded-2xl text-sm leading-relaxed bg-black/5 dark:bg-white/5 text-black/80 dark:text-white/80 border-l-2 border-l-black/20 dark:border-l-white/20 break-words rounded-tl-sm shadow-sm chatbot-msg-content"></div>';
           messageDiv.innerHTML = innerHTML;
           chatMessages.appendChild(messageDiv);
-          var contentTarget = messageDiv.querySelector('.chatbot-msg-content');
+          const contentTarget = messageDiv.querySelector('.chatbot-msg-content');
 
           // Stream reading logic
           const reader = response.body.getReader();

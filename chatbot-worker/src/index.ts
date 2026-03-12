@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, type RequestOptions } from '@google/generative-ai';
 
 export interface Env {
 	GEMINI_API_KEY: string;
@@ -147,7 +147,7 @@ export default {
 			}
 
 			// Initialize the model
-			let requestOptions: any = {};
+			let requestOptions: RequestOptions | undefined;
 			if (env.CF_ACCOUNT_ID && env.CF_GATEWAY_ID) {
 				requestOptions = {
 					baseUrl: `https://gateway.ai.cloudflare.com/v1/${env.CF_ACCOUNT_ID}/${env.CF_GATEWAY_ID}/google-ai-studio`,
@@ -173,7 +173,7 @@ export default {
 				requestOptions
 			);
 
-			const formattedHistory = history.map((msg: any) => ({
+			const formattedHistory = history.map((msg: { role: string, content: string }) => ({
 				role: msg.role,
 				parts: [{ text: msg.content }],
 			}));
@@ -195,9 +195,9 @@ export default {
 						}
 					}
 					await writer.close();
-				} catch (e: any) {
+				} catch (e: unknown) {
 					console.error('Streaming error:', e);
-					await writer.abort(e);
+					await writer.abort(e instanceof Error ? e : new Error(String(e)));
 				}
 			})());
 
@@ -211,9 +211,10 @@ export default {
 				},
 			});
 
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error('Error in chatbot worker:', error);
-			return new Response(JSON.stringify({ error: error.message || 'Internal Server Error' }), {
+			const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
+			return new Response(JSON.stringify({ error: errorMessage }), {
 				status: 500,
 				headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
 			});

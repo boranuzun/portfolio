@@ -17,7 +17,7 @@ export default [
     },
     rules: {
       semi: ["error", "always"],
-      quotes: ["error", "double", { allowTemplateLiterals: true }],
+      quotes: "off",
       "@typescript-eslint/triple-slash-reference": "off",
     },
   },
