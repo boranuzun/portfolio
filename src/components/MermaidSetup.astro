@@ -49,8 +49,7 @@
 
       // 2. Erase existing children before rendering to prevent artifact duplication
       const wrappers = document.querySelectorAll('.mermaid-wrapper');
-      for (let i = 0; i < wrappers.length; i++) {
-        const wrapper = wrappers[i];
+      await Promise.all(Array.from(wrappers).map(async (wrapper) => {
         const code = wrapper.getAttribute('data-code');
         if (code) {
           // Clear it completely
@@ -63,7 +62,7 @@
             console.error("Mermaid rendering failed:", e);
           }
         }
-      }
+      }));
     } finally {
       isRendering = false;
     }
