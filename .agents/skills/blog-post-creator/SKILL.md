@@ -1,7 +1,6 @@
 ---
 name: blog-post-creator
 description: Create new Astro blog posts in src/content/blog/<kebab-case-slug>/index.md with valid frontmatter, consistent structure, and natural voice.
-allowed-tools: Read, Write, Edit, Glob
 ---
 
 # Blog Post Creator
