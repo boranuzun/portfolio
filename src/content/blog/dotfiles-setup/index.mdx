@@ -73,10 +73,8 @@ Answers are saved to `~/.config/chezmoi/chezmoi.toml` and never asked again.
 
 ### Post-bootstrap manual steps
 
-A few things aren't automated. You do these once after bootstrapping:
+Two things aren't automated. You do these once after bootstrapping:
 
-- **Oh My Zsh** — install if not present
-- **`zsh-syntax-highlighting` plugin** — clone into OMZ custom plugins
 - **GitHub CLI** — `gh auth login`
 - **(macOS) 1Password SSH agent** — enable in 1Password settings; the SSH config already points to it
 
@@ -147,7 +145,7 @@ The aliases I actually use:
 
 | Alias | Expands to | What it does |
 | --- | --- | --- |
-| `ls` | `eza --color --icons --long --header --git --time-style=relative --group-directories-first` | Long listing with git status |
+| `ls` | `eza --color --icons --long --header --git` | Long listing with git status |
 | `lt` | `eza --tree --level=2 --long --icons --git` | Tree view, 2 levels deep |
 | `cd` | `z` | zoxide smart directory jump |
 | `ff` | `fastfetch` | System info |
@@ -157,6 +155,8 @@ The aliases I actually use:
 | `opc` | `opencode` | AI coding assistant |
 | `cm` | `chezmoi` | chezmoi shortcut |
 | `rr` | `source ~/.zshrc` | Reload shell config without opening a new terminal |
+| `ql` | `qlmanage -p` | Quick Look preview (macOS only) |
+| `idea` | IntelliJ IDEA Ultimate | Launch IDE (macOS only) |
 
 ## Day-to-day workflow
 
