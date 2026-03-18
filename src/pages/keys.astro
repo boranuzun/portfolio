@@ -1,0 +1,52 @@
+---
+import Container from "@components/Container.astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import { KEYS } from "@consts";
+---
+
+<PageLayout title="Keys" description="My public encryption keys.">
+  <Container>
+    <article class="space-y-6">
+      <h1 class="animate font-semibold text-black dark:text-white">
+        Keys
+      </h1>
+      <p class="animate text-sm opacity-60">
+        Public keys for encrypting messages or files to me.
+      </p>
+
+      <div class="animate rounded-lg overflow-hidden border border-black/10 dark:border-white/10">
+        <div class="bg-neutral-200 dark:bg-neutral-800 px-4 py-2.5 flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-red-400/80"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-400/80"></span>
+          <span class="w-3 h-3 rounded-full bg-green-400/80"></span>
+          <span class="ml-3 text-xs font-mono text-black/30 dark:text-white/30">boran@portfolio ~ % keys</span>
+        </div>
+        <div class="bg-neutral-50 dark:bg-neutral-900 p-5 font-mono text-xs leading-relaxed space-y-4 overflow-x-auto">
+          <div class="text-black/70 dark:text-green-400/90">
+            <span class="text-black/40 dark:text-green-400/50">$</span> <span class="text-black/50 dark:text-green-400/70">cat</span> ~/.age/key.txt
+          </div>
+          <div class="pl-4 text-black/60 dark:text-green-300/80 break-all">{KEYS.AGE}</div>
+
+          <div class="text-black/70 dark:text-green-400/90">
+            <span class="text-black/40 dark:text-green-400/50">$</span> <span class="text-black/50 dark:text-green-400/70">gpg</span> --fingerprint contact@boranuzun.ch
+          </div>
+          <div class="pl-4 text-black/60 dark:text-green-300/80 space-y-1">
+            <div>pub ed25519 2026-03-17 [SC] [expire : 2028-03-16]</div>
+            <div>{KEYS.GPG_FINGERPRINT}</div>
+          </div>
+
+          <div class="text-black/70 dark:text-green-400/90">
+            <span class="text-black/40 dark:text-green-400/50">$</span> 
+            <span class="text-black/50 dark:text-green-400/70">gpg</span> 
+            --armor --export contact@boranuzun.ch
+          </div>
+          <pre class="pl-4 text-black/75 dark:text-green-300/70 bg-neutral-200/60 dark:bg-neutral-800/40 rounded p-3 text-[10px] leading-tight whitespace-pre-wrap break-all max-h-64 overflow-y-auto">{KEYS.GPG}</pre>
+
+          <div class="text-black/70 dark:text-green-400/90">
+            <span class="text-black/40 dark:text-green-400/50">$</span> <span class="inline-block w-1.75 h-3.5 bg-black/25 dark:bg-green-400/40 align-text-bottom"></span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </Container>
+</PageLayout>
