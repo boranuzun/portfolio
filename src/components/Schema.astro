@@ -4,6 +4,14 @@ interface Props {
 }
 
 const { schema } = Astro.props;
+
+// Safely stringify the schema to prevent XSS and JSON parse errors
+const json = JSON.stringify(schema)
+  .replace(/</g, '\\u003c')
+  .replace(/>/g, '\\u003e')
+  .replace(/&/g, '\\u0026')
+  .replace(/\u2028/g, '\\u2028')
+  .replace(/\u2029/g, '\\u2029');
 ---
 
-<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+<script is:inline type="application/ld+json" set:html={json} />
