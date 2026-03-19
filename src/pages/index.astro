@@ -19,7 +19,7 @@ const projects = (await getCollection("projects"))
   .slice(0,SITE.NUM_PROJECTS_ON_HOMEPAGE);
 
 const allwork = (await getCollection("work"))
-  .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
+  .sort((a, b) => b.data.dateStart.valueOf() - a.data.dateStart.valueOf())
   .slice(0,SITE.NUM_WORKS_ON_HOMEPAGE);
 
 const work = await Promise.all(
