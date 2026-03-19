@@ -8,18 +8,24 @@
   
   let isRendering = false;
 
+  const getMermaidTheme = () => {
+    // 0. Reliably get current theme taking into account local storage and OS preferences
+    const theme = localStorage.getItem('theme');
+    let isDark = document.documentElement.classList.contains('dark');
+
+    if (theme === 'dark') isDark = true;
+    else if (theme === 'light') isDark = false;
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) isDark = true;
+
+    return isDark;
+  };
+
   const renderMermaid = async () => {
     if (isRendering) return;
     isRendering = true;
     
     try {
-      // 0. Reliably get current theme taking into account local storage and OS preferences
-      const theme = localStorage.getItem('theme');
-      let isDark = document.documentElement.classList.contains('dark');
-      
-      if (theme === 'dark') isDark = true;
-      else if (theme === 'light') isDark = false;
-      else if (window.matchMedia('(prefers-color-scheme: dark)').matches) isDark = true;
+      const isDark = getMermaidTheme();
       
       // Force the class synchronously so any CSS-based checks within Mermaid also pass
       if (isDark) document.documentElement.classList.add('dark');
