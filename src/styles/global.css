@@ -5,11 +5,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans:
-    'JetBrains Mono', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-serif:
-    'JetBrains Mono', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  /* Body text and code */
+  --font-mono:
+    'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    /* Headings */
+  --font-display: 'Geist', ui-sans-serif, system-ui, sans-serif;
 }
 
 /*
@@ -46,7 +46,7 @@
   }
 
   body {
-    @apply font-sans antialiased;
+    @apply font-mono antialiased;
     @apply flex flex-col;
     @apply bg-neutral-100 dark:bg-neutral-900;
     @apply text-black/50 dark:text-white/75;
@@ -68,7 +68,7 @@
 
   article {
     @apply max-w-full prose dark:prose-invert prose-img:mx-auto prose-img:my-auto;
-    @apply font-serif prose-headings:font-sans prose-headings:font-semibold;
+    @apply font-mono prose-headings:font-mono prose-headings:font-semibold;
     @apply prose-headings:text-black dark:prose-headings:text-white;
   }
 }
@@ -132,3 +132,12 @@ html.scrolled #back-to-top {
   .cursor-blink {
     animation: blink 1.5s step-end infinite;
   }
+
+html.dark .astro-code,
+html.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
