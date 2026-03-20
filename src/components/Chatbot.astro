@@ -1,5 +1,4 @@
 ---
-// src/components/Chatbot.astro
 const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787';
 ---
 
@@ -10,7 +9,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
     <div class="p-5 flex items-center justify-between shrink-0">
       <div class="flex items-center gap-3">
         <div>
-          <h3 class="text-lg font-serif font-medium text-black dark:text-white tracking-tight">Chat with Boran's AI</h3>
+          <h3 class="text-lg font-mono font-medium text-black dark:text-white tracking-tight">Chat with Boran's AI</h3>
           <p class="text-[11px] uppercase tracking-wider text-black/40 dark:text-white/40 mt-0.5">Powered by Gemini 3.1 Flash-Lite</p>
         </div>
       </div>
@@ -60,7 +59,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787'
     <div class="relative flex items-center justify-center text-white dark:text-black">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200 ease-out group-hover:rotate-12 group-hover:scale-110"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
     </div>
-    <span class="hidden font-sans text-sm font-medium tracking-tight text-white dark:text-black sm:inline-block">Ask AI</span>
+    <span class="hidden font-mono text-sm font-medium tracking-tight text-white dark:text-black sm:inline-block">Ask AI</span>
   </button>
 </div>
 
