@@ -15,30 +15,31 @@
     "test:chatbot": "npm --prefix chatbot-worker test"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.5",
-    "@astrojs/mdx": "^4.3.9",
-    "@astrojs/rss": "^4.0.13",
-    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/check": "^0.9.8",
+    "@astrojs/mdx": "^4.3.14",
+    "@astrojs/rss": "^4.0.17",
+    "@astrojs/sitemap": "^3.7.1",
     "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/lora": "^5.2.8",
     "@lucide/astro": "^0.577.0",
     "@tailwindcss/typography": "^0.5.19",
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
-    "@typescript-eslint/parser": "^8.46.2",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
     "clsx": "^2.1.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "mermaid": "^11.13.0",
-    "sharp": "^0.34.4",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.16",
+    "sharp": "^0.34.5",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.0",
-    "@tailwindcss/vite": "^4.1.16",
-    "astro": "^5.15.3",
-    "eslint": "^9.39.0",
-    "eslint-plugin-astro": "^1.4.0",
-    "typescript-eslint": "^8.46.2"
+    "@eslint/js": "^9.39.4",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^5.18.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-astro": "^1.6.0",
+    "typescript-eslint": "^8.57.0"
   }
 }
