@@ -23,7 +23,7 @@ export function renderMarkdown(text: string): string {
   let tableHeaderDone = false;
 
   const isTableRow = (line: string) => line.startsWith('|') && line.endsWith('|');
-  const isSeparator = (line: string) => /^\|[\s|:\-]+\|$/.test(line);
+  const isSeparator = (line: string) => /^\|[\s|:-]+\|$/.test(line);
   const parseCells = (line: string) => line.split('|').slice(1, -1).map(c => c.trim());
 
   const closeList = () => { if (inList) { result.push('</ul>'); inList = false; } };
