@@ -3,6 +3,7 @@ title: "Homelab"
 description: "Self-hosted infrastructure for experimentation and services."
 date: "Jan 1 2025"
 technologies: ["Docker", "Proxmox VE", "Ubuntu", "Bash"]
+mermaid: true
 ---
 
 My homelab started as an experiment and evolved into the backbone of my digital life. I use it to pull my data away from large tech companies while constantly getting reps in with Linux, Docker, and network administration. It currently runs on a hybrid two-node architecture to separate bulk storage and heavy virtualization from lightweight applications.

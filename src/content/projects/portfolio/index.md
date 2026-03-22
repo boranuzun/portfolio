@@ -4,6 +4,7 @@ description: "Astro-based portfolio with AI chatbot."
 date: "Mar 09 2026"
 repoURL: "https://github.com/boranuzun/portfolio"
 technologies: ["TypeScript", "JavaScript", "Astro", "Tailwind CSS", "Cloudflare Workers", "Gemini AI"]
+mermaid: true
 ---
 
 This is how I built my portfolio. I started with [Mark Horn's Astro Nano theme](https://astro.build/themes/details/astronano/) but ended up modifying it heavily to add an AI chatbot and structured SEO data.
