@@ -1,16 +1,8 @@
 ---
 import "../styles/global.css";
-import "@fontsource/jetbrains-mono/latin-400.css";
-import "@fontsource/jetbrains-mono/latin-600.css";
-import "@fontsource/geist/latin-400.css";
-import "@fontsource/geist/latin-500.css";
-
-import jetbrainsMono400 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2";
-import jetbrainsMono600 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-600-normal.woff2";
-import geist400 from "@fontsource/geist/files/geist-latin-400-normal.woff2";
-import geist500 from "@fontsource/geist/files/geist-latin-500-normal.woff2";
 
 import { ClientRouter } from "astro:transitions";
+import Fonts from "./Fonts.astro";
 import { SITE } from "@consts";
 import Schema from "@components/Schema.astro";
 import { generatePersonSchema } from "@lib/schema";
@@ -23,22 +15,22 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = "/og-image.png" } = Astro.props;
+const { title, description, image = "/og-image.webp" } = Astro.props;
+
+const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787';
+const connectSrc = import.meta.env.DEV
+  ? `'self' http://127.0.0.1:8787`
+  : `'self' ${chatbotUrl}`;
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src ${connectSrc}; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';`} />
 <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)">
-<!-- <link rel="icon" type="image/x-icon" href="/favicon-light.svg"> -->
 <meta name="generator" content={Astro.generator} />
-
-<!-- Font preloads -->
-<link rel="preload" href={jetbrainsMono400} as="font" type="font/woff2" crossorigin/>
-<link rel="preload" href={jetbrainsMono600} as="font" type="font/woff2" crossorigin/>
-<link rel="preload" href={geist400} as="font" type="font/woff2" crossorigin/>
-<link rel="preload" href={geist500} as="font" type="font/woff2" crossorigin/>
+<Fonts />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -71,17 +63,6 @@ const { title, description, image = "/og-image.png" } = Astro.props;
 
 <!-- JSON-LD Schema for Person -->
 <Schema schema={generatePersonSchema(Astro.url)} />
-
-<script>
-  import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
-  document.addEventListener("astro:before-swap", (e) =>
-    [
-      ...(e as TransitionBeforeSwapEvent).newDocument.head.querySelectorAll(
-        "link[as=\"font\"]"
-      ),
-    ].forEach((link) => link.remove())
-  );
-</script>
 
 <script is:inline>
   function init() {
