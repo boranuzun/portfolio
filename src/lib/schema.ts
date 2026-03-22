@@ -1,6 +1,7 @@
 import { SITE, SOCIALS } from "@consts";
+import type { SchemaOrgPerson, SchemaOrgBlogPosting, SchemaOrgSoftwareSourceCode } from './schema.types';
 
-export function generatePersonSchema(url: URL) {
+export function generatePersonSchema(url: URL): SchemaOrgPerson {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -11,7 +12,7 @@ export function generatePersonSchema(url: URL) {
     description:
       "Recent graduate with a HES-SO BSc in Business Information Technology, eager to begin a career in DevOps or network and systems administration.",
     url: url.origin,
-    image: new URL("/avatar.png", url.origin).toString(),
+    image: new URL("/avatar.webp", url.origin).toString(),
     sameAs: SOCIALS.map((social) => social.HREF),
   };
 }
@@ -23,7 +24,7 @@ export function generateBlogPostingSchema(
     date: Date;
   },
   url: URL,
-) {
+): SchemaOrgBlogPosting {
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -53,7 +54,7 @@ export function generateProjectSchema(
     technologies?: string[];
   },
   url: URL,
-) {
+): SchemaOrgSoftwareSourceCode {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
