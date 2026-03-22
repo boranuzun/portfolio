@@ -5,7 +5,7 @@ import astro from "eslint-plugin-astro";
 /** @type {import("eslint").FlatConfig[]} */
 export default [
   {
-    ignores: [".vscode/", "dist/", "node_modules/", "public/", ".astro/"],
+    ignores: [".vscode/", "dist/", "node_modules/", "public/", ".astro/", "docs/"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -18,7 +18,11 @@ export default [
     rules: {
       semi: ["error", "always"],
       quotes: "off",
+      "prefer-const": "error",
+      "no-console": ["warn", { allow: ["warn", "error"] }],
       "@typescript-eslint/triple-slash-reference": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },
   },
   {

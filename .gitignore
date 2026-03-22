@@ -24,3 +24,6 @@ pnpm-debug.log*
 # Cloudflare Workers
 chatbot-worker/.wrangler/
 chatbot-worker/.dev.vars
+
+# Node compile cache
+node-compile-cache/
