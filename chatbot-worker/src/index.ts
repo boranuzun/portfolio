@@ -10,6 +10,21 @@ export interface Env {
 
 const allowedOrigins = ['https://boranuzun.ch', 'http://localhost:4321'];
 
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT = 20;
+const RATE_WINDOW = 60_000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_WINDOW });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
+
 const getCorsHeaders = (request: Request) => {
 	const origin = request.headers.get('Origin') || '';
 	return {
@@ -32,6 +47,14 @@ export default {
 			return new Response('Method Not Allowed', { status: 405, headers: getCorsHeaders(request) });
 		}
 
+		const clientIp = request.headers.get('CF-Connecting-IP') || 'unknown';
+		if (isRateLimited(clientIp)) {
+			return new Response(JSON.stringify({ error: 'Too many requests. Please try again later.' }), {
+				status: 429,
+				headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
+			});
+		}
+
 		try {
 			if (!env.GEMINI_API_KEY) {
 				throw new Error("GEMINI_API_KEY is not set in the environment variables.");
@@ -49,7 +72,6 @@ export default {
 				if (env.CF_AIG_TOKEN && httpOptions.headers) {
 					httpOptions.headers['cf-aig-authorization'] = `Bearer ${env.CF_AIG_TOKEN}`;
 				}
-				console.log('Using Cloudflare AI Gateway');
 			}
 
 			const ai = new GoogleGenAI({
@@ -64,6 +86,13 @@ export default {
 
 			if (!userMessage) {
 				return new Response(JSON.stringify({ error: 'Message is required' }), {
+					status: 400,
+					headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
+				});
+			}
+
+			if (userMessage.length > 2000) {
+				return new Response(JSON.stringify({ error: 'Message is too long. Maximum 2000 characters.' }), {
 					status: 400,
 					headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
 				});
@@ -116,8 +145,7 @@ export default {
 
 		} catch (error: unknown) {
 			console.error('Error in chatbot worker:', error);
-			const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
-			return new Response(JSON.stringify({ error: errorMessage }), {
+			return new Response(JSON.stringify({ error: 'Something went wrong. Please try again later.' }), {
 				status: 500,
 				headers: { ...getCorsHeaders(request), 'Content-Type': 'application/json' },
 			});
