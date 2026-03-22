@@ -1,6 +1,6 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import PageLayout from "@layouts/PageLayout.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import { readingTime } from "@lib/utils";
@@ -27,7 +27,7 @@ const projectSchema = generateProjectSchema(project.data, Astro.url);
 
 <Schema schema={projectSchema} />
 
-<PageLayout title={project.data.title} description={project.data.description}>
+<ContentLayout title={project.data.title} description={project.data.description} mermaid={project.data.mermaid}>
   <Container>
     <div class="animate">
       <BackToPrev href="/projects">
@@ -47,22 +47,14 @@ const projectSchema = generateProjectSchema(project.data, Astro.url);
       <div class="animate text-2xl font-semibold text-black dark:text-white">
         {project.data.title}
       </div>
-      {(project.data.demoURL || project.data.repoURL || project.data.websiteURL) && (
+      {(project.data.repoURL || project.data.websiteURL) && (
         <nav class="animate flex gap-1">
-          {project.data.demoURL && (
-            <Link href={project.data.demoURL} external>
-              demo
-            </Link>
-          )}
-          {project.data.demoURL && project.data.repoURL && (
-            <span>/</span>
-          )}
           {project.data.repoURL && (
             <Link href={project.data.repoURL} external>
               repo
             </Link>
           )}
-          {(project.data.repoURL || project.data.demoURL) && project.data.websiteURL && (
+          {project.data.repoURL && project.data.websiteURL && (
             <span>/</span>
           )}
           {project.data.websiteURL && (
@@ -77,4 +69,4 @@ const projectSchema = generateProjectSchema(project.data, Astro.url);
       <Content />
     </article>
   </Container>
-</PageLayout>
+</ContentLayout>
