@@ -13,8 +13,16 @@ import PageLayout from "@layouts/PageLayout.astro";
         Oops! The page you're looking for doesn't exist or has been moved.
       </p>
       <div class="animate pt-4">
-        <a href="/" class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 transition-colors font-medium text-black dark:text-white">
-          &larr; Back to Home
+        <a href="/" class="group inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 transition-colors font-medium text-black dark:text-white">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            class="size-5 stroke-2 fill-none stroke-current">
+            <line x1="19" y1="12" x2="5" y2="12" class="translate-x-3 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out" />
+            <polyline points="12 5 5 12 12 19" class="translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-in-out" />
+          </svg>
+          Back to Home
         </a>
       </div>
     </div>
