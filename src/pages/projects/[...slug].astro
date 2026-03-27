@@ -2,8 +2,7 @@
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import Container from "@components/Container.astro";
-import FormattedDate from "@components/FormattedDate.astro";
-import { readingTime } from "@lib/utils";
+import { readingTime, formatDate } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
 import Link from "@components/Link.astro";
 import Schema from "@components/Schema.astro";
@@ -37,7 +36,9 @@ const projectSchema = generateProjectSchema(project.data, Astro.url);
     <div class="space-y-1 my-10">
       <div class="animate flex items-center gap-1.5">
         <div class="font-base text-sm">
-          <FormattedDate date={project.data.date} />
+          <time datetime={project.data.date.toISOString()}>
+            {formatDate(project.data.date)}
+          </time>
         </div>
         &bull;
         <div class="font-base text-sm">

@@ -27,6 +27,7 @@
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.57.0",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.20",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "mermaid": "^11.13.0",
     "sharp": "^0.34.5",

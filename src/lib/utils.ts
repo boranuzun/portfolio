@@ -1,16 +1,17 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import dayjs from "dayjs";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export function formatDate(date: Date) {
-  return Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  }).format(date);
+  return dayjs(date).format("MMM D, YYYY");
+}
+
+export function isSameDay(a: Date, b: Date) {
+  return dayjs(a).isSame(b, "day");
 }
 
 export function readingTime(html: string) {

@@ -2,8 +2,7 @@
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import Container from "@components/Container.astro";
-import FormattedDate from "@components/FormattedDate.astro";
-import { readingTime } from "@lib/utils";
+import { readingTime, formatDate, isSameDay } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
 import Schema from "@components/Schema.astro";
 import { generateBlogPostingSchema } from "@lib/schema";
@@ -20,8 +19,15 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<"blog">;
 
 const post = Astro.props;
-const { Content } = await render(post);
-const blogSchema = generateBlogPostingSchema(post.data, Astro.url);
+const { Content, remarkPluginFrontmatter } = await render(post);
+const lastModified = remarkPluginFrontmatter.lastModified
+  ? new Date(remarkPluginFrontmatter.lastModified)
+  : null;
+const showUpdated = lastModified !== null && !isSameDay(lastModified, post.data.date);
+const blogSchema = generateBlogPostingSchema(
+  { ...post.data, lastModified },
+  Astro.url,
+);
 ---
 
 <Schema schema={blogSchema} />
@@ -36,13 +42,22 @@ const blogSchema = generateBlogPostingSchema(post.data, Astro.url);
     <div class="space-y-1 my-10">
       <div class="animate flex items-center gap-1.5">
         <div class="font-base text-sm">
-          <FormattedDate date={post.data.date} />
+          <time datetime={post.data.date.toISOString()}>
+            {formatDate(post.data.date)}
+          </time>
         </div>
         &bull;
         <div class="font-base text-sm">
           {readingTime(post.body ?? "")}
         </div>
       </div>
+      {showUpdated && (
+        <div class="animate font-base text-sm text-black/50 dark:text-white/50">
+          Updated <time datetime={lastModified!.toISOString()}>
+            {formatDate(lastModified!)}
+          </time>
+        </div>
+      )}
       <div class="animate text-2xl font-semibold text-black dark:text-white">
         {post.data.title}
       </div>
