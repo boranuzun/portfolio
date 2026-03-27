@@ -22,6 +22,7 @@ export function generateBlogPostingSchema(
     title: string;
     description: string;
     date: Date;
+    lastModified?: Date | null;
   },
   url: URL,
 ): SchemaOrgBlogPosting {
@@ -31,7 +32,7 @@ export function generateBlogPostingSchema(
     headline: post.title,
     description: post.description,
     datePublished: post.date.toISOString(),
-    dateModified: post.date.toISOString(),
+    dateModified: (post.lastModified ?? post.date).toISOString(),
     author: {
       "@type": "Person",
       name: SITE.NAME,
