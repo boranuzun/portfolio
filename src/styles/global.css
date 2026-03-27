@@ -5,11 +5,26 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* Body text and code */
   --font-mono:
     'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-    /* Headings */
-  --font-display: 'Geist', ui-sans-serif, system-ui, sans-serif;
+
+  /* Terminal color palette — dark */
+  --color-terminal-bg: #0a0f0a;
+  --color-terminal-surface: #0d1a0d;
+  --color-terminal-border: #1a3a1a;
+  --color-terminal-text: #e0e0e0;
+  --color-terminal-text-secondary: #6b7b6b;
+  --color-terminal-accent: #00ff88;
+  --color-terminal-code-bg: #1a2a1a;
+
+  /* Terminal color palette — light */
+  --color-terminal-light-bg: #f4f8f4;
+  --color-terminal-light-surface: #ffffff;
+  --color-terminal-light-border: #d4e4d4;
+  --color-terminal-light-text: #1a1a1a;
+  --color-terminal-light-text-secondary: #5a6a5a;
+  --color-terminal-light-accent: #0d7a3f;
+  --color-terminal-light-code-bg: #e8f0e8;
 }
 
 /*
@@ -48,14 +63,23 @@
   body {
     @apply font-mono antialiased;
     @apply flex flex-col;
-    @apply bg-neutral-100 dark:bg-neutral-900;
-    @apply text-black/50 dark:text-white/75;
+    background-color: var(--color-terminal-light-bg);
+    color: var(--color-terminal-light-text-secondary);
+  }
+
+  html.dark body {
+    background-color: var(--color-terminal-bg);
+    color: var(--color-terminal-text-secondary);
   }
 
   header {
     @apply fixed top-0 left-0 right-0 z-50 py-5;
-    @apply bg-neutral-100/75 dark:bg-neutral-900/25;
+    background-color: color-mix(in srgb, var(--color-terminal-light-bg) 75%, transparent);
     @apply backdrop-blur-xs saturate-200;
+  }
+
+  html.dark header {
+    background-color: color-mix(in srgb, var(--color-terminal-bg) 75%, transparent);
   }
 
   main {
@@ -68,20 +92,50 @@
 
   article {
     @apply max-w-full prose dark:prose-invert prose-img:mx-auto prose-img:my-auto;
-    @apply font-mono prose-headings:font-mono prose-headings:font-semibold;
+    @apply font-mono prose-headings:font-mono prose-headings:font-bold;
     @apply prose-headings:text-black dark:prose-headings:text-white;
+    @apply prose-headings:tracking-tight;
   }
 }
 
 @layer utilities {
   article a {
-    @apply text-current underline underline-offset-2;
-    @apply decoration-black/15 dark:decoration-white/30;
+    color: var(--color-terminal-light-accent);
+    @apply underline underline-offset-2;
+    @apply decoration-current/30;
     @apply transition-colors duration-300 ease-in-out;
   }
   article a:hover {
-    @apply text-black dark:text-white;
-    @apply decoration-black/25 dark:decoration-white/50;
+    @apply decoration-current/60;
+  }
+  html.dark article a {
+    color: var(--color-terminal-accent);
+  }
+
+  .terminal-card {
+    background-color: var(--color-terminal-light-surface);
+    border: 1px solid var(--color-terminal-light-border);
+    @apply rounded-lg p-5 transition-colors duration-300;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+  .terminal-card:hover {
+    border-color: var(--color-terminal-light-accent);
+  }
+  html.dark .terminal-card {
+    background-color: var(--color-terminal-surface);
+    border-color: var(--color-terminal-border);
+    box-shadow: none;
+  }
+  html.dark .terminal-card:hover {
+    border-color: var(--color-terminal-accent);
+  }
+
+  .comment-label {
+    @apply text-xs uppercase tracking-wider font-semibold mb-3;
+    color: var(--color-terminal-light-accent);
+  }
+  html.dark .comment-label {
+    color: var(--color-terminal-accent);
   }
 }
 
@@ -131,6 +185,16 @@ html.scrolled #back-to-top {
   }
   .cursor-blink {
     animation: blink 1.5s step-end infinite;
+  }
+
+  @keyframes type-in {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  .type-in {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: type-in 1.5s steps(40) forwards;
   }
 
 html.dark .astro-code,
