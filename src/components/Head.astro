@@ -89,6 +89,7 @@ const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
       const nextTheme = isDark ? "light" : "dark";
       localStorage.setItem("theme", nextTheme);
       toggleTheme(!isDark);
+      playClickSound();
     });
 
     window.matchMedia("(prefers-color-scheme: dark)")
@@ -130,6 +131,27 @@ const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
       top: 0,
       behavior: prefersReducedMotion ? "auto" : "smooth"
     });
+  }
+
+function playClickSound() {
+    try {
+      const ctx = new window.AudioContext();
+      const bufferSize = ctx.sampleRate * 0.012;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        const t = i / ctx.sampleRate;
+        data[i] = Math.exp(-t * 400) * (Math.random() * 2 - 1) * 0.3;
+      }
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.012);
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(ctx.currentTime);
+    } catch { /* audio not available */ }
   }
 
 function toggleTheme(dark) {
