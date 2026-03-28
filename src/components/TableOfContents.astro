@@ -1,0 +1,36 @@
+---
+type Props = {
+  headings: { depth: number; slug: string; text: string }[];
+};
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+{filteredHeadings.length > 0 && (
+  <nav id="toc-nav" aria-label="Table of contents">
+    <div class="comment-label">// toc</div>
+    <ul class="flex flex-col gap-1.5 text-sm list-none pl-0">
+      {filteredHeadings.map(heading => (
+        <li class:list={[heading.depth === 3 && "pl-3"]}>
+          <a
+            href={`#${heading.slug}`}
+            class="block py-0.5 transition-colors duration-200 text-terminal-light-text-secondary hover:text-terminal-light-accent dark:text-terminal-text-secondary dark:hover:text-terminal-accent no-underline"
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  :global(.toc-active) {
+    color: var(--color-terminal-light-accent) !important;
+    font-weight: 600;
+  }
+  :global(html.dark .toc-active) {
+    color: var(--color-terminal-accent) !important;
+  }
+</style>

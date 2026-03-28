@@ -7,7 +7,7 @@ import { BLOG } from "@consts";
 import { getPublishedEntries } from "@lib/collections";
 
 const data = await getPublishedEntries("blog");
-  
+
 type Acc = {
   [year: string]: CollectionEntry<"blog">[];
 }
@@ -21,7 +21,7 @@ const posts = data.reduce((acc: Acc, post) => {
     return acc;
   }, {});
 
-const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a)); 
+const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
 ---
 
 <PageLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>

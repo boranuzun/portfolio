@@ -63,23 +63,14 @@
   body {
     @apply font-mono antialiased;
     @apply flex flex-col;
-    background-color: var(--color-terminal-light-bg);
-    color: var(--color-terminal-light-text-secondary);
-  }
-
-  html.dark body {
-    background-color: var(--color-terminal-bg);
-    color: var(--color-terminal-text-secondary);
+    @apply bg-neutral-100 dark:bg-neutral-900;
+    @apply text-black/50 dark:text-white/75;
   }
 
   header {
     @apply fixed top-0 left-0 right-0 z-50 py-5;
-    background-color: color-mix(in srgb, var(--color-terminal-light-bg) 75%, transparent);
+    @apply bg-neutral-100/75 dark:bg-neutral-900/25;
     @apply backdrop-blur-xs saturate-200;
-  }
-
-  html.dark header {
-    background-color: color-mix(in srgb, var(--color-terminal-bg) 75%, transparent);
   }
 
   main {
@@ -95,6 +86,11 @@
     @apply font-mono prose-headings:font-mono prose-headings:font-bold;
     @apply prose-headings:text-black dark:prose-headings:text-white;
     @apply prose-headings:tracking-tight;
+  }
+
+  /* Offset anchors for fixed header */
+  article :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 6rem;
   }
 }
 
@@ -128,6 +124,11 @@
   }
   html.dark .terminal-card:hover {
     border-color: var(--color-terminal-accent);
+  }
+
+  .toc-sidebar {
+    /* Position to the left of the max-w-5xl (64rem) container */
+    right: calc(50% + 32rem + 1rem);
   }
 
   .comment-label {

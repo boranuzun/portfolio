@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import Container from "@components/Container.astro";
 import PageLayout from "@layouts/PageLayout.astro";
 import ArrowCard from "@components/ArrowCard.astro";
+import SkillPill from "@components/SkillPill.astro";
 import Link from "@components/Link.astro";
 import { dateRange } from "@lib/utils";
 import { SITE, HOME, SOCIALS } from "@consts";
@@ -14,7 +15,7 @@ const projects = (await getPublishedEntries("projects")).slice(0, SITE.NUM_PROJE
 
 const allwork = (await getCollection("work"))
   .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
-  .slice(0,SITE.NUM_WORKS_ON_HOMEPAGE);
+  .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
 
 const work = await Promise.all(
   allwork.map(async (item) => {
@@ -22,33 +23,31 @@ const work = await Promise.all(
     return { ...item, Content };
   })
 );
-
 ---
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
-    <h4 class="animate font-mono text-black dark:text-white">
-      <div class="text-3xl font-bold">
-        Hi, I'm Boran&nbsp;<span class="text-3xl">👋🏻</span>
-      </div>
-      <div class="text-base text-gray-600 dark:text-gray-200 font-medium">
-        Aspiring DevOps Engineer · Network & Systems Administrator
-      </div>
-      <div class="text-sm flex gap-3 text-gray-600 dark:text-gray-200 font-extralight italic">
-        <Link href="/cv/cv-eng.pdf" external>🇬🇧 CV in English</Link>
-        <Link href="/cv/cv.pdf" external>🇫🇷 CV en Français</Link>
-      </div>
-    </h4>
     <div class="space-y-16">
-      <section>
-        <article class="space-y-4">
-          <p class="animate">
+      <section class="animate">
+        <div class="comment-label">$ whoami</div>
+        <h1 class="text-3xl font-bold text-black dark:text-white tracking-tight">
+          Hi, I'm Boran&nbsp;<span class="text-3xl">👋🏻</span>
+        </h1>
+        <div class="text-base mt-1">
+          Aspiring DevOps Engineer &middot; Network &amp; Systems Administrator<span class="cursor-blink text-terminal-light-accent dark:text-terminal-accent"> &#9608;</span>
+        </div>
+        <div class="text-sm flex gap-3 mt-2 italic">
+          <Link href="/cv/cv-eng.pdf" external>&#127468;&#127463; CV in English</Link>
+          <Link href="/cv/cv.pdf" external>&#127467;&#127479; CV en Fran&ccedil;ais</Link>
+        </div>
+        <article class="space-y-4 mt-6">
+          <p>
             I'm a recent graduate, with a BSc in Business Information Technology, looking to start my career in DevOps or network and systems administration. I've spent a lot of my time building a homelab and experimenting with automation, which is where I really found my interest in infrastructure.
           </p>
-          <p class="animate">
+          <p>
             I'm passionate about networking, DevOps, and open-source projects. More recently, I've been diving into AI agents, getting my hands dirty with multi-agent systems, MCP servers and building agent skills. I love the challenge of automating systems and seeing everything work together efficiently.
           </p>
-          <p class="animate">
+          <p>
             Right now, I'm looking for a junior position or internship where I can put my skills to use and keep learning from an experienced team.
           </p>
         </article>
@@ -58,13 +57,15 @@ const work = await Promise.all(
         <h5 class="font-semibold text-black dark:text-white">
           Skills & Technologies
         </h5>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {skillsData.categories.map(category => (
             <div>
-              <span class="font-medium text-black dark:text-white">
-                {category.category}
-              </span>
-              <p>{category.skills.join(", ")}</p>
+              <div class="text-xs opacity-60 mb-1">{category.category}</div>
+              <div class="flex flex-wrap gap-1.5">
+                {category.skills.map(skill => (
+                  <SkillPill name={skill} />
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -75,9 +76,7 @@ const work = await Promise.all(
           <h5 class="font-semibold text-black dark:text-white">
             Work Experience
           </h5>
-          <Link href="/work">
-            See all work
-          </Link>
+          <Link href="/work">See all work</Link>
         </div>
         <ul class="flex flex-col space-y-4">
           {work.map(entry => (
@@ -91,9 +90,6 @@ const work = await Promise.all(
               <div class="text-sm opacity-75">
                 {dateRange(entry.data.dateStart, entry.data.dateEnd)}
               </div>
-              {/* <article>
-                <entry.Content />
-              </article> */}
             </li>
           ))}
         </ul>
@@ -104,9 +100,7 @@ const work = await Promise.all(
           <h5 class="font-semibold text-black dark:text-white">
             Recent projects
           </h5>
-          <Link href="/projects">
-            See all projects
-          </Link>
+          <Link href="/projects">See all projects</Link>
         </div>
         <ul class="flex flex-col list-none pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
           {projects.map(project => (
@@ -122,9 +116,7 @@ const work = await Promise.all(
           <h5 class="font-semibold text-black dark:text-white">
             Latest posts
           </h5>
-          <Link href="/blog">
-            See all posts
-          </Link>
+          <Link href="/blog">See all posts</Link>
         </div>
         <ul class="flex flex-col list-none pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
           {blog.map(post => (
@@ -139,12 +131,10 @@ const work = await Promise.all(
         <h5 class="font-semibold text-black dark:text-white">
           Let's Connect
         </h5>
-        <article>
-          <p>
-            If you want to get in touch with me about something or just to say hi,
-            reach out on social media or send me an email.
-          </p>
-        </article>
+        <p>
+          If you want to get in touch with me about something or just to say hi,
+          reach out on social media or send me an email.
+        </p>
         <ul class="flex flex-wrap gap-2">
           {SOCIALS.map(SOCIAL => (
             <li class="flex gap-x-2 text-nowrap">

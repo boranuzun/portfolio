@@ -14,15 +14,14 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
     <div class="flex items-center justify-between mt-8">
-      <div class="flex gap-2 items-center text-sm tabular-nums text-black/50 dark:text-white/50">
+      <div class="flex gap-2 items-center text-sm tabular-nums">
         <span>&copy; {currentYear}</span>
         <span aria-hidden="true" class="opacity-50">&bull;</span>
-        <span class="font-medium text-black/75 dark:text-white/80">{SITE.NAME}</span>
+        <span class="font-medium text-terminal-light-text dark:text-terminal-text">{SITE.NAME}</span>
       </div>
-      
-      <a 
-        href="/privacy" 
-        class="text-sm font-medium text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors duration-200 ease-out underline underline-offset-4 decoration-black/20 dark:decoration-white/20 hover:decoration-black dark:hover:decoration-white"
+      <a
+        href="/privacy"
+        class="text-sm font-medium transition-colors duration-200 ease-out underline underline-offset-4 decoration-current/20 hover:decoration-current/50 text-terminal-light-text-secondary hover:text-terminal-light-accent dark:text-terminal-text-secondary dark:hover:text-terminal-accent"
       >
         Privacy Policy
       </a>

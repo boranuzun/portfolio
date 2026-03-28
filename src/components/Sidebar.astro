@@ -1,0 +1,29 @@
+---
+type Props = {
+  headings: { depth: number; slug: string; text: string }[];
+};
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+{/* Mobile: collapsible TOC */}
+{filteredHeadings.length > 0 && (
+  <div class="md:hidden mb-8">
+    <details>
+      <summary class="comment-label cursor-pointer select-none">// table of contents</summary>
+      <ul class="flex flex-col gap-1 text-sm list-none pl-0 mt-2">
+        {filteredHeadings.map(heading => (
+          <li class:list={[heading.depth === 3 && "pl-3"]}>
+            <a
+              href={`#${heading.slug}`}
+              class="block py-0.5 text-terminal-light-text-secondary hover:text-terminal-light-accent dark:text-terminal-text-secondary dark:hover:text-terminal-accent no-underline"
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  </div>
+)}
