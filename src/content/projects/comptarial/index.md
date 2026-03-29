@@ -4,44 +4,35 @@ description: "Secure digital platform for client document exchange for an accoun
 date: "Sep 27 2025"
 repoURL: "https://github.com/heg-comptarial/comptarial"
 technologies:
-  [
-    "TypeScript",
-    "JavaScript",
-    "React",
-    "Next.js",
-    "PHP",
-    "Laravel",
-    "MySQL",
-    "Tailwind CSS",
-  ]
+  ["TypeScript", "JavaScript", "React", "Next.js", "PHP", "Laravel", "MySQL", "Tailwind CSS"]
 mermaid: true
 ---
 
-Comptarial is a web application I helped build for an accounting firm. The goal was straightforward: they needed a way to securely exchange tax returns and financial documents with their clients. We built this as part of a module at the Haute école de gestion de Genève (HEG), running the project as an Agile team using Scrum. 
+Comptarial is a web application I helped build for an accounting firm. The goal was straightforward: they needed a way to securely exchange tax returns and financial documents with their clients. We built this as part of a module at the Haute école de gestion de Genève (HEG), running the project as an Agile team using Scrum.
 
 ## The Architecture
 
-We went with a decoupled architecture. A Next.js frontend handles the user interface, while a Laravel backend manages the heavy lifting. 
+We went with a decoupled architecture. A Next.js frontend handles the user interface, while a Laravel backend manages the heavy lifting.
 
 ```mermaid
 graph TD
     Client[User]
-    
+
     subgraph Frontend[Next.js Application]
         UI[UI Components]
     end
-    
+
     subgraph Backend[Laravel 12+ API]
         Auth[Sanctum Auth]
         Controllers[API Endpoints]
         Mail[Mail Service]
     end
-    
+
     subgraph Infrastructure
         DB[(MySQL Database)]
         S3[Infomaniak S3 Storage]
     end
-    
+
     Client -->|HTTPS| Frontend
     Frontend -->|REST API| Backend
     Backend -->|Read/Write| DB

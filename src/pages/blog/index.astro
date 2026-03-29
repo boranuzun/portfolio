@@ -9,47 +9,43 @@ import { getPublishedEntries } from "@lib/collections";
 const data = await getPublishedEntries("blog");
 
 type Acc = {
-  [year: string]: CollectionEntry<"blog">[];
-}
+	[year: string]: CollectionEntry<"blog">[];
+};
 
 const posts = data.reduce((acc: Acc, post) => {
-    const year = post.data.date.getFullYear().toString();
-    if (!acc[year]) {
-      acc[year] = [];
-    }
-    acc[year].push(post);
-    return acc;
-  }, {});
+	const year = post.data.date.getFullYear().toString();
+	if (!acc[year]) {
+		acc[year] = [];
+	}
+	acc[year].push(post);
+	return acc;
+}, {});
 
 const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
 ---
 
 <PageLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
-  <Container>
-    <div class="space-y-10">
-      <div class="animate font-semibold text-black dark:text-white text-2xl">
-        Blog
-      </div>
-      <div class="space-y-4">
-        {years.map(year => (
-          <section class="animate space-y-4">
-            <div class="font-semibold text-black dark:text-white">
-              {year}
-            </div>
-            <div>
-              <ul class="flex flex-col list-none pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
-                {
-                  posts[year].map((post) => (
-                    <li class="group relative">
-                      <ArrowCard entry={post}/>
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-          </section>
-        ))}
-      </div>
-    </div>
-  </Container>
+	<Container>
+		<div class="space-y-10">
+			<div class="animate text-2xl font-semibold text-black dark:text-white">Blog</div>
+			<div class="space-y-4">
+				{
+					years.map((year) => (
+						<section class="animate space-y-4">
+							<div class="font-semibold text-black dark:text-white">{year}</div>
+							<div>
+								<ul class="flex list-none flex-col pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
+									{posts[year].map((post) => (
+										<li class="group relative">
+											<ArrowCard entry={post} />
+										</li>
+									))}
+								</ul>
+							</div>
+						</section>
+					))
+				}
+			</div>
+		</div>
+	</Container>
 </PageLayout>

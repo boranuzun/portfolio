@@ -64,12 +64,12 @@ After that, chezmoi applies every tracked config file to its target location, de
 
 On first apply, chezmoi asks four questions:
 
-| Prompt | Stored as |
-| --- | --- |
-| Email address | `data.email` |
-| Full name | `data.name` |
-| GPG key ID for git signing (leave empty to disable) | `data.gpgKeyId` |
-| Is OrbStack installed? | `data.hasOrbStack` |
+| Prompt                                              | Stored as          |
+| --------------------------------------------------- | ------------------ |
+| Email address                                       | `data.email`       |
+| Full name                                           | `data.name`        |
+| GPG key ID for git signing (leave empty to disable) | `data.gpgKeyId`    |
+| Is OrbStack installed?                              | `data.hasOrbStack` |
 
 Answers are saved to `~/.config/chezmoi/chezmoi.toml` and never asked again.
 
@@ -124,14 +124,14 @@ The same pattern applies throughout: `aliases.zsh.tmpl`, `env.zsh.tmpl`, and `om
 
 The Zsh configuration is split into focused modules under `~/.config/zsh/`:
 
-| File | Purpose |
-| --- | --- |
-| `env.zsh.tmpl` | `$PATH` (Homebrew path on macOS, `~/.local/bin` on Linux), `$EDITOR`, locale, Bun, Starship, zoxide |
-| `history.zsh` | History file size (1,000,000 entries), dedup settings |
-| `fzf.zsh` | fzf key bindings, `bat`/`eza` previews, yazi shell wrapper |
-| `omz.zsh.tmpl` | Oh My Zsh theme (none — Starship handles the prompt), plugins list |
-| `aliases.zsh.tmpl` | All shell aliases, OS-specific variants |
-| `.zshrc` | Sources all modules in order |
+| File               | Purpose                                                                                             |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| `env.zsh.tmpl`     | `$PATH` (Homebrew path on macOS, `~/.local/bin` on Linux), `$EDITOR`, locale, Bun, Starship, zoxide |
+| `history.zsh`      | History file size (1,000,000 entries), dedup settings                                               |
+| `fzf.zsh`          | fzf key bindings, `bat`/`eza` previews, yazi shell wrapper                                          |
+| `omz.zsh.tmpl`     | Oh My Zsh theme (none — Starship handles the prompt), plugins list                                  |
+| `aliases.zsh.tmpl` | All shell aliases, OS-specific variants                                                             |
+| `.zshrc`           | Sources all modules in order                                                                        |
 
 The tools:
 
@@ -145,21 +145,21 @@ The tools:
 
 The aliases I actually use:
 
-| Alias | Expands to | What it does |
-| --- | --- | --- |
-| `ls` | `eza --color --icons --long --header --git` | Long listing with git status |
-| `lt` | `eza --tree --level=2 --long --icons --git` | Tree view, 2 levels deep |
-| `ltree` | `eza --tree --level=2 --icons --git` | Tree view, 2 levels, compact |
-| `cd` | `z` | zoxide smart directory jump |
-| `ff` | `fastfetch` | System info |
-| `sysup` | macOS: `brew upgrade; mas upgrade; omz update` / Arch: `sudo pacman -Syu; omz update` / Debian: `sudo apt update && sudo apt upgrade -y; omz update` | Update everything for your platform |
-| `buc` | `brew upgrade --cask` | Upgrade Homebrew casks only (macOS) |
-| `fh` | `fc -l 1 \| tac \| fzf` | Fuzzy search through full shell history |
-| `gh-create` | `gh repo create --private --source=. --remote=origin && git push -u --all && gh browse` | Create a private GitHub repo and push the current directory |
-| `opc` | `opencode` | AI coding assistant |
-| `cm` | `chezmoi` | chezmoi shortcut |
-| `rr` | `source ~/.zshrc` | Reload shell config without opening a new terminal |
-| `ql` | `qlmanage -p` | Quick Look preview (macOS only) |
+| Alias       | Expands to                                                                                                                                           | What it does                                                |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `ls`        | `eza --color --icons --long --header --git`                                                                                                          | Long listing with git status                                |
+| `lt`        | `eza --tree --level=2 --long --icons --git`                                                                                                          | Tree view, 2 levels deep                                    |
+| `ltree`     | `eza --tree --level=2 --icons --git`                                                                                                                 | Tree view, 2 levels, compact                                |
+| `cd`        | `z`                                                                                                                                                  | zoxide smart directory jump                                 |
+| `ff`        | `fastfetch`                                                                                                                                          | System info                                                 |
+| `sysup`     | macOS: `brew upgrade; mas upgrade; omz update` / Arch: `sudo pacman -Syu; omz update` / Debian: `sudo apt update && sudo apt upgrade -y; omz update` | Update everything for your platform                         |
+| `buc`       | `brew upgrade --cask`                                                                                                                                | Upgrade Homebrew casks only (macOS)                         |
+| `fh`        | `fc -l 1 \| tac \| fzf`                                                                                                                              | Fuzzy search through full shell history                     |
+| `gh-create` | `gh repo create --private --source=. --remote=origin && git push -u --all && gh browse`                                                              | Create a private GitHub repo and push the current directory |
+| `opc`       | `opencode`                                                                                                                                           | AI coding assistant                                         |
+| `cm`        | `chezmoi`                                                                                                                                            | chezmoi shortcut                                            |
+| `rr`        | `source ~/.zshrc`                                                                                                                                    | Reload shell config without opening a new terminal          |
+| `ql`        | `qlmanage -p`                                                                                                                                        | Quick Look preview (macOS only)                             |
 
 ## Day-to-day workflow
 

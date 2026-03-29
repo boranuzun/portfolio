@@ -5,8 +5,8 @@ import Footer from "@components/Footer.astro";
 import CommandPalette from "@components/CommandPalette.astro";
 
 type Props = {
-  title: string;
-  description: string;
+	title: string;
+	description: string;
 };
 
 const { title, description } = Astro.props;
@@ -14,15 +14,15 @@ const { title, description } = Astro.props;
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <Head title={`~/${title.toLowerCase()}`} description={description} />
-  </head>
-  <body>
-    <Header />
-    <main>
-      <slot />
-    </main>
-    <Footer />
-    <CommandPalette />
-  </body>
+	<head>
+		<Head title={`~/${title.toLowerCase()}`} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+		<CommandPalette />
+	</body>
 </html>

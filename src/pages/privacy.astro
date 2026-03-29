@@ -5,59 +5,95 @@ import { SITE } from "@consts";
 ---
 
 <PageLayout title="Privacy Policy" description="Privacy Policy for Boran's portfolio.">
-  <Container>
-    <article class="space-y-6">
-      <h1 class="animate font-semibold text-black dark:text-white text-2xl">
-        Privacy Policy
-      </h1>
-      <p class="animate text-sm opacity-75">Last updated: March 11, 2026</p>
+	<Container>
+		<article class="space-y-6">
+			<h1 class="animate text-2xl font-semibold text-black dark:text-white">Privacy Policy</h1>
+			<p class="animate text-sm opacity-75">Last updated: March 11, 2026</p>
 
-      <section class="animate space-y-4">
-        <h2 class="font-semibold text-black dark:text-white text-lg">The short version</h2>
-        <p>
-          I'm not interested in tracking you. This portfolio is just a place to show what I can do. I don't use analytics, I don't set tracking cookies, and I don't sell your data.
-        </p>
-      </section>
+			<section class="animate space-y-4">
+				<h2 class="text-lg font-semibold text-black dark:text-white">The short version</h2>
+				<p>
+					I'm not interested in tracking you. This portfolio is just a place to show what I can do.
+					I don't use analytics, I don't set tracking cookies, and I don't sell your data.
+				</p>
+			</section>
 
-      <section class="animate space-y-4">
-        <h2 class="font-semibold text-black dark:text-white text-lg">The chatbot</h2>
-        <p>
-          The only time I see any data from you is if you talk to the AI chatbot. When you send a message, it travels through a Cloudflare Worker and their AI Gateway before hitting the Google Gemini API.
-        </p>
-        <p>
-          Cloudflare keeps logs of these conversations for a few weeks. I use those logs to make sure the bot isn't crashing and to see how people are interacting with it. I don't have any long-term storage set up for these messages.
-        </p>
-        <p>
-          Because I run this from Switzerland, Google's "Paid Services" terms apply to the Gemini API. This means Google doesn't use your prompts or the bot's answers to train their AI models. They might keep the data briefly to catch abuse or for legal reasons, but nobody is sitting there reading your chats to improve the algorithm. You can check the details in <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Google's API terms</a>.
-        </p>
-        <p>
-          One heads-up: I can't delete individual messages once they've been sent. If you're not okay with that, it's probably best to skip the chatbot. And please, don't put anything sensitive or personal in there. It's an AI, after all.
-        </p>
-      </section>
+			<section class="animate space-y-4">
+				<h2 class="text-lg font-semibold text-black dark:text-white">The chatbot</h2>
+				<p>
+					The only time I see any data from you is if you talk to the AI chatbot. When you send a
+					message, it travels through a Cloudflare Worker and their AI Gateway before hitting the
+					Google Gemini API.
+				</p>
+				<p>
+					Cloudflare keeps logs of these conversations for a few weeks. I use those logs to make
+					sure the bot isn't crashing and to see how people are interacting with it. I don't have
+					any long-term storage set up for these messages.
+				</p>
+				<p>
+					Because I run this from Switzerland, Google's "Paid Services" terms apply to the Gemini
+					API. This means Google doesn't use your prompts or the bot's answers to train their AI
+					models. They might keep the data briefly to catch abuse or for legal reasons, but nobody
+					is sitting there reading your chats to improve the algorithm. You can check the details in <a
+						href="https://ai.google.dev/gemini-api/terms"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-black underline decoration-black/15 underline-offset-2 transition-colors duration-300 ease-in-out hover:decoration-black/40 dark:text-white dark:decoration-white/30 dark:hover:decoration-white/50"
+						>Google's API terms</a
+					>.
+				</p>
+				<p>
+					One heads-up: I can't delete individual messages once they've been sent. If you're not
+					okay with that, it's probably best to skip the chatbot. And please, don't put anything
+					sensitive or personal in there. It's an AI, after all.
+				</p>
+			</section>
 
-      <section class="animate space-y-4">
-        <h2 class="font-semibold text-black dark:text-white text-lg">The services I use</h2>
-        <p>
-          If you want to dive deeper into the privacy practices of the tools powering the chatbot, here are their policies:
-        </p>
-        <ul class="list-disc list-outside space-y-2 pl-6 text-sm opacity-80">
-          <li><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Cloudflare Privacy Policy</a></li>
-          <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">Google Privacy Policy</a></li>
-        </ul>
-      </section>
+			<section class="animate space-y-4">
+				<h2 class="text-lg font-semibold text-black dark:text-white">The services I use</h2>
+				<p>
+					If you want to dive deeper into the privacy practices of the tools powering the chatbot,
+					here are their policies:
+				</p>
+				<ul class="list-outside list-disc space-y-2 pl-6 text-sm opacity-80">
+					<li>
+						<a
+							href="https://www.cloudflare.com/privacypolicy/"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-black underline decoration-black/15 underline-offset-2 transition-colors duration-300 ease-in-out hover:decoration-black/40 dark:text-white dark:decoration-white/30 dark:hover:decoration-white/50"
+							>Cloudflare Privacy Policy</a
+						>
+					</li>
+					<li>
+						<a
+							href="https://policies.google.com/privacy"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-black underline decoration-black/15 underline-offset-2 transition-colors duration-300 ease-in-out hover:decoration-black/40 dark:text-white dark:decoration-white/30 dark:hover:decoration-white/50"
+							>Google Privacy Policy</a
+						>
+					</li>
+				</ul>
+			</section>
 
-      <section class="animate space-y-4">
-        <h2 class="font-semibold text-black dark:text-white text-lg">Get in touch</h2>
-        <p>
-          Got questions? Send me an email at <a href={`mailto:${SITE.EMAIL}`} class="text-black dark:text-white underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:decoration-black/40 dark:hover:decoration-white/50 transition-colors duration-300 ease-in-out">{SITE.EMAIL}</a>.
-        </p>
-      </section>
+			<section class="animate space-y-4">
+				<h2 class="text-lg font-semibold text-black dark:text-white">Get in touch</h2>
+				<p>
+					Got questions? Send me an email at <a
+						href={`mailto:${SITE.EMAIL}`}
+						class="text-black underline decoration-black/15 underline-offset-2 transition-colors duration-300 ease-in-out hover:decoration-black/40 dark:text-white dark:decoration-white/30 dark:hover:decoration-white/50"
+						>{SITE.EMAIL}</a
+					>.
+				</p>
+			</section>
 
-      <section class="animate space-y-4 border-t border-black/5 dark:border-white/5 pt-4">
-        <p class="text-xs opacity-50 italic">
-          I might update this policy occasionally. If I do, I'll change the "last updated" date at the top of the page.
-        </p>
-      </section>
-    </article>
-  </Container>
+			<section class="animate space-y-4 border-t border-black/5 pt-4 dark:border-white/5">
+				<p class="text-xs italic opacity-50">
+					I might update this policy occasionally. If I do, I'll change the "last updated" date at
+					the top of the page.
+				</p>
+			</section>
+		</article>
+	</Container>
 </PageLayout>

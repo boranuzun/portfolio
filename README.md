@@ -127,12 +127,12 @@ Path aliases are configured in `tsconfig.json`:
 
 ```jsonc
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@*": ["./src/*"],
-    },
-  },
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@*": ["./src/*"],
+		},
+	},
 }
 ```
 
@@ -191,10 +191,10 @@ Frontmatter schema:
 
 ```ts
 {
-  company: string;
-  role: string;
-  dateStart: Date;
-  dateEnd: Date | string; // e.g. "Present"
+	company: string;
+	role: string;
+	dateStart: Date;
+	dateEnd: Date | string; // e.g. "Present"
 }
 ```
 

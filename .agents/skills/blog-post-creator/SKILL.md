@@ -14,8 +14,6 @@ Before writing any post, read these files:
 - `references/writing-guidelines.md` — voice, tone, and style rules
 - `references/examples.md` — complete post example and frontmatter template
 
-
-
 Create a new post at:
 
 src/content/blog/<kebab-case-slug>/index.md

@@ -1,12 +1,16 @@
 ---
-import type { SchemaOrgPerson, SchemaOrgBlogPosting, SchemaOrgSoftwareSourceCode } from "@lib/schema.types";
+import type {
+	SchemaOrgPerson,
+	SchemaOrgBlogPosting,
+	SchemaOrgSoftwareSourceCode,
+} from "@lib/schema.types";
 
 interface Props {
-  schema: SchemaOrgPerson | SchemaOrgBlogPosting | SchemaOrgSoftwareSourceCode;
+	schema: SchemaOrgPerson | SchemaOrgBlogPosting | SchemaOrgSoftwareSourceCode;
 }
 
 const { schema } = Astro.props;
-const safeJson = JSON.stringify(schema).replaceAll('</', '<\\/');
+const safeJson = JSON.stringify(schema).replaceAll("</", "<\\/");
 ---
 
 <script is:inline type="application/ld+json" set:html={safeJson} />

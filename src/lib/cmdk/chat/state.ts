@@ -1,23 +1,23 @@
 export interface ChatState {
-  isThinking: boolean;
-  messageHistory: string[];
-  historyIndex: number;
-  apiHistory: { role: "user" | "model"; content: string }[];
+	isThinking: boolean;
+	messageHistory: string[];
+	historyIndex: number;
+	apiHistory: { role: "user" | "model"; content: string }[];
 }
 
 const state: ChatState = {
-  isThinking: false,
-  messageHistory: [],
-  historyIndex: -1,
-  apiHistory: [],
+	isThinking: false,
+	messageHistory: [],
+	historyIndex: -1,
+	apiHistory: [],
 };
 
 export function getChatState(): ChatState {
-  return state;
+	return state;
 }
 
 export function clearChatHistory(): void {
-  state.apiHistory = [];
-  state.messageHistory = [];
-  state.historyIndex = -1;
+	state.apiHistory = [];
+	state.messageHistory = [];
+	state.historyIndex = -1;
 }

@@ -5,20 +5,20 @@ import tailwindcss from "@tailwindcss/vite";
 import { remarkModifiedTime } from "./remark-modified-time.mjs";
 
 export default defineConfig({
-  site: "https://boranuzun.ch/",
-  // base: "/portfolio/",
-  integrations: [mdx(), sitemap()],
-  vite: {
-    plugins: [tailwindcss()],
-  },
-  markdown: {
-    remarkPlugins: [remarkModifiedTime],
-    shikiConfig: {
-      themes: {
-        light: "vitesse-light",
-        dark: "vitesse-dark",
-      },
-      wrap: true,
-    }
-  }
+	site: "https://boranuzun.ch/",
+	// base: "/portfolio/",
+	integrations: [mdx(), sitemap()],
+	vite: {
+		plugins: [tailwindcss()],
+	},
+	markdown: {
+		remarkPlugins: [remarkModifiedTime],
+		shikiConfig: {
+			themes: {
+				light: "vitesse-light",
+				dark: "vitesse-dark",
+			},
+			wrap: true,
+		},
+	},
 });

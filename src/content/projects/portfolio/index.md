@@ -45,11 +45,11 @@ graph TD
 
 The palette is a multi-module TypeScript system under `src/lib/cmdk/` with three modes accessible from a single entry point:
 
-| Mode | Trigger | What it does |
-| --- | --- | --- |
+| Mode        | Trigger         | What it does                                         |
+| ----------- | --------------- | ---------------------------------------------------- |
 | **Command** | Default on open | Navigate pages, toggle theme, jump to external links |
-| **Search** | Type → Enter | Fuzzy-search across all blog posts and projects |
-| **AI Chat** | Cmd+Enter | Streaming AI responses via Cloudflare Worker |
+| **Search**  | Type → Enter    | Fuzzy-search across all blog posts and projects      |
+| **AI Chat** | Cmd+Enter       | Streaming AI responses via Cloudflare Worker         |
 
 The system is built as a state machine — `state.ts` owns the current mode and query; `registry.ts` holds the action definitions; `renderer.ts` reacts to state changes and repaints the list. Icons are centralized in `icons.ts` using Lucide SVGs and injected at init, keeping the Astro component markup clean.
 

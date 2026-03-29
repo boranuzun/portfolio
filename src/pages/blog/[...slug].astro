@@ -9,56 +9,57 @@ import Schema from "@components/Schema.astro";
 import { generateBlogPostingSchema } from "@lib/schema";
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("blog"))
-    .filter(post => !post.data.draft)
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: post,
-  }));
+	const posts = (await getCollection("blog"))
+		.filter((post) => !post.data.draft)
+		.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
 }
 type Props = CollectionEntry<"blog">;
 
 const post = Astro.props;
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 const lastModified = remarkPluginFrontmatter.lastModified
-  ? new Date(remarkPluginFrontmatter.lastModified)
-  : null;
-const blogSchema = generateBlogPostingSchema(
-  { ...post.data, lastModified },
-  Astro.url,
-);
+	? new Date(remarkPluginFrontmatter.lastModified)
+	: null;
+const blogSchema = generateBlogPostingSchema({ ...post.data, lastModified }, Astro.url);
 ---
 
 <Schema schema={blogSchema} />
 
-<ContentLayout title={post.data.title} description={post.data.description} mermaid={post.data.mermaid}>
-  <Container>
-    <div class="animate mb-6">
-      <BackToPrev href="/blog">
-        Back to blog
-      </BackToPrev>
-    </div>
+<ContentLayout
+	title={post.data.title}
+	description={post.data.description}
+	mermaid={post.data.mermaid}
+>
+	<Container>
+		<div class="animate mb-6">
+			<BackToPrev href="/blog"> Back to blog </BackToPrev>
+		</div>
 
-    <Sidebar headings={headings} />
+		<Sidebar headings={headings} />
 
-    {/* Desktop TOC — fixed to left of content */}
-    <div class="hidden lg:block fixed top-24 w-44 toc-sidebar">
-      <TableOfContents headings={headings} />
-    </div>
+		{/* Desktop TOC — fixed to left of content */}
+		<div class="toc-sidebar fixed top-24 hidden w-44 lg:block">
+			<TableOfContents headings={headings} />
+		</div>
 
-    {/* Main content */}
-    <div class="animate mb-8">
-      <h1 class="text-2xl font-bold text-terminal-light-text dark:text-terminal-text tracking-tight">
-        {post.data.title}
-      </h1>
-    </div>
-    <article class="animate">
-      <Content />
-    </article>
-  </Container>
+		{/* Main content */}
+		<div class="animate mb-8">
+			<h1
+				class="text-terminal-light-text dark:text-terminal-text text-2xl font-bold tracking-tight"
+			>
+				{post.data.title}
+			</h1>
+		</div>
+		<article class="animate">
+			<Content />
+		</article>
+	</Container>
 </ContentLayout>
 
 <script>
-  import "../../scripts/toc.ts";
+	import "../../scripts/toc.ts";
 </script>

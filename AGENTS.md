@@ -66,6 +66,7 @@ Draft content (`draft: true` in frontmatter) is excluded from all listings and t
 ### Linting
 
 ESLint uses the flat config format. Rules of note:
+
 - Semicolons required (`semi: ["error", "always"]`)
 - No quote-style enforcement
 

@@ -8,26 +8,40 @@ import Schema from "@components/Schema.astro";
 import { generatePersonSchema } from "@lib/schema";
 
 interface Props {
-  title: string;
-  description: string;
-  image?: string;
+	title: string;
+	description: string;
+	image?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = "/og-image.webp" } = Astro.props;
 
-const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || 'http://127.0.0.1:8787';
-const devExtra = import.meta.env.DEV && chatbotUrl !== 'http://127.0.0.1:8787' ? ' http://127.0.0.1:8787' : '';
+const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787";
+const devExtra =
+	import.meta.env.DEV && chatbotUrl !== "http://127.0.0.1:8787" ? " http://127.0.0.1:8787" : "";
 const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src ${connectSrc}; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';`} />
-<link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)">
-<link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)">
+<meta
+	http-equiv="Content-Security-Policy"
+	content={`default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src ${connectSrc}; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';`}
+/>
+<link
+	rel="icon"
+	type="image/svg+xml"
+	href="/favicon-dark.svg"
+	media="(prefers-color-scheme: dark)"
+/>
+<link
+	rel="icon"
+	type="image/svg+xml"
+	href="/favicon-light.svg"
+	media="(prefers-color-scheme: light)"
+/>
 <meta name="generator" content={Astro.generator} />
 <Fonts />
 
@@ -55,111 +69,117 @@ const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={new URL(image, Astro.url)} />
 
-<ClientRouter  />
+<ClientRouter />
 
 <!-- RSS Link -->
-<link rel="alternate" type="application/rss+xml" title={SITE.NAME} href={new URL("rss.xml", Astro.site)} />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title={SITE.NAME}
+	href={new URL("rss.xml", Astro.site)}
+/>
 
 <!-- JSON-LD Schema for Person -->
 <Schema schema={generatePersonSchema(Astro.url)} />
 
 <script is:inline>
-  function init() {
-    preloadTheme();
-    onScroll();
-    animate();
+	function init() {
+		preloadTheme();
+		onScroll();
+		animate();
 
-    const backToTop = document.getElementById("back-to-top");
-    backToTop?.addEventListener("click", (event) => scrollToTop(event));
+		const backToTop = document.getElementById("back-to-top");
+		backToTop?.addEventListener("click", (event) => scrollToTop(event));
 
-    const backToPrev = document.getElementById("back-to-prev");
-    backToPrev?.addEventListener("click", () => window.history.back());
+		const backToPrev = document.getElementById("back-to-prev");
+		backToPrev?.addEventListener("click", () => window.history.back());
 
-    const themeButton = document.getElementById("theme-button");
+		const themeButton = document.getElementById("theme-button");
 
-    function getEffectiveDark() {
-      const t = localStorage.getItem("theme");
-      if (t === "dark") return true;
-      if (t === "light") return false;
-      return window.matchMedia("(prefers-color-scheme: dark)").matches;
-    }
+		function getEffectiveDark() {
+			const t = localStorage.getItem("theme");
+			if (t === "dark") return true;
+			if (t === "light") return false;
+			return window.matchMedia("(prefers-color-scheme: dark)").matches;
+		}
 
-    themeButton?.addEventListener("click", () => {
-      const isDark = getEffectiveDark();
-      const nextTheme = isDark ? "light" : "dark";
-      localStorage.setItem("theme", nextTheme);
-      toggleTheme(!isDark);
-      playClickSound();
-    });
+		themeButton?.addEventListener("click", () => {
+			const isDark = getEffectiveDark();
+			const nextTheme = isDark ? "light" : "dark";
+			localStorage.setItem("theme", nextTheme);
+			toggleTheme(!isDark);
+			playClickSound();
+		});
 
-    window.matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", event => {
-        // Only react to system changes if user hasn't explicitly chosen light/dark
-        const t = localStorage.getItem("theme");
-        if (t !== "light" && t !== "dark") {
-          toggleTheme(event.matches);
-        }
-      });
+		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+			// Only react to system changes if user hasn't explicitly chosen light/dark
+			const t = localStorage.getItem("theme");
+			if (t !== "light" && t !== "dark") {
+				toggleTheme(event.matches);
+			}
+		});
 
-    document.addEventListener("scroll", onScroll);
-  }
+		document.addEventListener("scroll", onScroll);
+	}
 
-  function animate() {
-    const animateElements = document.querySelectorAll(".animate");
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const staggerDelay = prefersReducedMotion ? 0 : 150;
+	function animate() {
+		const animateElements = document.querySelectorAll(".animate");
+		const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		const staggerDelay = prefersReducedMotion ? 0 : 150;
 
-    animateElements.forEach((element, index) => {
-      setTimeout(() => {
-        element.classList.add("show");
-      }, index * staggerDelay);
-    });
-  }
+		animateElements.forEach((element, index) => {
+			setTimeout(() => {
+				element.classList.add("show");
+			}, index * staggerDelay);
+		});
+	}
 
-  function onScroll() {
-    if (window.scrollY > 0) {
-      document.documentElement.classList.add("scrolled");
-    } else {
-      document.documentElement.classList.remove("scrolled");
-    }
-  }
+	function onScroll() {
+		if (window.scrollY > 0) {
+			document.documentElement.classList.add("scrolled");
+		} else {
+			document.documentElement.classList.remove("scrolled");
+		}
+	}
 
-  function scrollToTop(event) {
-    event.preventDefault();
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({
-      top: 0,
-      behavior: prefersReducedMotion ? "auto" : "smooth"
-    });
-  }
+	function scrollToTop(event) {
+		event.preventDefault();
+		const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		window.scrollTo({
+			top: 0,
+			behavior: prefersReducedMotion ? "auto" : "smooth",
+		});
+	}
 
-function playClickSound() {
-    try {
-      const ctx = new window.AudioContext();
-      const bufferSize = ctx.sampleRate * 0.012;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        const t = i / ctx.sampleRate;
-        data[i] = Math.exp(-t * 400) * (Math.random() * 2 - 1) * 0.3;
-      }
-      const source = ctx.createBufferSource();
-      source.buffer = buffer;
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.2, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.012);
-      source.connect(gain);
-      gain.connect(ctx.destination);
-      source.start(ctx.currentTime);
-    } catch { /* audio not available */ }
-  }
+	function playClickSound() {
+		try {
+			const ctx = new window.AudioContext();
+			const bufferSize = ctx.sampleRate * 0.012;
+			const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+			const data = buffer.getChannelData(0);
+			for (let i = 0; i < bufferSize; i++) {
+				const t = i / ctx.sampleRate;
+				data[i] = Math.exp(-t * 400) * (Math.random() * 2 - 1) * 0.3;
+			}
+			const source = ctx.createBufferSource();
+			source.buffer = buffer;
+			const gain = ctx.createGain();
+			gain.gain.setValueAtTime(0.2, ctx.currentTime);
+			gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.012);
+			source.connect(gain);
+			gain.connect(ctx.destination);
+			source.start(ctx.currentTime);
+		} catch {
+			/* audio not available */
+		}
+	}
 
-function toggleTheme(dark) {
-    const css = document.createElement("style");
+	function toggleTheme(dark) {
+		const css = document.createElement("style");
 
-    css.appendChild(
-      document.createTextNode(
-        `*:not(#theme-button):not(#theme-button *) {
+		css.appendChild(
+			document.createTextNode(
+				`*:not(#theme-button):not(#theme-button *) {
              -webkit-transition: none !important;
              -moz-transition: none !important;
              -o-transition: none !important;
@@ -167,32 +187,32 @@ function toggleTheme(dark) {
              transition: none !important;
           }
         `,
-      )
-    );
+			),
+		);
 
-    document.head.appendChild(css);
+		document.head.appendChild(css);
 
-    if (dark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+		if (dark) {
+			document.documentElement.classList.add("dark");
+		} else {
+			document.documentElement.classList.remove("dark");
+		}
 
-  void window.getComputedStyle(css).opacity;
-    document.head.removeChild(css);
-  }
+		void window.getComputedStyle(css).opacity;
+		document.head.removeChild(css);
+	}
 
-  function preloadTheme() {
-    const userTheme = localStorage.theme;
-    if (userTheme === "light" || userTheme === "dark") {
-      toggleTheme(userTheme === "dark");
-    } else {
-      // Default to system preference without storing a value
-      toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-    }
-  }
+	function preloadTheme() {
+		const userTheme = localStorage.theme;
+		if (userTheme === "light" || userTheme === "dark") {
+			toggleTheme(userTheme === "dark");
+		} else {
+			// Default to system preference without storing a value
+			toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+		}
+	}
 
-  document.addEventListener("DOMContentLoaded", () => init());
-  document.addEventListener("astro:after-swap", () => init());
-  preloadTheme();
+	document.addEventListener("DOMContentLoaded", () => init());
+	document.addEventListener("astro:after-swap", () => init());
+	preloadTheme();
 </script>

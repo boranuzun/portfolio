@@ -4,27 +4,42 @@ import PageLayout from "@layouts/PageLayout.astro";
 ---
 
 <PageLayout title="404" description="Page not found.">
-  <Container>
-    <div class="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-6">
-      <h1 class="animate font-bold text-black dark:text-white text-7xl sm:text-9xl tracking-tighter">
-        404
-      </h1>
-      <p class="animate text-lg text-black/70 dark:text-white/70 max-w-sm mx-auto">
-        Oops! The page you're looking for doesn't exist or has been moved.
-      </p>
-      <div class="animate pt-4">
-        <a href="/" class="group inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 transition-colors font-medium text-black dark:text-white">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            class="size-5 stroke-2 fill-none stroke-current">
-            <line x1="19" y1="12" x2="5" y2="12" class="translate-x-3 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out" />
-            <polyline points="12 5 5 12 12 19" class="translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-in-out" />
-          </svg>
-          Back to Home
-        </a>
-      </div>
-    </div>
-  </Container>
+	<Container>
+		<div class="flex min-h-[50vh] flex-col items-center justify-center space-y-6 text-center">
+			<h1
+				class="animate text-7xl font-bold tracking-tighter text-black sm:text-9xl dark:text-white"
+			>
+				404
+			</h1>
+			<p class="animate mx-auto max-w-sm text-lg text-black/70 dark:text-white/70">
+				Oops! The page you're looking for doesn't exist or has been moved.
+			</p>
+			<div class="animate pt-4">
+				<a
+					href="/"
+					class="group inline-flex items-center justify-center gap-2 rounded-lg border border-black/15 px-5 py-2.5 font-medium text-black transition-colors hover:bg-black/5 dark:border-white/20 dark:text-white dark:hover:bg-white/5"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						aria-hidden="true"
+						class="size-5 fill-none stroke-current stroke-2"
+					>
+						<line
+							x1="19"
+							y1="12"
+							x2="5"
+							y2="12"
+							class="translate-x-3 scale-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-0 group-hover:scale-x-100"
+						></line>
+						<polyline
+							points="12 5 5 12 12 19"
+							class="translate-x-1 transition-transform duration-300 ease-in-out group-hover:translate-x-0"
+						></polyline>
+					</svg>
+					Back to Home
+				</a>
+			</div>
+		</div>
+	</Container>
 </PageLayout>

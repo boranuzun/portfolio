@@ -3,15 +3,15 @@ import BaseLayout from "./BaseLayout.astro";
 import MermaidSetup from "@components/MermaidSetup.astro";
 
 type Props = {
-  title: string;
-  description: string;
-  mermaid?: boolean;
+	title: string;
+	description: string;
+	mermaid?: boolean;
 };
 
 const { title, description, mermaid = false } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <slot />
-  {mermaid && <MermaidSetup />}
+	<slot />
+	{mermaid && <MermaidSetup />}
 </BaseLayout>

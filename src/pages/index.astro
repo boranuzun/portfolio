@@ -14,156 +14,165 @@ const blog = (await getPublishedEntries("blog")).slice(0, SITE.NUM_POSTS_ON_HOME
 const projects = (await getPublishedEntries("projects")).slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 
 const allwork = (await getCollection("work"))
-  .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
-  .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
+	.sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
+	.slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
 
 const work = await Promise.all(
-  allwork.map(async (item) => {
-    const { Content } = await render(item);
-    return { ...item, Content };
-  })
+	allwork.map(async (item) => {
+		const { Content } = await render(item);
+		return { ...item, Content };
+	}),
 );
 ---
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
-  <Container>
-    <div class="space-y-16">
-      <section class="animate">
-        <div class="comment-label">$ whoami</div>
-        <h1 class="text-3xl font-bold text-black dark:text-white tracking-tight">
-          Hi, I'm Boran&nbsp;<span class="text-3xl">👋🏻</span>
-        </h1>
-        <div class="text-base mt-1">
-          Aspiring DevOps Engineer &middot; Network &amp; Systems Administrator <span class="cursor-blink inline-block bg-terminal-light-accent dark:bg-terminal-accent" style="width:0.6em;height:1.1em"></span>
-        </div>
-        <div class="text-sm flex gap-3 mt-2 italic">
-          <Link href="/cv/cv-eng.pdf" external>&#127468;&#127463; CV in English</Link>
-          <Link href="/cv/cv.pdf" external>&#127467;&#127479; CV en Fran&ccedil;ais</Link>
-        </div>
-        <article class="space-y-4 mt-6">
-          <p class="animate">
-            I'm a recent graduate, with a BSc in Business Information Technology, looking to start my career in DevOps or network and systems administration. I've spent a lot of my time building a homelab and experimenting with automation, which is where I really found my interest in infrastructure.
-          </p>
-          <p class="animate">
-            I'm passionate about networking, DevOps, and open-source projects. More recently, I've been diving into AI agents, getting my hands dirty with multi-agent systems, MCP servers and building agent skills. I love the challenge of automating systems and seeing everything work together efficiently.
-          </p>
-          <p class="animate">
-            Right now, I'm looking for a junior position or internship where I can put my skills to use and keep learning from an experienced team.
-          </p>
-        </article>
-      </section>
+	<Container>
+		<div class="space-y-16">
+			<section class="animate">
+				<div class="comment-label">$ whoami</div>
+				<h1 class="text-3xl font-bold tracking-tight text-black dark:text-white">
+					Hi, I'm Boran&nbsp;<span class="text-3xl">👋🏻</span>
+				</h1>
+				<div class="mt-1 text-base">
+					Aspiring DevOps Engineer &middot; Network &amp; Systems Administrator <span
+						class="cursor-blink bg-terminal-light-accent dark:bg-terminal-accent inline-block"
+						style="width:0.6em;height:1.1em"></span>
+				</div>
+				<div class="mt-2 flex gap-3 text-sm italic">
+					<Link href="/cv/cv-eng.pdf" external>&#127468;&#127463; CV in English</Link>
+					<Link href="/cv/cv.pdf" external>&#127467;&#127479; CV en Fran&ccedil;ais</Link>
+				</div>
+				<article class="mt-6 space-y-4">
+					<p class="animate">
+						I'm a recent graduate, with a BSc in Business Information Technology, looking to start
+						my career in DevOps or network and systems administration. I've spent a lot of my time
+						building a homelab and experimenting with automation, which is where I really found my
+						interest in infrastructure.
+					</p>
+					<p class="animate">
+						I'm passionate about networking, DevOps, and open-source projects. More recently, I've
+						been diving into AI agents, getting my hands dirty with multi-agent systems, MCP servers
+						and building agent skills. I love the challenge of automating systems and seeing
+						everything work together efficiently.
+					</p>
+					<p class="animate">
+						Right now, I'm looking for a junior position or internship where I can put my skills to
+						use and keep learning from an experienced team.
+					</p>
+				</article>
+			</section>
 
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">
-          Skills & Technologies
-        </h5>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {skillsData.categories.map(category => (
-            <div>
-              <div class="text-xs opacity-60 mb-1">{category.category}</div>
-              <div class="flex flex-wrap gap-1.5">
-                {category.skills.map(skill => (
-                  <SkillPill name={skill} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+			<section class="animate space-y-4">
+				<h5 class="font-semibold text-black dark:text-white">Skills & Technologies</h5>
+				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+					{
+						skillsData.categories.map((category) => (
+							<div>
+								<div class="mb-1 text-xs opacity-60">{category.category}</div>
+								<div class="flex flex-wrap gap-1.5">
+									{category.skills.map((skill) => (
+										<SkillPill name={skill} />
+									))}
+								</div>
+							</div>
+						))
+					}
+				</div>
+			</section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Work Experience
-          </h5>
-          <Link href="/work">See all work</Link>
-        </div>
-        <ul class="flex flex-col space-y-4">
-          {work.map(entry => (
-            <li>
-              <div class="font-semibold text-black dark:text-white">
-                {entry.data.company}
-              </div>
-              <div class="text-sm opacity-75">
-                {entry.data.role}
-              </div>
-              <div class="text-sm opacity-75">
-                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
+			<section class="animate space-y-6">
+				<div class="flex flex-wrap items-center justify-between gap-y-2">
+					<h5 class="font-semibold text-black dark:text-white">Work Experience</h5>
+					<Link href="/work">See all work</Link>
+				</div>
+				<ul class="flex flex-col space-y-4">
+					{
+						work.map((entry) => (
+							<li>
+								<div class="font-semibold text-black dark:text-white">{entry.data.company}</div>
+								<div class="text-sm opacity-75">{entry.data.role}</div>
+								<div class="text-sm opacity-75">
+									{dateRange(entry.data.dateStart, entry.data.dateEnd)}
+								</div>
+							</li>
+						))
+					}
+				</ul>
+			</section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Recent projects
-          </h5>
-          <Link href="/projects">See all projects</Link>
-        </div>
-        <ul class="flex flex-col list-none pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
-          {projects.map(project => (
-            <li class="group relative">
-              <ArrowCard entry={project} />
-            </li>
-          ))}
-        </ul>
-      </section>
+			<section class="animate space-y-6">
+				<div class="flex flex-wrap items-center justify-between gap-y-2">
+					<h5 class="font-semibold text-black dark:text-white">Recent projects</h5>
+					<Link href="/projects">See all projects</Link>
+				</div>
+				<ul
+					class="flex list-none flex-col pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg"
+				>
+					{
+						projects.map((project) => (
+							<li class="group relative">
+								<ArrowCard entry={project} />
+							</li>
+						))
+					}
+				</ul>
+			</section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Latest posts
-          </h5>
-          <Link href="/blog">See all posts</Link>
-        </div>
-        <ul class="flex flex-col list-none pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg">
-          {blog.map(post => (
-            <li class="group relative">
-              <ArrowCard entry={post} />
-            </li>
-          ))}
-        </ul>
-      </section>
+			<section class="animate space-y-6">
+				<div class="flex flex-wrap items-center justify-between gap-y-2">
+					<h5 class="font-semibold text-black dark:text-white">Latest posts</h5>
+					<Link href="/blog">See all posts</Link>
+				</div>
+				<ul
+					class="flex list-none flex-col pl-0 [&>li:first-child>aside]:rounded-t-lg [&>li:last-child>aside]:rounded-b-lg"
+				>
+					{
+						blog.map((post) => (
+							<li class="group relative">
+								<ArrowCard entry={post} />
+							</li>
+						))
+					}
+				</ul>
+			</section>
 
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">
-          Let's Connect
-        </h5>
-        <p>
-          If you want to get in touch with me about something or just to say hi,
-          reach out on social media or send me an email.
-        </p>
-        <ul class="flex flex-wrap gap-2">
-          {SOCIALS.map(SOCIAL => (
-            <li class="flex gap-x-2 text-nowrap">
-              <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
-                {SOCIAL.NAME}
-              </Link>
-              {"/"}
-            </li>
-          ))}
-          <li
-            id="email-reveal"
-            class="line-clamp-1 blur-[3px] hover:blur-none transition-all duration-700 ease-in-out cursor-pointer select-none"
-          >
-            <Link href={`mailto:${SITE.EMAIL}`} aria-label={`Email ${SITE.NAME}`}>
-              {SITE.EMAIL}
-            </Link>
-          </li>
-        </ul>
-      </section>
-    </div>
-  </Container>
+			<section class="animate space-y-4">
+				<h5 class="font-semibold text-black dark:text-white">Let's Connect</h5>
+				<p>
+					If you want to get in touch with me about something or just to say hi, reach out on social
+					media or send me an email.
+				</p>
+				<ul class="flex flex-wrap gap-2">
+					{
+						SOCIALS.map((SOCIAL) => (
+							<li class="flex gap-x-2 text-nowrap">
+								<Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
+									{SOCIAL.NAME}
+								</Link>
+								{"/"}
+							</li>
+						))
+					}
+					<li
+						id="email-reveal"
+						class="line-clamp-1 cursor-pointer blur-[3px] transition-all duration-700 ease-in-out select-none hover:blur-none"
+					>
+						<Link href={`mailto:${SITE.EMAIL}`} aria-label={`Email ${SITE.NAME}`}>
+							{SITE.EMAIL}
+						</Link>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</Container>
 </PageLayout>
 
 <script>
-  function setupEmailReveal() {
-    document.getElementById('email-reveal')?.addEventListener('click', function() {
-      this.classList.remove('blur-[3px]');
-    });
-  }
-  document.addEventListener('DOMContentLoaded', setupEmailReveal);
-  document.addEventListener('astro:after-swap', setupEmailReveal);
+	function setupEmailReveal() {
+		document.getElementById("email-reveal")?.addEventListener("click", function () {
+			this.classList.remove("blur-[3px]");
+		});
+	}
+	document.addEventListener("DOMContentLoaded", setupEmailReveal);
+	document.addEventListener("astro:after-swap", setupEmailReveal);
 </script>

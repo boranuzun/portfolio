@@ -7,24 +7,25 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer class="animate">
-  <Container>
-    <div class="relative">
-      <div class="absolute right-0 -top-20">
-        <BackToTop />
-      </div>
-    </div>
-    <div class="flex items-center justify-between mt-8">
-      <div class="flex gap-2 items-center text-sm tabular-nums">
-        <span>&copy; {currentYear}</span>
-        <span aria-hidden="true" class="opacity-50">&bull;</span>
-        <span class="font-medium text-terminal-light-text dark:text-terminal-text">{SITE.NAME}</span>
-      </div>
-      <a
-        href="/privacy"
-        class="text-sm font-medium transition-colors duration-200 ease-out underline underline-offset-4 decoration-current/20 hover:decoration-current/50 text-terminal-light-text-secondary hover:text-terminal-light-accent dark:text-terminal-text-secondary dark:hover:text-terminal-accent"
-      >
-        Privacy Policy
-      </a>
-    </div>
-  </Container>
+	<Container>
+		<div class="relative">
+			<div class="absolute -top-20 right-0">
+				<BackToTop />
+			</div>
+		</div>
+		<div class="mt-8 flex items-center justify-between">
+			<div class="flex items-center gap-2 text-sm tabular-nums">
+				<span>&copy; {currentYear}</span>
+				<span aria-hidden="true" class="opacity-50">&bull;</span>
+				<span class="text-terminal-light-text dark:text-terminal-text font-medium">{SITE.NAME}</span
+				>
+			</div>
+			<a
+				href="/privacy"
+				class="text-terminal-light-text-secondary hover:text-terminal-light-accent dark:text-terminal-text-secondary dark:hover:text-terminal-accent text-sm font-medium underline decoration-current/20 underline-offset-4 transition-colors duration-200 ease-out hover:decoration-current/50"
+			>
+				Privacy Policy
+			</a>
+		</div>
+	</Container>
 </footer>

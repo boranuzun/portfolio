@@ -3,41 +3,41 @@ import { twMerge } from "tailwind-merge";
 import dayjs from "dayjs";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+	return twMerge(clsx(inputs));
 }
 
 export function formatDate(date: Date) {
-  return dayjs(date).format("MMM D, YYYY");
+	return dayjs(date).format("MMM D, YYYY");
 }
 
 export function isSameDay(a: Date, b: Date) {
-  return dayjs(a).isSame(b, "day");
+	return dayjs(a).isSame(b, "day");
 }
 
 export function readingTime(html: string) {
-  const textOnly = html.replace(/<[^>]+>/g, "");
-  const wordCount = textOnly.split(/\s+/).length;
-  const readingTimeMinutes = (wordCount / 200 + 1).toFixed();
-  return `${readingTimeMinutes} min read`;
+	const textOnly = html.replace(/<[^>]+>/g, "");
+	const wordCount = textOnly.split(/\s+/).length;
+	const readingTimeMinutes = (wordCount / 200 + 1).toFixed();
+	return `${readingTimeMinutes} min read`;
 }
 
 export function dateRange(startDate: Date, endDate?: Date | string): string {
-  const startMonth = startDate.toLocaleString("en-US", { month: "short" });
-  const startYear = startDate.getFullYear().toString();
-  let endMonth;
-  let endYear;
+	const startMonth = startDate.toLocaleString("en-US", { month: "short" });
+	const startYear = startDate.getFullYear().toString();
+	let endMonth;
+	let endYear;
 
-  if (endDate) {
-    if (typeof endDate === "string") {
-      endMonth = "";
-      endYear = endDate;
-    } else {
-      endMonth = endDate.toLocaleString("en-US", { month: "short" });
-      endYear = endDate.getFullYear().toString();
-    }
-  }
+	if (endDate) {
+		if (typeof endDate === "string") {
+			endMonth = "";
+			endYear = endDate;
+		} else {
+			endMonth = endDate.toLocaleString("en-US", { month: "short" });
+			endYear = endDate.getFullYear().toString();
+		}
+	}
 
-  return endDate
-    ? `${startMonth} ${startYear} - ${endMonth ? endMonth + " " : ""}${endYear}`
-    : `${startMonth} ${startYear} - Present`;
+	return endDate
+		? `${startMonth} ${startYear} - ${endMonth ? endMonth + " " : ""}${endYear}`
+		: `${startMonth} ${startYear} - Present`;
 }

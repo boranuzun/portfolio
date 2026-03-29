@@ -2,7 +2,7 @@
 
 ## Complete Example Structure
 
-```markdown
+````markdown
 ---
 title: "How I Migrated My Portfolio From Next.js to Astro"
 description: "Why I switched to Astro 5, what I gained in build speed, and the one gotcha that cost me an afternoon."
@@ -31,15 +31,16 @@ The migration was mostly mechanical. Content Collections replaced `getStaticProp
 ```typescript
 // src/content/config.ts
 const blog = defineCollection({
-  type: "content",
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    date: z.coerce.date(),
-    draft: z.boolean().optional(),
-  }),
+	type: "content",
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+		date: z.coerce.date(),
+		draft: z.boolean().optional(),
+	}),
 });
 ```
+````
 
 The one gotcha: Tailwind CSS 4 uses a Vite plugin, not PostCSS. The config looks different from every tutorial you'll find:
 
@@ -48,7 +49,7 @@ The one gotcha: Tailwind CSS 4 uses a Vite plugin, not PostCSS. The config looks
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  vite: { plugins: [tailwindcss()] },
+	vite: { plugins: [tailwindcss()] },
 });
 ```
 
@@ -57,7 +58,8 @@ export default defineConfig({
 Build time dropped from 12s to 3s. The deployed site ships zero JavaScript on static pages. The chatbot component is the only island, and it hydrates on interaction.
 
 [See the source](https://github.com/boranuzun/portfolio)
-```
+
+````
 
 ## Frontmatter Template
 
@@ -70,9 +72,10 @@ description: "A brief summary of the post (1-2 sentences)."
 date: "Mar 15 2026"
 draft: true
 ---
-```
+````
 
 **Rules:**
+
 - `title` and `description` are required strings
 - `date` accepts any parseable date string (e.g. `"Mar 15 2026"`, `"2026-03-15"`)
 - Set `draft: true` while writing; remove or set `false` when ready to publish
