@@ -7,6 +7,7 @@ import TableOfContents from "@components/TableOfContents.astro";
 import BackToPrev from "@components/BackToPrev.astro";
 import Schema from "@components/Schema.astro";
 import { generateBlogPostingSchema } from "@lib/schema";
+import { readingTime, formatDate, isSameDay } from "@lib/utils";
 
 export async function getStaticPaths() {
 	const posts = (await getCollection("blog"))
@@ -24,6 +25,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
 const lastModified = remarkPluginFrontmatter.lastModified
 	? new Date(remarkPluginFrontmatter.lastModified)
 	: null;
+const showUpdated = lastModified !== null && !isSameDay(lastModified, post.data.date);
 const blogSchema = generateBlogPostingSchema({ ...post.data, lastModified }, Astro.url);
 ---
 
@@ -47,9 +49,25 @@ const blogSchema = generateBlogPostingSchema({ ...post.data, lastModified }, Ast
 		</div>
 
 		{/* Main content */}
-		<div class="animate mb-8">
+		<div class="my-8 space-y-1">
+			<div
+				class="animate text-terminal-light-text dark:text-terminal-text flex items-center gap-1.5 text-sm"
+			>
+				<time datetime={post.data.date.toISOString()}>
+					{formatDate(post.data.date)}
+				</time>
+				&bull;
+				<span>{readingTime(post.body ?? "")}</span>
+			</div>
+			{
+				showUpdated && (
+					<div class="animate text-terminal-light-text-secondary dark:text-terminal-text-secondary text-sm">
+						Updated <time datetime={lastModified!.toISOString()}>{formatDate(lastModified!)}</time>
+					</div>
+				)
+			}
 			<h1
-				class="text-terminal-light-text dark:text-terminal-text text-2xl font-bold tracking-tight"
+				class="animate text-terminal-light-text dark:text-terminal-text text-2xl font-bold tracking-tight"
 			>
 				{post.data.title}
 			</h1>
