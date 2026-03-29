@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { renderMarkdown } from '../chatbot/markdown';
+import { renderMarkdown } from '../cmdk/chat/markdown';
 
 describe('renderMarkdown', () => {
   it('escapes HTML entities to prevent XSS', () => {
