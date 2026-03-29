@@ -1,83 +1,525 @@
 ---
-
+const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787";
 ---
 
 <div
   id="cmd-palette"
   class="hidden fixed inset-0 z-100 items-start justify-center pt-[10vh] sm:pt-[20vh] px-3 sm:px-4"
   style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);"
+  data-api-url={chatbotUrl}
+  transition:persist
 >
-  <div class="w-full max-w-sm sm:max-w-2xl terminal-card p-0 overflow-hidden">
-    <div class="flex items-center gap-2 px-4 py-3 border-b border-terminal-light-border dark:border-terminal-border">
-      <span class="text-terminal-light-accent dark:text-terminal-accent text-sm">&gt;</span>
+  <div class="cmd-modal">
+    <!-- Search header (command + search modes) -->
+    <div id="cmd-search-header" class="cmd-header">
+      <span id="cmd-search-icon" class="cmd-search-icon"></span>
+      <span id="cmd-search-tag" class="cmd-search-tag hidden">Search</span>
       <input
         id="cmd-input"
         type="text"
-        placeholder="search..."
+        placeholder="Search commands or ask AI..."
         autocomplete="off"
-        class="flex-1 bg-transparent outline-none font-mono text-sm text-terminal-light-text dark:text-terminal-text placeholder:text-terminal-light-text-secondary dark:placeholder:text-terminal-text-secondary"
+        class="cmd-input"
       />
-      <kbd class="text-xs opacity-50 px-1.5 py-0.5 rounded border border-terminal-light-border dark:border-terminal-border">esc</kbd>
+      <kbd class="cmd-kbd">esc</kbd>
     </div>
-    <div id="cmd-results" class="max-h-64 sm:max-h-96 overflow-y-auto p-2">
+
+    <!-- Chat header (chat mode) -->
+    <div id="cmd-chat-header" class="cmd-header hidden">
+      <button id="cmd-chat-back" class="cmd-chat-back" aria-label="Back to commands"></button>
+      <span class="cmd-chat-title">AI Chat</span>
+      <kbd class="cmd-kbd cmd-kbd-right">esc</kbd>
+    </div>
+
+    <!-- Command/search results -->
+    <div id="cmd-results" class="cmd-results"></div>
+
+    <!-- Chat messages -->
+    <div id="cmd-chat-messages" class="cmd-chat-messages hidden"></div>
+
+    <!-- Ask AI footer (command + search modes) -->
+    <div id="cmd-ask-ai-footer" class="cmd-ask-ai-footer">
+      <span id="cmd-ask-ai-icon" class="cmd-ask-ai-icon"></span>
+      <span>Ask AI</span>
+      <div class="cmd-ask-ai-keys">
+        <kbd id="cmd-key-command" class="cmd-kbd"></kbd>
+        <kbd id="cmd-key-enter" class="cmd-kbd"></kbd>
+      </div>
+    </div>
+
+    <!-- Chat footer (chat mode) -->
+    <div id="cmd-chat-footer" class="cmd-chat-footer hidden">
+      <span class="cmd-chat-prompt">&gt;</span>
+      <input
+        id="cmd-chat-input"
+        type="text"
+        placeholder="Ask me anything..."
+        autocomplete="off"
+        class="cmd-input"
+      />
+      <kbd id="cmd-key-chat-enter" class="cmd-kbd"></kbd>
     </div>
   </div>
 </div>
 
 <style>
+  /* Modal */
+  .cmd-modal {
+    width: 100%;
+    max-width: 32rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.875rem;
+    background-color: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    color: var(--color-terminal-light-text);
+  }
+  :global(html.dark) .cmd-modal {
+    background-color: #161616;
+    border-color: #2a2a2a;
+    color: var(--color-terminal-text);
+  }
+
+  @media (min-width: 640px) {
+    .cmd-modal {
+      max-width: 42rem;
+    }
+  }
+
+  /* Header */
+  .cmd-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  :global(html.dark) .cmd-header {
+    border-bottom-color: #2a2a2a;
+  }
+  .cmd-header.hidden { display: none; }
+
+  .cmd-search-icon {
+    color: var(--color-terminal-light-accent);
+    display: flex;
+    align-items: center;
+  }
+  :global(html.dark) .cmd-search-icon {
+    color: var(--color-terminal-accent);
+  }
+
+  .cmd-search-tag {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    background-color: var(--color-terminal-light-accent);
+    color: #fff;
+    flex-shrink: 0;
+  }
+  :global(html.dark) .cmd-search-tag {
+    background-color: var(--color-terminal-accent);
+    color: #000;
+  }
+  .cmd-search-tag.hidden { display: none; }
+
+  .cmd-input {
+    flex: 1;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--color-terminal-light-text);
+    border: none;
+    padding: 0;
+  }
+  .cmd-input::placeholder {
+    color: var(--color-terminal-light-text-secondary);
+  }
+  :global(html.dark) .cmd-input {
+    color: var(--color-terminal-text);
+  }
+  :global(html.dark) .cmd-input::placeholder {
+    color: var(--color-terminal-text-secondary);
+  }
+
+  .cmd-kbd {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    border: 1px solid #d0d0d0;
+    color: var(--color-terminal-light-text-secondary);
+    font-family: inherit;
+    line-height: 1;
+  }
+  :global(html.dark) .cmd-kbd {
+    border-color: #3a3a3a;
+    color: var(--color-terminal-text-secondary);
+  }
+
+  .cmd-kbd-right {
+    margin-left: auto;
+  }
+
+  .cmd-kbd svg {
+    display: block;
+  }
+
+  /* Chat header */
+  .cmd-chat-back {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-terminal-light-text-secondary);
+    display: flex;
+    align-items: center;
+    padding: 0;
+  }
+  :global(html.dark) .cmd-chat-back {
+    color: var(--color-terminal-text-secondary);
+  }
+  .cmd-chat-back:hover {
+    color: var(--color-terminal-light-text);
+  }
+  :global(html.dark) .cmd-chat-back:hover {
+    color: var(--color-terminal-text);
+  }
+
+  .cmd-chat-title {
+    color: var(--color-terminal-light-accent);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+  :global(html.dark) .cmd-chat-title {
+    color: var(--color-terminal-accent);
+  }
+
+  /* Results */
+  .cmd-results {
+    max-height: 16rem;
+    overflow-y: auto;
+    padding: 0.5rem;
+  }
+  .cmd-results.hidden { display: none; }
+
+  @media (min-width: 640px) {
+    .cmd-results {
+      max-height: 24rem;
+    }
+  }
+
+  /* Sections */
   :global(.cmd-group) {
-    font-size: 0.7rem;
+    font-size: 0.6875rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    padding: 0.5rem 0.75rem 0.25rem;
+    padding: 0.375rem 0.5rem 0.25rem;
     color: var(--color-terminal-light-accent);
   }
   :global(html.dark .cmd-group) {
     color: var(--color-terminal-accent);
   }
+
+  /* Items */
   :global(.cmd-item) {
     display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-    padding: 0.5rem 0.75rem;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem;
     border-radius: 0.375rem;
+    cursor: pointer;
     text-decoration: none;
-    color: var(--color-terminal-light-text-secondary);
-    transition: background-color 0.15s;
+    color: var(--color-terminal-light-text);
+    transition: background-color 0.1s;
   }
   :global(html.dark .cmd-item) {
-    color: var(--color-terminal-text-secondary);
+    color: var(--color-terminal-text);
   }
   :global(.cmd-item:hover),
   :global(.cmd-item-active) {
-    background-color: var(--color-terminal-light-code-bg);
+    background-color: rgba(0, 0, 0, 0.04);
   }
   :global(html.dark .cmd-item:hover),
   :global(html.dark .cmd-item-active) {
-    background-color: var(--color-terminal-code-bg);
+    background-color: rgba(255, 255, 255, 0.06);
   }
-  :global(.cmd-item-title) {
-    font-weight: 600;
+
+  :global(.cmd-item-search) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
+  }
+
+  :global(.cmd-icon) {
+    display: flex;
+    align-items: center;
+    color: var(--color-terminal-light-text-secondary);
+    flex-shrink: 0;
+  }
+  :global(html.dark .cmd-icon) {
+    color: var(--color-terminal-text-secondary);
+  }
+
+  :global(.cmd-item-name) {
     font-size: 0.875rem;
-    color: var(--color-terminal-light-text);
   }
-  :global(html.dark .cmd-item-title) {
-    color: var(--color-terminal-text);
-  }
+
   :global(.cmd-item-desc) {
     font-size: 0.75rem;
+    color: var(--color-terminal-light-text-secondary);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-width: 100%;
   }
+  :global(html.dark .cmd-item-desc) {
+    color: var(--color-terminal-text-secondary);
+  }
+
+  :global(.cmd-external),
+  :global(.cmd-item .cmd-kbd) {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    color: var(--color-terminal-light-text-secondary);
+  }
+  :global(html.dark .cmd-external),
+  :global(html.dark .cmd-item .cmd-kbd) {
+    color: var(--color-terminal-text-secondary);
+  }
+
+  :global(.cmd-item .cmd-kbd) {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    border: 1px solid #d0d0d0;
+    font-family: inherit;
+    line-height: 1;
+  }
+  :global(html.dark .cmd-item .cmd-kbd) {
+    border-color: #3a3a3a;
+  }
+
   :global(.cmd-no-results) {
-    padding: 1rem 0.75rem;
+    padding: 1rem 0.5rem;
     text-align: center;
     font-size: 0.875rem;
-    opacity: 0.5;
+    color: var(--color-terminal-light-text-secondary);
+  }
+  :global(html.dark .cmd-no-results) {
+    color: var(--color-terminal-text-secondary);
+  }
+
+  /* Ask AI footer */
+  .cmd-ask-ai-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 1rem;
+    border-top: 1px solid #e0e0e0;
+    cursor: pointer;
+    color: var(--color-terminal-light-text);
+    transition: background-color 0.1s;
+  }
+  :global(html.dark) .cmd-ask-ai-footer {
+    border-top-color: #2a2a2a;
+    color: var(--color-terminal-text);
+  }
+  .cmd-ask-ai-footer:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  :global(html.dark) .cmd-ask-ai-footer:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+  .cmd-ask-ai-footer.hidden { display: none; }
+
+  .cmd-ask-ai-icon {
+    display: flex;
+    align-items: center;
+  }
+
+  .cmd-ask-ai-footer svg {
+    color: var(--color-terminal-light-accent);
+  }
+  :global(html.dark) .cmd-ask-ai-footer svg {
+    color: var(--color-terminal-accent);
+  }
+
+  .cmd-ask-ai-keys {
+    margin-left: auto;
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  /* Chat footer */
+  .cmd-chat-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 1rem;
+    border-top: 1px solid #e0e0e0;
+  }
+  :global(html.dark) .cmd-chat-footer {
+    border-top-color: #2a2a2a;
+  }
+  .cmd-chat-footer.hidden { display: none; }
+
+  .cmd-chat-prompt {
+    color: var(--color-terminal-light-accent);
+  }
+  :global(html.dark) .cmd-chat-prompt {
+    color: var(--color-terminal-accent);
+  }
+
+  /* Chat messages */
+  .cmd-chat-messages {
+    max-height: 18rem;
+    overflow-y: auto;
+    padding: 0.75rem 1rem;
+  }
+  .cmd-chat-messages.hidden { display: none; }
+
+  @media (min-width: 640px) {
+    .cmd-chat-messages {
+      max-height: 24rem;
+    }
+  }
+
+  /* Chat message styles */
+  :global(.cmd-chat-msg-user),
+  :global(.cmd-chat-msg-ai) {
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.cmd-chat-msg-label) {
+    font-size: 0.6875rem;
+    margin-bottom: 0.25rem;
+    color: var(--color-terminal-light-text-secondary);
+  }
+  :global(html.dark .cmd-chat-msg-label) {
+    color: var(--color-terminal-text-secondary);
+  }
+  :global(.cmd-chat-msg-ai .cmd-chat-msg-label) {
+    color: var(--color-terminal-light-accent);
+  }
+  :global(html.dark .cmd-chat-msg-ai .cmd-chat-msg-label) {
+    color: var(--color-terminal-accent);
+  }
+
+  :global(.cmd-chat-bubble-user) {
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    background-color: rgba(0, 0, 0, 0.04);
+    color: var(--color-terminal-light-text);
+  }
+  :global(html.dark .cmd-chat-bubble-user) {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: var(--color-terminal-text);
+  }
+
+  :global(.cmd-chat-bubble-ai) {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-terminal-light-text);
+  }
+  :global(html.dark .cmd-chat-bubble-ai) {
+    color: var(--color-terminal-text);
+  }
+
+  :global(.cmd-chat-bubble-ai strong) {
+    color: var(--color-terminal-light-text);
+  }
+  :global(html.dark .cmd-chat-bubble-ai strong) {
+    color: var(--color-terminal-text);
+  }
+
+  /* Chat markdown styles */
+  :global(.cmd-chat-code) {
+    background-color: rgba(0, 0, 0, 0.06);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+  }
+  :global(html.dark .cmd-chat-code) {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  :global(.cmd-chat-link) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    color: var(--color-terminal-light-accent);
+    transition: opacity 0.15s;
+  }
+  :global(html.dark .cmd-chat-link) {
+    color: var(--color-terminal-accent);
+  }
+  :global(.cmd-chat-link:hover) {
+    opacity: 0.8;
+  }
+
+  :global(.cmd-chat-list) {
+    list-style: disc;
+    list-style-position: inside;
+    margin: 0.25rem 0;
+  }
+  :global(.cmd-chat-list li) {
+    margin: 0.125rem 0;
+  }
+
+  :global(.cmd-chat-table-wrap) {
+    overflow-x: auto;
+    margin: 0.5rem 0;
+  }
+  :global(.cmd-chat-table) {
+    width: 100%;
+    font-size: 0.8125rem;
+    border-collapse: collapse;
+  }
+  :global(.cmd-chat-table th),
+  :global(.cmd-chat-table td) {
+    border: 1px solid #e0e0e0;
+    padding: 0.375rem 0.75rem;
+  }
+  :global(html.dark .cmd-chat-table th),
+  :global(html.dark .cmd-chat-table td) {
+    border-color: #2a2a2a;
+  }
+  :global(.cmd-chat-table th) {
+    font-weight: 600;
+    text-align: left;
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+  :global(html.dark .cmd-chat-table th) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Typing indicator */
+  :global(.cmd-chat-typing) {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0;
+  }
+  :global(.cmd-chat-typing-dot) {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background-color: var(--color-terminal-light-text-secondary);
+    animation: cmd-bounce 1.2s infinite;
+  }
+  :global(html.dark .cmd-chat-typing-dot) {
+    background-color: var(--color-terminal-text-secondary);
+  }
+
+  @keyframes cmd-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
   }
 </style>
 
 <script>
-  import "../scripts/command-palette.ts";
+  import "../lib/cmdk/index.ts";
 </script>
