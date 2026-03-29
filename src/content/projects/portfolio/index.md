@@ -1,25 +1,26 @@
 ---
 title: "Portfolio Website"
-description: "Astro-based portfolio with AI chatbot."
+description: "Astro-based portfolio with a unified Cmd+K command palette for navigation, content search, and AI chat."
 date: "Mar 09 2026"
 repoURL: "https://github.com/boranuzun/portfolio"
-technologies: ["TypeScript", "JavaScript", "Astro", "Tailwind CSS", "Cloudflare Workers", "Gemini AI"]
+technologies: ["TypeScript", "Astro", "Tailwind CSS", "Cloudflare Workers", "Gemini AI"]
 mermaid: true
 ---
 
-This is how I built my portfolio. I started with [Mark Horn's Astro Nano theme](https://astro.build/themes/details/astronano/) but ended up modifying it heavily to add an AI chatbot and structured SEO data.
+This is how I built my portfolio. I started with [Mark Horn's Astro Nano theme](https://astro.build/themes/details/astronano/) and heavily modified it — adding structured SEO data, a Mermaid diagram integration, and a UI redesign centered around a Cmd+K command palette.
 
-My goal was simple: serve a static site for maximum speed, but add just enough interactivity so people can ask questions about my work without needing to email me.
+My goal was a static site with just enough interactivity that visitors can navigate, search, and ask questions without needing to email me.
 
 ## Architecture
 
-The site uses Astro to generate static HTML, combined with a lightweight serverless backend. Since I like documenting my work, I also built a custom integration to render Mermaid diagrams right from markdown blocks. Using Astro's dynamic client scripts (`/src/components/MermaidSetup.astro`), it intercepts the code blocks and converts them to SVG on the client side, keeping them fully functional across Astro's View Transitions and dark mode switches.
+The site uses Astro 6 to generate static HTML. A lightweight Cloudflare Worker handles the AI backend. All content is managed through Astro's Content Layer API with typed Zod schemas.
 
 ```mermaid
 graph TD
     subgraph Frontend [Astro Application]
-        UI[Chatbot.astro]
+        Palette[CommandPalette.astro]
         Pages[Static Routes]
+        TOC[TableOfContents.astro]
         Head[Head.astro]
     end
 
@@ -29,64 +30,74 @@ graph TD
     end
 
     subgraph External [Third-Party Services]
-        Gemini[Google Gemini 3.1 API]
+        Gemini[Google Gemini API]
     end
 
-    UI -->|Fetch API| Worker
+    Palette -->|command / search mode| Pages
+    Palette -->|AI chat mode — Fetch API| Worker
     Worker -->|Authenticated Request| Gateway
     Gateway -->|Model Invocation| Gemini
+    Pages --> TOC
     Pages --> Head
 ```
 
-## The AI Chatbot
+## Command Palette (Cmd+K)
 
-I built a simple chatbot so visitors can query my experience directly.
+The palette is a multi-module TypeScript system under `src/lib/cmdk/` with three modes accessible from a single entry point:
 
-### Frontend
+| Mode | Trigger | What it does |
+| --- | --- | --- |
+| **Command** | Default on open | Navigate pages, toggle theme, jump to external links |
+| **Search** | Type → Enter | Fuzzy-search across all blog posts and projects |
+| **AI Chat** | Cmd+Enter | Streaming AI responses via Cloudflare Worker |
 
-The UI lives in `/src/components/Chatbot.astro`. I used a browser state variable to keep the conversation history intact while you navigate between pages. When you hit send, it fires off a `POST` request with your prompt and the context. The response streams back incrementally so there's no awkward loading pause.
+The system is built as a state machine — `state.ts` owns the current mode and query; `registry.ts` holds the action definitions; `renderer.ts` reacts to state changes and repaints the list. Icons are centralized in `icons.ts` using Lucide SVGs and injected at init, keeping the Astro component markup clean.
 
-### Backend
+```mermaid
+stateDiagram-v2
+    [*] --> Command: open palette
+    Command --> Search: Enter with query
+    Search --> Command: Backspace on empty input
+    Command --> Chat: Cmd+Enter
+    Search --> Chat: Cmd+Enter
+    Chat --> Command: close / reopen
+```
 
-The backend is a Cloudflare Worker (`/chatbot-worker/src/index.ts:fetch`) acting as a proxy. It initializes the Google Gemini client with a rigid system prompt—basically telling the model to only talk about my professional background and refuse everything else.
+### AI Chat Mode
+
+The chat subsystem (`src/lib/cmdk/chat/`) handles streaming responses from a Cloudflare Worker. The worker acts as a proxy to Google Gemini with a rigid system prompt — it only discusses my professional background and refuses everything else. Responses stream back incrementally via `TransformStream`.
+
+The Worker is also routed through Cloudflare's AI Gateway for request caching (`cf-aig-cache-ttl`). Common questions are served from cache instead of hitting the Gemini API again.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant U as Chatbot UI (Chatbot.astro)
+    participant P as Command Palette (chat mode)
     participant W as CF Worker (index.ts)
     participant G as CF AI Gateway
     participant AI as Gemini API
-    
-    U->>W: POST / { message, history }
-    W->>W: Validate CORS & Environment Keys
-    W->>G: Route request through gateway
-    G->>AI: Process generative prompt
+
+    P->>W: POST / { message, history }
+    W->>W: Validate CORS & env keys
+    W->>G: Route through gateway
+    G->>AI: Process prompt
     AI-->>G: Stream output chunks
-    G-->>W: Forward streamed chunks
-    W-->>U: TransformStream to client
+    G-->>W: Forward chunks
+    W-->>P: TransformStream to client
 ```
 
-I routed the calls through Cloudflare's AI Gateway to take advantage of request caching (`cf-aig-cache-ttl`). If someone asks a common question, the gateway serves the cached response instead of pinging the Gemini API again, which keeps costs down.
+## Table of Contents Sidebar
+
+Long-form content (blog posts, project pages) gets an auto-generated sticky TOC sidebar (`src/components/TableOfContents.astro`). It reads the heading structure from the rendered content and highlights the active section as you scroll.
+
+## Mermaid Diagrams
+
+A custom integration renders Mermaid diagrams from fenced code blocks in markdown. `MermaidSetup.astro` intercepts the blocks and converts them to SVG on the client side, keeping them functional across Astro's View Transitions and dark/light mode switches. The `mermaid: true` frontmatter flag enables it per-page.
 
 ## Structured JSON-LD Data for SEO
 
-To help search engines actually understand the content, the site generates dynamic JSON-LD schema data. It makes sure blog posts and projects get indexed correctly for rich search results.
+`src/lib/schema.ts` builds Schema.org-compliant objects for blog posts and projects. During the build, `Head.astro` calls these functions and feeds the output to `Schema.astro`, which injects the JSON-LD block into the HTML `<head>` for rich search result indexing.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Route as Page Route
-    participant Head as Head (Head.astro)
-    participant Lib as Lib (schema.ts)
-    participant Schema as Schema (Schema.astro)
-    
-    Route->>Head: Pass localized metadata
-    Head->>Lib: Call generatePersonSchema()
-    Lib-->>Head: Return JSON-LD object
-    Head->>Schema: Inject into component
-    Schema-->>Route: Render html tag application/ld+json
-```
+## Content Layer API
 
-In `/src/lib/schema.ts`, I have a few functions that build Schema.org-compliant JavaScript objects. During the build process, `/src/components/Head.astro` calls these functions and feeds the output to `/src/components/Schema.astro`. That component then injects the final JSON-LD block directly into the HTML `<head>`.
-
+The site uses Astro 6's Content Layer API with Zod schemas to type-check all content at build time. Collections are queried via `getCollection()` and `render()` — no runtime `Astro.glob()` calls.

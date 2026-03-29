@@ -62,12 +62,13 @@ After that, chezmoi applies every tracked config file to its target location, de
 
 ### Setup prompts
 
-On first apply, chezmoi asks three questions:
+On first apply, chezmoi asks four questions:
 
 | Prompt | Stored as |
 | --- | --- |
 | Email address | `data.email` |
 | Full name | `data.name` |
+| GPG key ID for git signing (leave empty to disable) | `data.gpgKeyId` |
 | Is OrbStack installed? | `data.hasOrbStack` |
 
 Answers are saved to `~/.config/chezmoi/chezmoi.toml` and never asked again.
@@ -96,7 +97,7 @@ No manual encrypt/decrypt steps. chezmoi handles the round-trip.
 
 ## Templated configs
 
-I use OrbStack on my Mac but not on Linux. On Linux I prefer native package managers (`apt`, `pacman`) over Homebrew. Rather than maintaining separate branches, Go template conditionals handle this using `.chezmoi.os`.
+I use OrbStack on my Mac but not on Linux. On Linux I prefer native package managers (`apt`, `pacman`) over Homebrew. Rather than maintaining separate branches, Go template conditionals handle this using `.chezmoi.os`. The same template variables drive git config too — if you supply a GPG key ID at setup time, `commit.gpgsign = true` and `user.signingKey` are set automatically; leave it empty and signing is disabled entirely.
 
 My `~/.zprofile` source file (`dot_zprofile.tmpl`) looks like this:
 
@@ -148,16 +149,17 @@ The aliases I actually use:
 | --- | --- | --- |
 | `ls` | `eza --color --icons --long --header --git` | Long listing with git status |
 | `lt` | `eza --tree --level=2 --long --icons --git` | Tree view, 2 levels deep |
+| `ltree` | `eza --tree --level=2 --icons --git` | Tree view, 2 levels, compact |
 | `cd` | `z` | zoxide smart directory jump |
 | `ff` | `fastfetch` | System info |
 | `sysup` | macOS: `brew upgrade; mas upgrade; omz update` / Arch: `sudo pacman -Syu; omz update` / Debian: `sudo apt update && sudo apt upgrade -y; omz update` | Update everything for your platform |
+| `buc` | `brew upgrade --cask` | Upgrade Homebrew casks only (macOS) |
 | `fh` | `fc -l 1 \| tac \| fzf` | Fuzzy search through full shell history |
-| `gh-create` | `gh repo create --private ...` | Create a private GitHub repo and push the current directory |
+| `gh-create` | `gh repo create --private --source=. --remote=origin && git push -u --all && gh browse` | Create a private GitHub repo and push the current directory |
 | `opc` | `opencode` | AI coding assistant |
 | `cm` | `chezmoi` | chezmoi shortcut |
 | `rr` | `source ~/.zshrc` | Reload shell config without opening a new terminal |
 | `ql` | `qlmanage -p` | Quick Look preview (macOS only) |
-| `idea` | IntelliJ IDEA Ultimate | Launch IDE (macOS only) |
 
 ## Day-to-day workflow
 
