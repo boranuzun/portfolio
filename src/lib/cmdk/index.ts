@@ -5,6 +5,7 @@ import { icons } from "./icons";
 import type { SearchEntry } from "./types";
 
 let currentSearchEntries: SearchEntry[] = [];
+let cmdkController: AbortController | null = null;
 
 function getElements() {
   return {
@@ -69,7 +70,7 @@ function showSearchMode(): void {
   if (els.results) {
     renderSearchMode(els.results, query).then((entries) => {
       currentSearchEntries = entries;
-    });
+    }).catch(() => {});
   }
 }
 
@@ -175,7 +176,7 @@ function handleInput(): void {
   } else if (state.mode === "search") {
     renderSearchMode(els.results, state.query).then((entries) => {
       currentSearchEntries = entries;
-    });
+    }).catch(() => {});
   }
 }
 
@@ -198,6 +199,11 @@ function initCmdk(): void {
   const els = getElements();
   if (!els.overlay) return;
 
+  // Abort previous listeners to prevent accumulation across Astro navigations
+  cmdkController?.abort();
+  cmdkController = new AbortController();
+  const { signal } = cmdkController;
+
   injectIcons();
 
   // Global keyboard shortcut
@@ -210,20 +216,20 @@ function initCmdk(): void {
         open();
       }
     }
-  });
+  }, { signal });
 
   // Close on overlay click
   els.overlay.addEventListener("click", (e) => {
     if (e.target === els.overlay) close();
-  });
+  }, { signal });
 
   // Input handler
-  els.input?.addEventListener("input", handleInput);
+  els.input?.addEventListener("input", handleInput, { signal });
 
   // Search trigger click from renderer
   els.results?.addEventListener("cmdk:search-trigger", () => {
     showSearchMode();
-  });
+  }, { signal });
 
   // Keyboard navigation for search input
   els.input?.addEventListener("keydown", (e) => {
@@ -247,7 +253,7 @@ function initCmdk(): void {
       } else if (state.mode === "search" && els.results) {
         renderSearchMode(els.results, state.query).then((entries) => {
           currentSearchEntries = entries;
-        });
+        }).catch(() => {});
       }
       return;
     }
@@ -260,7 +266,7 @@ function initCmdk(): void {
       } else if (state.mode === "search" && els.results) {
         renderSearchMode(els.results, state.query).then((entries) => {
           currentSearchEntries = entries;
-        });
+        }).catch(() => {});
       }
       return;
     }
@@ -281,7 +287,7 @@ function initCmdk(): void {
       showCommandMode();
       return;
     }
-  });
+  }, { signal });
 
   // Chat input keyboard handler
   els.chatInput?.addEventListener("keydown", (e) => {
@@ -297,18 +303,18 @@ function initCmdk(): void {
     }
 
     handleChatKeydown(e);
-  });
+  }, { signal });
 
   // Ask AI footer click
   els.askAiFooter?.addEventListener("click", () => {
     showChatMode();
-  });
+  }, { signal });
 
   // Chat back button
   const chatBackBtn = document.getElementById("cmd-chat-back");
   chatBackBtn?.addEventListener("click", () => {
     showCommandMode();
-  });
+  }, { signal });
 
   // Trigger button
   document.getElementById("cmd-k-trigger")?.addEventListener("click", () => {
@@ -317,7 +323,7 @@ function initCmdk(): void {
     } else {
       open();
     }
-  });
+  }, { signal });
 }
 
 document.addEventListener("DOMContentLoaded", initCmdk);

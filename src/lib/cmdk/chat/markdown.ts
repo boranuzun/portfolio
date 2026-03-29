@@ -11,6 +11,10 @@ export function renderMarkdown(text: string): string {
       '<code class="cmd-chat-code">$1</code>',
     )
     .replace(
+      /(?<![([])(https?:\/\/[^\s<)"]+)/g,
+      '<a href="$1" target="_blank" rel="noopener noreferrer" class="cmd-chat-link">$1</a>',
+    )
+    .replace(
       /\[([^\]]+)\]\(((https?:\/\/|mailto:)[^\s)]+)\)/g,
       (_match, linkText: string, url: string) => {
         try {
@@ -22,10 +26,6 @@ export function renderMarkdown(text: string): string {
         }
         return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="cmd-chat-link">${linkText}</a>`;
       },
-    )
-    .replace(
-      /(?<!href=")(https?:\/\/[^\s<)"]+)/g,
-      '<a href="$1" target="_blank" rel="noopener noreferrer" class="cmd-chat-link">$1</a>',
     );
 
   const lines = html.split("\n");

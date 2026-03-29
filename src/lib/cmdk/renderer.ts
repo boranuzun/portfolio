@@ -134,6 +134,7 @@ export function renderCommandMode(container: HTMLElement): void {
 async function loadSearchIndex(): Promise<SearchEntry[]> {
   if (searchIndex) return searchIndex;
   const res = await fetch("/search-index.json");
+  if (!res.ok) throw new Error(`Failed to load search index: ${res.status}`);
   searchIndex = await res.json();
   return searchIndex!;
 }

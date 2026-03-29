@@ -1,8 +1,14 @@
+let tocController: AbortController | null = null;
+
 function initTOC() {
   const article = document.querySelector('article');
   const tocNav = document.querySelector('#toc-nav');
 
   if (!article || !tocNav) return;
+
+  tocController?.abort();
+  tocController = new AbortController();
+  const { signal } = tocController;
 
   const tocLinks = tocNav.querySelectorAll<HTMLAnchorElement>('a');
   if (tocLinks.length === 0) return;
@@ -25,11 +31,11 @@ function initTOC() {
     history.pushState(null, '', href);
   }
 
-  tocNav.addEventListener('click', handleClick);
+  tocNav.addEventListener('click', handleClick, { signal });
 
   const mobileToc = document.querySelector('.md\\:hidden details');
   if (mobileToc) {
-    mobileToc.addEventListener('click', handleClick);
+    mobileToc.addEventListener('click', handleClick, { signal });
   }
 
   // Scroll-based active heading detection — compute positions fresh each time
@@ -66,7 +72,7 @@ function initTOC() {
   window.addEventListener('scroll', () => {
     if (scrollRaf) cancelAnimationFrame(scrollRaf);
     scrollRaf = requestAnimationFrame(updateActive);
-  }, { passive: true });
+  }, { passive: true, signal });
 
   updateActive();
 }

@@ -111,7 +111,8 @@ export async function sendMessage(): Promise<void> {
     wrapper.appendChild(bubble);
     messages.appendChild(wrapper);
 
-    const reader = response.body!.getReader();
+    if (!response.body) throw new Error("Response has no body");
+    const reader = response.body.getReader();
     const decoder = new TextDecoder("utf-8");
     let fullReply = "";
 
@@ -138,13 +139,13 @@ export async function sendMessage(): Promise<void> {
       bubble.textContent = "Something went wrong, please try again.";
     }
 
-    input.focus();
+    input?.focus();
   } catch (error) {
     console.error("Chat Error:", error);
     hideTypingIndicator();
     state.isThinking = false;
     addMessage((error as Error).message, false);
-    input.focus();
+    input?.focus();
   }
 }
 
@@ -155,7 +156,7 @@ export function handleChatKeydown(e: KeyboardEvent): void {
 
   if (e.key === "Enter" && !e.metaKey && !e.ctrlKey) {
     e.preventDefault();
-    sendMessage();
+    void sendMessage();
     return;
   }
 
