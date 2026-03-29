@@ -1,0 +1,5 @@
+pre-commit:
+  commands:
+    format:
+      glob: "*.{astro,ts,css,md,mdx,json,js,mjs}"
+      run: npx prettier --write {staged_files} && git add {staged_files}
