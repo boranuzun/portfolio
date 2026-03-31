@@ -77,8 +77,24 @@ export function renderCommandMode(container: HTMLElement): void {
 				item.appendChild(createExternalBadge());
 			}
 
+			if (action.badge) {
+				const { text, variant } = action.badge();
+				const kbd = document.createElement("kbd");
+				kbd.className = "cmd-kbd";
+				if (variant === "green") {
+					kbd.style.color = "#16a34a";
+					kbd.style.borderColor = "#16a34a";
+				} else if (variant === "red") {
+					kbd.style.color = "#dc2626";
+					kbd.style.borderColor = "#dc2626";
+				}
+				kbd.textContent = text;
+				item.appendChild(kbd);
+			}
+
 			item.addEventListener("click", () => {
 				action.handler();
+				if (action.keepOpen) renderCommandMode(container);
 			});
 
 			container.appendChild(item);

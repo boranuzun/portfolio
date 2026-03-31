@@ -7,6 +7,7 @@ export interface Action {
 	external?: boolean;
 	keepOpen?: boolean;
 	keywords?: string[];
+	badge?: () => { text: string; variant?: "green" | "red" };
 }
 
 export interface Section {

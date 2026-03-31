@@ -212,7 +212,22 @@ const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
 		}
 	}
 
+	function toggleCRT(enabled) {
+		if (enabled) {
+			document.documentElement.classList.add("crt");
+		} else {
+			document.documentElement.classList.remove("crt");
+		}
+	}
+
+	function preloadCRT() {
+		const userCRT = localStorage.getItem("crt");
+		// Default to on; only disable if explicitly set to "off"
+		toggleCRT(userCRT !== "off");
+	}
+
 	document.addEventListener("DOMContentLoaded", () => init());
 	document.addEventListener("astro:after-swap", () => init());
 	preloadTheme();
+	preloadCRT();
 </script>

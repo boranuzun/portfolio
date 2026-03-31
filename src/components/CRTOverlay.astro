@@ -1,0 +1,71 @@
+---
+
+---
+
+<div class="crt-overlay" aria-hidden="true"></div>
+
+<style>
+	@keyframes crt-flicker {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		92% {
+			opacity: 1;
+		}
+		93% {
+			opacity: 0.94;
+		}
+		94% {
+			opacity: 1;
+		}
+		96% {
+			opacity: 0.97;
+		}
+	}
+
+	.crt-overlay {
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 50;
+		animation: crt-flicker 5s infinite;
+	}
+
+	/* Scanlines — dark mode */
+	.crt-overlay::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			to bottom,
+			transparent 0px,
+			transparent 2px,
+			rgba(0, 0, 0, 0.12) 2px,
+			rgba(0, 0, 0, 0.12) 4px
+		);
+	}
+
+	/* Light mode: lighter scanlines */
+	:global(html:not(.dark)) .crt-overlay::before {
+		background: repeating-linear-gradient(
+			to bottom,
+			transparent 0px,
+			transparent 2px,
+			rgba(0, 0, 0, 0.07) 2px,
+			rgba(0, 0, 0, 0.07) 4px
+		);
+	}
+
+	/* Hidden when CRT is disabled */
+	:global(html:not(.crt)) .crt-overlay {
+		display: none;
+	}
+
+	/* Respect reduced motion — disable flicker, keep static layers */
+	@media (prefers-reduced-motion: reduce) {
+		.crt-overlay {
+			animation: none;
+		}
+	}
+</style>

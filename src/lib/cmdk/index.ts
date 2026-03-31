@@ -162,6 +162,10 @@ function executeSelected(): void {
 		if (action) {
 			if (!action.keepOpen) close();
 			action.handler();
+			if (action.keepOpen) {
+				const els = getElements();
+				if (els.results) renderCommandMode(els.results);
+			}
 		}
 	} else if (state.mode === "search") {
 		const entry = currentSearchEntries[state.selectedIndex];

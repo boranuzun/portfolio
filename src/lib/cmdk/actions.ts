@@ -13,6 +13,17 @@ function toggleTheme(): void {
 	document.getElementById("theme-button")?.click();
 }
 
+declare function playClickSound(): void;
+declare function toggleCRT(enabled: boolean): void;
+
+function handleToggleCRT(): void {
+	const isEnabled = document.documentElement.classList.contains("crt");
+	const next = !isEnabled;
+	localStorage.setItem("crt", next ? "on" : "off");
+	toggleCRT(next);
+	playClickSound();
+}
+
 export function getSections(): Section[] {
 	return [
 		{
@@ -24,6 +35,20 @@ export function getSections(): Section[] {
 					handler: toggleTheme,
 					keepOpen: true,
 					keywords: ["dark", "light", "mode"],
+					badge: () => ({
+						text: document.documentElement.classList.contains("dark") ? "dark" : "light",
+					}),
+				},
+				{
+					name: "Toggle CRT overlay",
+					icon: icons.scanLine,
+					handler: handleToggleCRT,
+					keepOpen: true,
+					keywords: ["crt", "scanlines", "overlay", "effect"],
+					badge: () =>
+						document.documentElement.classList.contains("crt")
+							? { text: "on", variant: "green" as const }
+							: { text: "off", variant: "red" as const },
 				},
 			],
 		},
