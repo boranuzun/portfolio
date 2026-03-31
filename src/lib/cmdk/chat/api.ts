@@ -20,7 +20,7 @@ export async function streamChatResponse(
 		return response;
 	} catch (error) {
 		if ((error as Error).name === "AbortError") {
-			throw new Error("Request timed out. Please try again.");
+			throw new Error("Request timed out. Please try again.", { cause: error });
 		}
 		throw error;
 	} finally {
