@@ -5,6 +5,7 @@ import Container from "@components/Container.astro";
 import Sidebar from "@components/Sidebar.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import BackToPrev from "@components/BackToPrev.astro";
+import Link from "@components/Link.astro";
 import Schema from "@components/Schema.astro";
 import { generateProjectSchema } from "@lib/schema";
 
@@ -46,10 +47,27 @@ const projectSchema = generateProjectSchema(project.data, Astro.url);
 		{/* Main content */}
 		<div class="animate mb-8">
 			<h1
-				class="text-terminal-light-text dark:text-terminal-text text-2xl font-bold tracking-tight"
+				class="text-terminal-light-text dark:text-terminal-text text-3xl font-bold tracking-tight"
 			>
 				{project.data.title}
 			</h1>
+			{
+				(project.data.repoURL || project.data.websiteURL) && (
+					<nav class="mt-2 flex gap-1">
+						{project.data.repoURL && (
+							<Link href={project.data.repoURL} external>
+								repo
+							</Link>
+						)}
+						{project.data.repoURL && project.data.websiteURL && <span>/</span>}
+						{project.data.websiteURL && (
+							<Link href={project.data.websiteURL} external>
+								website
+							</Link>
+						)}
+					</nav>
+				)
+			}
 		</div>
 		<article class="animate">
 			<Content />
