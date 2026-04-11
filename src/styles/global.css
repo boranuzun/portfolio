@@ -4,36 +4,70 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Light mode (default) */
+:root {
+	--color-canvas: #f5f5f5; /* neutral-100 */
+	--color-surface: #e5e5e5; /* neutral-200 */
+	--color-border: #d4d4d4; /* neutral-300 */
+	--color-fg: #404040; /* neutral-700 — 9.7:1 ✓ */
+	--color-fg-bright: #171717; /* neutral-900 — 15.3:1 ✓ */
+	--color-fg-muted: #525252; /* neutral-600 — 7.2:1 ✓ */
+	--color-fg-dim: #a3a3a3; /* neutral-400 — decorative only */
+	--color-accent: #166534; /* green-800 — 5.7:1 ✓ */
+	--color-link: #0369a1; /* sky-700 — 4.9:1 ✓ */
+	--color-code: #b45309; /* amber-700 — 4.6:1 ✓ */
+	--color-info: #0e7490; /* cyan-700 — 4.5:1 ✓ */
+	--color-error: #b91c1c; /* red-700 — 5.6:1 ✓ */
+	--color-tag: #7e22ce; /* purple-700 — 5.0:1 ✓ */
+	--color-warn: #9a3412; /* orange-800 — 6.0:1 ✓ */
+	--color-decorative: #be185d; /* pink-700 — 5.3:1 ✓ */
+}
+
+/* Dark mode overrides */
+html.dark {
+	--color-canvas: #171717; /* neutral-900 */
+	--color-surface: #262626; /* neutral-800 */
+	--color-border: #404040; /* neutral-700 */
+	--color-fg: #d4d4d4; /* neutral-300 — 12.8:1 ✓ */
+	--color-fg-bright: #f5f5f5; /* neutral-100 — 15.3:1 ✓ */
+	--color-fg-muted: #a3a3a3; /* neutral-400 — 7.8:1 ✓ */
+	--color-fg-dim: #404040; /* neutral-700 — decorative only */
+	--color-accent: #4ade80; /* green-400 — 8.1:1 ✓ */
+	--color-link: #38bdf8; /* sky-400 — 7.9:1 ✓ */
+	--color-code: #fbbf24; /* amber-400 — 9.2:1 ✓ */
+	--color-info: #22d3ee; /* cyan-400 — 8.7:1 ✓ */
+	--color-error: #f87171; /* red-400 — 6.9:1 ✓ */
+	--color-tag: #c084fc; /* purple-400 — 7.2:1 ✓ */
+	--color-warn: #fb923c; /* orange-400 — 6.5:1 ✓ */
+	--color-decorative: #f472b6; /* pink-400 — 6.3:1 ✓ */
+}
+
 @theme {
-	--font-mono:
-		"JetBrains Mono", "Fira Code", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+	--font-body: var(--font-body), system-ui, sans-serif;
+	--font-serif: var(--font-serif), Georgia, serif;
+	--font-mono: var(--font-mono), "Fira Code", Consolas, Monaco, "Ubuntu Mono", monospace;
+}
 
-	/* Terminal color palette — dark */
-	--color-terminal-bg: #0a0f0a;
-	--color-terminal-surface: #0d1a0d;
-	--color-terminal-border: #1a3a1a;
-	--color-terminal-text: #e0e0e0;
-	--color-terminal-text-secondary: #6b7b6b;
-	--color-terminal-accent: #00ff88;
-	--color-terminal-code-bg: #1a2a1a;
-
-	/* Terminal color palette — light */
-	--color-terminal-light-bg: #f4f8f4;
-	--color-terminal-light-surface: #ffffff;
-	--color-terminal-light-border: #d4e4d4;
-	--color-terminal-light-text: #1a1a1a;
-	--color-terminal-light-text-secondary: #5a6a5a;
-	--color-terminal-light-accent: #0d7a3f;
-	--color-terminal-light-code-bg: #e8f0e8;
+@theme inline {
+	--color-canvas: var(--color-canvas);
+	--color-surface: var(--color-surface);
+	--color-border: var(--color-border);
+	--color-fg: var(--color-fg);
+	--color-fg-bright: var(--color-fg-bright);
+	--color-fg-muted: var(--color-fg-muted);
+	--color-fg-dim: var(--color-fg-dim);
+	--color-accent: var(--color-accent);
+	--color-link: var(--color-link);
+	--color-code: var(--color-code);
+	--color-info: var(--color-info);
+	--color-error: var(--color-error);
+	--color-tag: var(--color-tag);
+	--color-warn: var(--color-warn);
+	--color-decorative: var(--color-decorative);
 }
 
 /*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
+  Tailwind v4 default border color compatibility.
 */
 @layer base {
 	*,
@@ -41,7 +75,7 @@
 	::before,
 	::backdrop,
 	::file-selector-button {
-		border-color: var(--color-gray-200, currentcolor);
+		border-color: var(--color-border);
 	}
 }
 
@@ -61,14 +95,14 @@
 	}
 
 	body {
-		@apply font-mono antialiased;
+		@apply font-body antialiased;
 		@apply flex flex-col;
 		@apply bg-neutral-100 dark:bg-neutral-900;
 		@apply text-black/50 dark:text-white/75;
 	}
 
 	header {
-		@apply fixed top-0 right-0 left-0 z-50 py-5;
+		@apply fixed top-0 right-0 left-0 z-50 py-2;
 		@apply bg-neutral-100/75 dark:bg-neutral-900/25;
 		@apply saturate-200 backdrop-blur-xs;
 	}
@@ -78,135 +112,61 @@
 	}
 
 	footer {
-		@apply py-5 text-sm;
+		padding: 1rem 0;
+		font-size: 0.7rem;
 	}
 
+	/* Prose (subpage article styling) */
 	article {
-		@apply prose dark:prose-invert prose-img:mx-auto prose-img:my-auto max-w-full;
-		@apply prose-headings:font-mono prose-headings:font-bold font-mono;
-		@apply prose-headings:text-black dark:prose-headings:text-white;
-		@apply prose-headings:tracking-tight;
+		@apply prose max-w-full;
+		@apply prose-headings:font-serif prose-headings:font-semibold font-serif;
+		@apply prose-code:font-mono prose-pre:font-mono;
+		color: var(--color-fg);
 	}
 
-	/* Offset anchors for fixed header */
+	html.dark article {
+		@apply prose-invert;
+	}
+
 	article :is(h1, h2, h3, h4, h5, h6) {
-		scroll-margin-top: 6rem;
+		scroll-margin-top: 4.5rem;
+		color: var(--color-fg-bright);
 	}
-}
 
-@layer utilities {
 	article a {
-		color: var(--color-terminal-light-accent);
-		@apply underline underline-offset-2;
-		@apply decoration-current/30;
+		color: var(--color-link);
+		@apply underline decoration-current/30 underline-offset-2;
 		@apply transition-colors duration-300 ease-in-out;
 	}
 	article a:hover {
 		@apply decoration-current/60;
 	}
-	html.dark article a {
-		color: var(--color-terminal-accent);
+
+	article code:not(pre code) {
+		color: var(--color-code);
+		background-color: var(--color-surface);
+		padding: 0.1rem 0.3rem;
+		font-size: 0.85em;
+		border-radius: 0;
 	}
 
-	.terminal-card {
-		background-color: var(--color-terminal-light-surface);
-		border: 1px solid var(--color-terminal-light-border);
-		@apply rounded-lg p-5 transition-colors duration-300;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-	}
-	.terminal-card:hover {
-		border-color: var(--color-terminal-light-accent);
-	}
-	html.dark .terminal-card {
-		background-color: var(--color-terminal-surface);
-		border-color: var(--color-terminal-border);
-		box-shadow: none;
-	}
-	html.dark .terminal-card:hover {
-		border-color: var(--color-terminal-accent);
+	article pre {
+		border-radius: 0 !important;
+		border: 1px solid var(--color-border);
 	}
 
-	.toc-sidebar {
-		/* Position to the left of the max-w-5xl (64rem) container */
-		right: calc(50% + 32rem + 1rem);
+	/* Skip article code-frame border inside explicit non-prose UI (e.g. keys terminal). */
+	article .not-prose pre {
+		border: none;
 	}
 
-	.comment-label {
-		@apply mb-3 text-xs font-semibold tracking-wider uppercase;
-		color: var(--color-terminal-light-accent);
-	}
-	html.dark .comment-label {
-		color: var(--color-terminal-accent);
-	}
+	/* Zero border-radius globally
+	* {
+		border-radius: 0 !important;
+	} */
 }
 
-.animate {
-	@apply translate-y-3 opacity-0;
-	@apply transition-all duration-700 ease-out;
-}
-
-.animate.show {
-	@apply translate-y-0 opacity-100;
-}
-
-html #back-to-top {
-	@apply pointer-events-none opacity-0;
-}
-
-/* Respect user's motion preferences */
-@media (prefers-reduced-motion: reduce) {
-	*,
-	*::before,
-	*::after {
-		animation-duration: 0.01ms !important;
-		animation-iteration-count: 1 !important;
-		transition-duration: 0.01ms !important;
-	}
-
-	.animate {
-		@apply translate-y-0 opacity-100;
-	}
-
-	.animate.show {
-		@apply translate-y-0 opacity-100;
-	}
-
-	html #back-to-top {
-		@apply opacity-0;
-	}
-}
-
-html.scrolled #back-to-top {
-	@apply pointer-events-auto opacity-100;
-}
-
-@keyframes blink {
-	0%,
-	100% {
-		opacity: 1;
-	}
-	50% {
-		opacity: 0;
-	}
-}
-.cursor-blink {
-	animation: blink 1.5s step-end infinite;
-}
-
-@keyframes type-in {
-	from {
-		width: 0;
-	}
-	to {
-		width: 100%;
-	}
-}
-.type-in {
-	overflow: hidden;
-	white-space: nowrap;
-	animation: type-in 1.5s steps(40) forwards;
-}
-
+/* Shiki dark mode */
 html.dark .astro-code,
 html.dark .astro-code span {
 	color: var(--shiki-dark) !important;
@@ -216,17 +176,38 @@ html.dark .astro-code span {
 	text-decoration: var(--shiki-dark-text-decoration) !important;
 }
 
-/* Chatbot message animation */
-@keyframes fade-in-up {
-	0% {
-		opacity: 0;
-		transform: translateY(10px);
-	}
-	100% {
-		opacity: 1;
-		transform: translateY(0);
+/* Mermaid diagrams dark mode (rendered at build time, inverted via CSS) */
+html.dark svg[id^="mermaid"] {
+	filter: invert(1) hue-rotate(180deg);
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
 	}
 }
-.animate-fade-in-up {
-	animation: fade-in-up 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+/* --- Scroll/page-entry reveal --- */
+.animate {
+	@apply translate-y-3 opacity-0;
+	@apply transition-all duration-700 ease-out;
+}
+
+.animate.show {
+	@apply translate-y-0 opacity-100;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+	.animate {
+		@apply translate-y-0 opacity-100;
+	}
+	.animate.show {
+		@apply translate-y-0 opacity-100;
+	}
 }

@@ -5,7 +5,6 @@ date: "Sep 27 2025"
 repoURL: "https://github.com/heg-comptarial/comptarial"
 technologies:
   ["TypeScript", "JavaScript", "React", "Next.js", "PHP", "Laravel", "MySQL", "Tailwind CSS"]
-mermaid: true
 ---
 
 Comptarial is a web application I helped build for an accounting firm. The goal was straightforward: they needed a way to securely exchange tax returns and financial documents with their clients. We built this as part of a module at the Haute école de gestion de Genève (HEG), running the project as an Agile team using Scrum.

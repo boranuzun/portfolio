@@ -1,0 +1,30 @@
+---
+import Pill from "@components/Pill.astro";
+
+type CategoryData = {
+	category: string;
+	icon?: string;
+	skills: string[];
+};
+
+type Props = {
+	categories: CategoryData[];
+};
+
+const { categories } = Astro.props;
+---
+
+<div class="grid grid-cols-2 gap-x-8 gap-y-4 text-[0.7rem]">
+	{
+		categories.map((category) => (
+			<div>
+				<p class="text-fg-muted mb-2 text-[0.7rem]">{category.category}</p>
+				<div class="flex flex-wrap gap-1">
+					{category.skills.map((skill) => (
+						<Pill name={skill} />
+					))}
+				</div>
+			</div>
+		))
+	}
+</div>

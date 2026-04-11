@@ -1,13 +1,15 @@
 ---
+import { Font } from "astro:assets";
 import { type CollectionEntry, getCollection, render } from "astro:content";
-import ContentLayout from "@layouts/ContentLayout.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
 import Container from "@components/Container.astro";
-import Sidebar from "@components/Sidebar.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import BackToPrev from "@components/BackToPrev.astro";
 import Schema from "@components/Schema.astro";
 import { generateBlogPostingSchema } from "@lib/schema";
 import { readingTime, formatDate, isSameDay } from "@lib/utils";
+import ForceGraph from "@components/ForceGraph.astro";
+import { buildBlogGraph } from "@lib/graph";
 
 export async function getStaticPaths() {
 	const posts = (await getCollection("blog"))
@@ -27,56 +29,69 @@ const lastModified = remarkPluginFrontmatter.lastModified
 	: null;
 const showUpdated = lastModified !== null && !isSameDay(lastModified, post.data.date);
 const blogSchema = generateBlogPostingSchema({ ...post.data, lastModified }, Astro.url);
+const { nodes: postNodes, links: postLinks } = buildBlogGraph([post]);
 ---
 
 <Schema schema={blogSchema} />
 
-<ContentLayout
-	title={post.data.title}
-	description={post.data.description}
-	mermaid={post.data.mermaid}
->
+<BaseLayout title={post.data.title} description={post.data.description}>
+	<Font slot="head" cssVariable="--font-serif" preload />
 	<Container>
-		<div class="animate mb-6">
-			<BackToPrev href="/blog"> Back to blog </BackToPrev>
-		</div>
+		<div class="xl:grid xl:grid-cols-[11rem_1fr] xl:gap-8">
+			<aside class="hidden xl:block">
+				<div class="sticky top-20 flex flex-col gap-6">
+					<BackToPrev href="/blog"> Back to blog </BackToPrev>
+					{
+						postNodes.length > 1 && (
+							<div>
+								<p class="text-fg-muted mb-2 text-sm font-semibold">Graph View</p>
+								<ForceGraph nodes={postNodes} links={postLinks} height={176} />
+							</div>
+						)
+					}
+					<TableOfContents headings={headings} />
+				</div>
+			</aside>
 
-		<Sidebar headings={headings} />
-
-		{/* Desktop TOC — fixed to left of content */}
-		<div class="toc-sidebar fixed top-24 hidden w-44 lg:block">
-			<TableOfContents headings={headings} />
-		</div>
-
-		{/* Main content */}
-		<div class="my-8 space-y-1">
-			<div
-				class="animate text-terminal-light-text dark:text-terminal-text flex items-center gap-1.5 text-sm"
-			>
-				<time datetime={post.data.date.toISOString()}>
-					{formatDate(post.data.date)}
-				</time>
-				&bull;
-				<span>{readingTime(post.body ?? "")}</span>
-			</div>
-			{
-				showUpdated && (
-					<div class="animate text-terminal-light-text-secondary dark:text-terminal-text-secondary text-sm">
-						Updated <time datetime={lastModified!.toISOString()}>{formatDate(lastModified!)}</time>
+			<div class="animate">
+				<div class="mb-10 space-y-1">
+					<div class="text-fg-muted flex items-center gap-1.5 text-sm">
+						<time datetime={post.data.date.toISOString()}>
+							{formatDate(post.data.date)}
+						</time>
+						<span aria-hidden="true">&bull;</span>
+						<span>{readingTime(post.body ?? "")}</span>
 					</div>
-				)
-			}
-			<h1
-				class="animate text-terminal-light-text dark:text-terminal-text text-3xl font-bold tracking-tight"
-			>
-				{post.data.title}
-			</h1>
+					{
+						showUpdated && (
+							<div class="text-fg-muted/70 text-sm">
+								Updated{" "}
+								<time datetime={lastModified!.toISOString()}>{formatDate(lastModified!)}</time>
+							</div>
+						)
+					}
+					<h1 class="text-fg-bright text-3xl font-semibold">
+						{post.data.title}
+					</h1>
+					{
+						post.data.tags && post.data.tags.length > 0 && (
+							<div class="flex flex-wrap gap-1.5 pt-1">
+								{post.data.tags.map((tag) => (
+									<span class="bg-surface border-border text-fg-muted rounded border px-1.5 py-0.5 font-mono text-xs">
+										{tag}
+									</span>
+								))}
+							</div>
+						)
+					}
+				</div>
+				<article>
+					<Content />
+				</article>
+			</div>
 		</div>
-		<article class="animate">
-			<Content />
-		</article>
 	</Container>
-</ContentLayout>
+</BaseLayout>
 
 <script>
 	import "../../scripts/toc.ts";

@@ -1,137 +1,104 @@
 ---
 import Container from "@components/Container.astro";
-import Link from "@components/Link.astro";
+import { Command, Sun, Moon } from "@lucide/astro";
 import { SITE } from "@consts";
 
 const path = `/${Astro.url.pathname.split("/")[1]}`;
+
+const navLinks = [
+	// { href: "/", label: "index" },
+	{ href: "/work", label: "work" },
+	{ href: "/projects", label: "projects" },
+	{ href: "/blog", label: "blog" },
+	// { href: "/keys", label: "keys" },
+];
 ---
 
 <header>
 	<Container>
-		<div class="flex flex-wrap justify-between gap-y-2">
-			<Link href="/" underline={false}>
-				<div class="flex items-center gap-2 font-semibold">
-					<img src="/B_black@1x.png" alt={SITE.NAME} class="h-8 w-8 object-contain dark:hidden" />
-					<img
-						src="/B_white@1x.png"
-						alt={SITE.NAME}
-						class="hidden h-8 w-8 object-contain dark:block"
-					/>
-				</div>
-			</Link>
-			<div class="flex items-center gap-4">
-				<nav class="flex items-center gap-1">
-					<Link
-						href="/work"
-						class={path === "/work" ? "text-terminal-light-accent dark:text-terminal-accent" : ""}
-						>work</Link
-					>
-					<span>{`/`}</span>
-					<Link
-						href="/projects"
-						class={path === "/projects"
-							? "text-terminal-light-accent dark:text-terminal-accent"
-							: ""}>projects</Link
-					>
-					<span>{`/`}</span>
-					<Link
-						href="/blog"
-						class={path === "/blog" ? "text-terminal-light-accent dark:text-terminal-accent" : ""}
-						>blog</Link
-					>
-					<span>{`/`}</span>
-					<Link
-						href="/keys"
-						class={path === "/keys" ? "text-terminal-light-accent dark:text-terminal-accent" : ""}
-						>keys</Link
-					>
+		<div class="flex flex-wrap justify-between gap-y-2 py-3">
+			{/* Logo */}
+			<a href="/" class="text-accent font-semibold no-underline">
+				<img src="/B_black@1x.png" alt={SITE.NAME} class="h-8 w-8 object-contain dark:hidden" />
+				<img
+					src="/B_white@1x.png"
+					alt={SITE.NAME}
+					class="hidden h-8 w-8 object-contain dark:block"
+				/>
+			</a>
+
+			{/* Nav + cmdk */}
+			<div class="flex items-center gap-3">
+				<nav class="flex items-center" aria-label="Main navigation">
+					{
+						navLinks.map((link, i) => (
+							<>
+								<a
+									href={link.href}
+									data-astro-prefetch="hover"
+									class={`${path === link.href ? "text-fg-bright" : "text-fg-muted"} hover:text-accent text-base no-underline transition-colors duration-200`}
+									aria-current={path === link.href ? "page" : undefined}
+								>
+									{link.label}
+								</a>
+								{i < navLinks.length - 1 && (
+									<span class="text-fg-dim px-1.5 font-bold select-none" aria-hidden="true">
+										/
+									</span>
+								)}
+							</>
+						))
+					}
 				</nav>
-				<div class="flex flex-wrap items-center gap-1">
-					<button
-						id="theme-button"
-						aria-label="Toggle theme"
-						class="group relative flex size-8 cursor-pointer items-center justify-center rounded-full"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="18"
-							height="18"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="group-hover:stroke-terminal-light-accent dark:group-hover:stroke-terminal-accent absolute inset-0 m-auto origin-center scale-100 rotate-0 opacity-100 transition-all duration-500 ease-in-out dark:scale-50 dark:-rotate-90 dark:opacity-0"
-						>
-							<circle cx="12" cy="12" r="5"></circle>
-							<line x1="12" y1="1" x2="12" y2="3"></line>
-							<line x1="12" y1="21" x2="12" y2="23"></line>
-							<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-							<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-							<line x1="1" y1="12" x2="3" y2="12"></line>
-							<line x1="21" y1="12" x2="23" y2="12"></line>
-							<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-							<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-						</svg>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="18"
-							height="18"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="group-hover:stroke-terminal-light-accent dark:group-hover:stroke-terminal-accent absolute inset-0 m-auto origin-center scale-50 rotate-90 opacity-0 transition-all duration-500 ease-in-out dark:scale-100 dark:rotate-0 dark:opacity-100"
-						>
-							<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-						</svg>
-					</button>
-					<button
-						id="cmd-k-trigger"
-						aria-label="Open command palette"
-						class="hidden cursor-pointer items-center gap-1 rounded border px-2 py-1 text-xs transition-colors duration-300 md:flex"
-						style="border-color: var(--color-terminal-light-border); color: var(--color-terminal-light-text-secondary);"
-					>
-						<kbd class="flex items-center gap-0.5"
-							><svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="12"
-								height="12"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"
-								></path></svg
-							>K</kbd
-						>
-					</button>
-				</div>
+
+				{/* Theme toggle */}
+				<button
+					id="theme-button"
+					class="text-fg-muted hover:text-accent flex items-center justify-center transition-colors duration-200"
+					aria-label="Toggle theme"
+				>
+					<Sun size={16} class="sun-icon transition-transform duration-300" />
+					<Moon size={16} class="moon-icon absolute transition-transform duration-300" />
+				</button>
+
+				{/* cmdk trigger */}
+				<button
+					id="cmd-k-trigger"
+					aria-label="Open command palette"
+					class="cmdk-btn text-fg-muted hover:text-accent hover:border-accent border-border bg-surface-dim hidden items-center gap-1.5 rounded-md border px-2 py-1 text-[0.7rem] transition-all duration-200 md:flex"
+				>
+					<Command size={12} aria-hidden="true" />
+					<span>K</span>
+				</button>
 			</div>
 		</div>
 	</Container>
 </header>
 
 <style>
-	#cmd-k-trigger {
-		border-color: var(--color-terminal-light-border);
-		color: var(--color-terminal-light-text-secondary);
+	#theme-button {
+		position: relative;
+		width: 24px;
+		height: 24px;
 	}
-	:global(html.dark) #cmd-k-trigger {
-		border-color: var(--color-terminal-border);
-		color: var(--color-terminal-text-secondary);
+
+	.sun-icon {
+		transform: rotate(0deg) scale(1);
+		opacity: 1;
 	}
-	#cmd-k-trigger:hover {
-		border-color: var(--color-terminal-light-accent);
-		color: var(--color-terminal-light-accent);
+
+	.moon-icon {
+		transform: rotate(90deg) scale(0);
+		opacity: 0;
 	}
-	:global(html.dark) #cmd-k-trigger:hover {
-		border-color: var(--color-terminal-accent);
-		color: var(--color-terminal-accent);
+
+	:global(html.dark) .sun-icon {
+		transform: rotate(-90deg) scale(0);
+		opacity: 0;
+	}
+
+	:global(html.dark) .moon-icon {
+		transform: rotate(0deg) scale(1);
+		opacity: 1;
 	}
 </style>

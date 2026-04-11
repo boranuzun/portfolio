@@ -1,47 +1,60 @@
 ---
+import Pill from "@components/Pill.astro";
+import { cn } from "@lib/utils";
 import type { CollectionEntry } from "astro:content";
 
 type Props = {
 	entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
+	class?: string;
+	showMeta?: boolean;
 };
 
-const { entry } = Astro.props;
+const { entry, class: className, showMeta = true } = Astro.props;
 const href = `/${entry.collection}/${entry.id}`;
+const tags = "tags" in entry.data ? entry.data.tags : undefined;
 ---
 
 <a
 	href={href}
-	class="border-terminal-light-border dark:border-terminal-border block border-b py-4 pr-8"
+	data-astro-prefetch="hover"
+	class={cn(
+		"group hover:border-l-accent hover:bg-surface/30 border-b-border/40 relative block border-b border-l-2 border-l-transparent py-3 pr-8 pl-0 hover:pl-2 no-underline transition-[padding-left,border-color,background-color] duration-200 first:rounded-tr-md last:rounded-br-md last:border-b-0",
+		className,
+	)}
 >
-	<p
-		class="text-terminal-light-text group-hover:text-terminal-light-accent dark:text-terminal-text dark:group-hover:text-terminal-accent font-semibold text-balance transition-colors duration-300 ease-in-out"
+	<span class="text-fg-bright group-hover:text-accent transition-colors duration-200"
+		>{entry.data.title}</span
 	>
-		{entry.data.title}
-	</p>
-	<p class="mt-0.5 line-clamp-2 text-sm text-pretty">
-		{entry.data.description}
-	</p>
+	{
+		showMeta && entry.data.description && (
+			<p class="text-fg-muted mt-1 text-sm">{entry.data.description}</p>
+		)
+	}
+	{
+		showMeta && tags && tags.length > 0 && (
+			<div class="mt-1.5 flex flex-wrap gap-1.5">
+				{tags.map((tag) => (
+					<Pill name={tag} class="border-tag/30 bg-tag/10 text-tag px-1 py-0.5" />
+				))}
+			</div>
+		)
+	}
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 24 24"
+		aria-hidden="true"
+		class="text-fg-dim absolute top-1/2 right-2 size-5 -translate-y-1/2 fill-none stroke-current stroke-2"
+	>
+		<line
+			x1="5"
+			y1="12"
+			x2="19"
+			y2="12"
+			class="translate-x-3 scale-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-0 group-hover:scale-x-100"
+		></line>
+		<polyline
+			points="12 5 19 12 12 19"
+			class="-translate-x-1 transition-transform duration-300 ease-in-out group-hover:translate-x-0"
+		></polyline>
+	</svg>
 </a>
-<aside
-	class="group-hover:bg-terminal-light-code-bg dark:group-hover:bg-terminal-code-bg absolute inset-0 -inset-x-3 -top-px -z-10 transition-colors duration-300 ease-in-out"
-	aria-hidden="true"
->
-</aside>
-<svg
-	xmlns="http://www.w3.org/2000/svg"
-	viewBox="0 0 24 24"
-	aria-hidden="true"
-	class="absolute top-1/2 right-2 size-5 -translate-y-1/2 fill-none stroke-current stroke-2"
->
-	<line
-		x1="5"
-		y1="12"
-		x2="19"
-		y2="12"
-		class="translate-x-3 scale-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-0 group-hover:scale-x-100"
-	></line>
-	<polyline
-		points="12 5 19 12 12 19"
-		class="-translate-x-1 transition-transform duration-300 ease-in-out group-hover:translate-x-0"
-	></polyline>
-</svg>

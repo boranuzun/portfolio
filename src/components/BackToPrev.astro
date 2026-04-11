@@ -8,7 +8,8 @@ const { href } = Astro.props;
 
 <a
 	href={href}
-	class="group relative flex w-fit flex-nowrap rounded-sm border border-black/15 py-1.5 pr-3 pl-7 transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white"
+	data-astro-prefetch="hover"
+	class="group relative flex w-fit flex-nowrap rounded-sm border border-black/15 py-1.5 pr-3 pl-7 no-underline transition-all duration-100 ease-in-out hover:bg-black/5 hover:text-black active:translate-y-0.5 dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white"
 >
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +28,7 @@ const { href } = Astro.props;
 			class="translate-x-1 transition-transform duration-300 ease-in-out group-hover:translate-x-0"
 		></polyline>
 	</svg>
-	<div class="text-sm">
+	<div class="text-xs">
 		<slot />
 	</div>
 </a>

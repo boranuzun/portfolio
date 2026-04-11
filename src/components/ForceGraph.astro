@@ -1,0 +1,469 @@
+---
+import type { GraphNode, GraphLink } from "@lib/graph";
+import { Maximize2, X } from "@lucide/astro";
+
+type Props = {
+	nodes: GraphNode[];
+	links: GraphLink[];
+	height?: number;
+	class?: string;
+};
+
+const { nodes, links, height = 420, class: className } = Astro.props;
+const graphData = JSON.stringify({ nodes, links });
+const uid = Math.random().toString(36).slice(2, 8);
+const modalId = `fg-modal-${uid}`;
+---
+
+<div class:list={["fg-wrapper", className]}>
+	<div
+		class="force-graph border-2"
+		data-graph={graphData}
+		style={`height: ${height}px; width: 100%;`}
+	>
+	</div>
+	<button class="fg-expand-btn" data-modal={modalId} aria-label="Expand graph">
+		<Maximize2 size={14} />
+	</button>
+</div>
+
+<dialog id={modalId} class="fg-modal">
+	<button class="fg-modal-close" aria-label="Close graph">
+		<X size={16} />
+	</button>
+	<div class="force-graph" data-graph={graphData} style="height: 100%; width: 100%;"></div>
+</dialog>
+
+<style>
+	/* ── Inline wrapper ──────────────────────────────────── */
+	.fg-wrapper {
+		position: relative;
+	}
+
+	.force-graph {
+		overflow: hidden;
+		border-radius: 0.25rem;
+		background: var(--color-canvas);
+	}
+
+	:global(.fg-label) {
+		transition:
+			transform 0.15s ease,
+			fill 0.15s ease;
+	}
+
+	/* ── Expand button ───────────────────────────────────── */
+	.fg-expand-btn {
+		position: absolute;
+		top: 8px;
+		right: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 26px;
+		height: 26px;
+		border-radius: 0.25rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface);
+		color: var(--color-fg-muted);
+		cursor: pointer;
+		opacity: 0;
+		transition:
+			opacity 0.15s,
+			color 0.15s,
+			border-color 0.15s;
+	}
+
+	.fg-wrapper:hover .fg-expand-btn {
+		opacity: 1;
+	}
+
+	.fg-expand-btn:hover {
+		color: var(--color-fg);
+		border-color: var(--color-fg-muted);
+	}
+
+	/* ── Modal ───────────────────────────────────────────── */
+	.fg-modal {
+		position: fixed;
+		inset: 0;
+		margin: auto;
+		width: min(90vw, 1100px);
+		height: 85vh;
+		padding: 0;
+		border: 1px solid var(--color-border);
+		border-radius: 0.25rem;
+		background: color-mix(in srgb, var(--color-canvas) 75%, transparent);
+		overflow: hidden;
+	}
+
+	.fg-modal .force-graph {
+		background: transparent;
+	}
+
+	.fg-modal-close {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 0.25rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface);
+		color: var(--color-fg-muted);
+		cursor: pointer;
+		transition:
+			color 0.15s,
+			border-color 0.15s;
+	}
+
+	.fg-modal-close:hover {
+		color: var(--color-fg);
+		border-color: var(--color-fg-muted);
+	}
+</style>
+
+<style is:global>
+	.fg-modal::backdrop {
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+	}
+</style>
+
+<script>
+	import {
+		forceSimulation,
+		forceManyBody,
+		forceLink,
+		forceCenter,
+		forceCollide,
+		forceX,
+		forceY,
+	} from "d3-force";
+	import { select } from "d3-selection";
+	import { zoom, zoomIdentity } from "d3-zoom";
+	import { drag } from "d3-drag";
+	import type { SimulationNodeDatum, SimulationLinkDatum } from "d3-force";
+
+	type NodeDatum = SimulationNodeDatum & {
+		id: string;
+		label: string;
+		type: "hub" | "leaf";
+		href?: string;
+	};
+
+	type LinkDatum = SimulationLinkDatum<NodeDatum>;
+
+	function getLabelWidth(label: string): number {
+		return label.length * 6.5;
+	}
+
+	function resolvedId(n: NodeDatum | string): string {
+		return typeof n === "string" ? n : n.id;
+	}
+
+	function initGraph(container: HTMLElement) {
+		const raw = container.getAttribute("data-graph");
+		if (!raw) return;
+		const data = JSON.parse(raw) as {
+			nodes: NodeDatum[];
+			links: { source: string; target: string }[];
+		};
+
+		const nodes: NodeDatum[] = data.nodes.map((n) => ({ ...n }));
+		const links: LinkDatum[] = data.links.map((l) => ({ ...l })) as LinkDatum[];
+
+		const ro = new ResizeObserver((entries) => {
+			const rect = entries[0]?.contentRect;
+			if (!rect || rect.width === 0) return;
+			ro.disconnect();
+			const width = rect.width;
+			const height = rect.height || 420;
+
+			// Pre-position all nodes near center to prevent explosion from (0,0)
+			nodes.forEach((n) => {
+				n.x = width / 2 + (Math.random() - 0.5) * 20;
+				n.y = height / 2 + (Math.random() - 0.5) * 20;
+			});
+
+			let pinnedNodeId: string | null = null;
+			let hoverTimeout: ReturnType<typeof setTimeout> | null = null;
+
+			// ── SVG root ──────────────────────────────────────────
+			const svg = select(container)
+				.append("svg")
+				.attr("width", "100%")
+				.attr("height", "100%")
+				.style("display", "block");
+
+			const g = svg.append("g");
+
+			// ── Zoom ─────────────────────────────────────────────
+			const zoomBehavior = zoom<SVGSVGElement, unknown>()
+				.scaleExtent([0.3, 3])
+				.on("zoom", (event) => g.attr("transform", event.transform));
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			svg.call(zoomBehavior as any);
+
+			svg.on("dblclick.zoom", () => {
+				svg
+					.transition()
+					.duration(300)
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					.call(zoomBehavior.transform as any, zoomIdentity);
+			});
+
+			// ── Simulation ────────────────────────────────────────
+			// TODO: wire d.weight into strength/collide when needed
+			const simulation = forceSimulation<NodeDatum>(nodes)
+				.alphaDecay(0.015)
+				.velocityDecay(0.65)
+				.force(
+					"charge",
+					forceManyBody<NodeDatum>().strength((d) => (d.type === "hub" ? -60 : -30)),
+				)
+				.force(
+					"link",
+					forceLink<NodeDatum, LinkDatum>(links)
+						.id((d) => d.id)
+						.distance(70),
+				)
+				.force("x", forceX(width / 2).strength(0.02))
+				.force("y", forceY(height / 2).strength(0.02))
+				.force("center", forceCenter(width / 2, height / 2).strength(0.01))
+				.force(
+					"collide",
+					forceCollide<NodeDatum>((d) =>
+						d.type === "hub" ? getLabelWidth(d.label) / 2 + 8 : getLabelWidth(d.label) / 2 + 2,
+					),
+				);
+
+			// ── Edges ─────────────────────────────────────────────
+			const edgeEls = g
+				.append("g")
+				.selectAll<SVGLineElement, LinkDatum>("line")
+				.data(links)
+				.join("line")
+				.style("stroke", "var(--color-border)")
+				.style("stroke-width", "1")
+				.style("opacity", "0.4");
+
+			// ── Nodes ─────────────────────────────────────────────
+			const nodeEls = g
+				.append("g")
+				.selectAll<SVGGElement, NodeDatum>("g")
+				.data(nodes)
+				.join("g")
+				.style("cursor", (d) => (d.href ? "pointer" : d.type === "hub" ? "grab" : "default"));
+
+			// Hub: pill (rect + text)
+			nodeEls
+				.filter((d) => d.type === "hub")
+				.each(function (d) {
+					const w = getLabelWidth(d.label) + 20;
+					const h = 22;
+					select(this)
+						.append("rect")
+						.attr("class", "fg-hub-rect")
+						.attr("width", w)
+						.attr("height", h)
+						.attr("x", -w / 2)
+						.attr("y", -h / 2)
+						.attr("rx", 4)
+						.style("fill", "var(--color-surface)")
+						.style("stroke", "var(--color-border)")
+						.style("stroke-width", "1.5");
+					select(this)
+						.append("text")
+						.attr("class", "fg-label")
+						.text(d.label)
+						.attr("text-anchor", "middle")
+						.attr("dy", "0.35em")
+						.style("font-size", "12px")
+						.style("font-weight", "600")
+						.style("fill", "var(--color-fg)")
+						.style("pointer-events", "none")
+						.style("user-select", "none");
+				});
+
+			// Leaf: transparent hit area + text
+			nodeEls
+				.filter((d) => d.type === "leaf")
+				.each(function (d) {
+					const w = getLabelWidth(d.label) + 16;
+					select(this)
+						.append("rect")
+						.attr("width", w)
+						.attr("height", 20)
+						.attr("x", -w / 2)
+						.attr("y", -10)
+						.style("fill", "transparent");
+					select(this)
+						.append("text")
+						.attr("class", "fg-label")
+						.text(d.label)
+						.attr("text-anchor", "middle")
+						.attr("dy", "0.35em")
+						.style("font-size", "12px")
+						.style("fill", "var(--color-fg-muted)")
+						.style("transform", "translateY(0)")
+						.style("pointer-events", "none")
+						.style("user-select", "none");
+				});
+
+			// ── Tick ─────────────────────────────────────────────
+			simulation.on("tick", () => {
+				edgeEls
+					.attr("x1", (l) => (l.source as NodeDatum).x ?? 0)
+					.attr("y1", (l) => (l.source as NodeDatum).y ?? 0)
+					.attr("x2", (l) => (l.target as NodeDatum).x ?? 0)
+					.attr("y2", (l) => (l.target as NodeDatum).y ?? 0);
+
+				nodeEls.attr("transform", (d) => `translate(${d.x ?? 0},${d.y ?? 0})`);
+			});
+
+			// ── Highlight helpers ─────────────────────────────────
+			function applyHighlight(d: NodeDatum) {
+				const neighbors = new Set<string>();
+				links.forEach((l) => {
+					const s = resolvedId(l.source as NodeDatum | string);
+					const t = resolvedId(l.target as NodeDatum | string);
+					if (s === d.id) neighbors.add(t);
+					if (t === d.id) neighbors.add(s);
+				});
+				nodeEls.style("opacity", (n) => (n.id === d.id || neighbors.has(n.id) ? "1" : "0.15"));
+				edgeEls.style("opacity", (l) => {
+					const s = resolvedId(l.source as NodeDatum | string);
+					const t = resolvedId(l.target as NodeDatum | string);
+					return s === d.id || t === d.id ? "1" : "0.05";
+				});
+				nodeEls
+					.filter((n) => n.id === d.id)
+					.select<SVGTextElement>(".fg-label")
+					.style("fill", "var(--color-fg-bright)")
+					.style("transform", (n) =>
+						n.href ? "translateY(-2px)" : n.type === "leaf" ? "translateY(0)" : null,
+					);
+				nodeEls
+					.filter((n) => n.id === d.id)
+					.select<SVGRectElement>(".fg-hub-rect")
+					.style("stroke", "var(--color-fg)");
+			}
+
+			function applyReset() {
+				nodeEls.style("opacity", "1");
+				edgeEls.style("opacity", "0.4");
+				nodeEls
+					.select<SVGTextElement>(".fg-label")
+					.style("fill", (d) => (d.type === "hub" ? "var(--color-fg)" : "var(--color-fg-muted)"))
+					.style("transform", (d) => (d.type === "leaf" ? "translateY(0)" : null));
+				nodeEls.select<SVGRectElement>(".fg-hub-rect").style("stroke", "var(--color-border)");
+			}
+
+			// ── Hover & Click ─────────────────────────────────────
+			nodeEls
+				.on("mouseenter", function (_event, d) {
+					if (hoverTimeout) {
+						clearTimeout(hoverTimeout);
+						hoverTimeout = null;
+					}
+					applyHighlight(d);
+				})
+				.on("mouseleave", function () {
+					hoverTimeout = setTimeout(() => {
+						hoverTimeout = null;
+						if (pinnedNodeId) {
+							const pinned = nodes.find((n) => n.id === pinnedNodeId);
+							if (pinned) applyHighlight(pinned);
+						} else {
+							applyReset();
+						}
+					}, 40);
+				})
+				.on("click", function (event, d) {
+					event.stopPropagation();
+					if (d.href) {
+						window.location.href = d.href;
+						return;
+					}
+					if (d.type === "leaf") return;
+					if (pinnedNodeId === d.id) {
+						pinnedNodeId = null;
+						applyReset();
+					} else {
+						pinnedNodeId = d.id;
+						applyHighlight(d);
+					}
+				});
+
+			svg.on("mouseleave", () => {
+				if (hoverTimeout) {
+					clearTimeout(hoverTimeout);
+					hoverTimeout = null;
+				}
+				if (pinnedNodeId) {
+					const pinned = nodes.find((n) => n.id === pinnedNodeId);
+					if (pinned) applyHighlight(pinned);
+				} else {
+					applyReset();
+				}
+			});
+
+			svg.on("click", () => {
+				pinnedNodeId = null;
+				applyReset();
+			});
+
+			// ── Drag ──────────────────────────────────────────────
+			const dragBehavior = drag<SVGGElement, NodeDatum>()
+				.on("start", (event, d) => {
+					event.sourceEvent.stopPropagation();
+					if (!event.active) simulation.alphaTarget(0.1).restart();
+					d.fx = d.x;
+					d.fy = d.y;
+				})
+				.on("drag", (event, d) => {
+					d.fx = event.x;
+					d.fy = event.y;
+				})
+				.on("end", (event, d) => {
+					if (!event.active) simulation.alphaTarget(0);
+					d.fx = null;
+					d.fy = null;
+				});
+
+			nodeEls.filter((d) => !d.href).call(dragBehavior);
+		});
+		ro.observe(container);
+	}
+
+	function setup() {
+		// Init all graph instances (inline + any open modals)
+		document.querySelectorAll<HTMLElement>(".force-graph").forEach(initGraph);
+
+		// ── Modal open/close ──────────────────────────────────
+		document.querySelectorAll<HTMLButtonElement>(".fg-expand-btn").forEach((btn) => {
+			const modalId = btn.getAttribute("data-modal");
+			if (!modalId) return;
+			const modal = document.getElementById(modalId) as HTMLDialogElement | null;
+			if (!modal) return;
+
+			btn.addEventListener("click", () => modal.showModal());
+
+			modal.querySelector(".fg-modal-close")?.addEventListener("click", () => modal.close());
+
+			// Click on backdrop (outside dialog box) closes it
+			modal.addEventListener("click", (e) => {
+				if (e.target === modal) modal.close();
+			});
+		});
+	}
+
+	document.addEventListener("astro:page-load", setup);
+</script>

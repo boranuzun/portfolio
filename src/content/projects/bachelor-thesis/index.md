@@ -21,7 +21,6 @@ technologies:
     "SOPS",
     "age",
   ]
-mermaid: true
 ---
 
 For my Bachelor's thesis, titled _"Conception et déploiement automatisé d'un Operating System as Code à l'aide de pratiques Infrastructure as Code"_, I took my manually configured homelab and completely rebuilt it as a fully automated, reproducible environment. I wanted to see if I could apply corporate Infrastructure as Code (IaC) and GitOps practices to a personal server setup to fix the headache of losing track of configurations over time.
