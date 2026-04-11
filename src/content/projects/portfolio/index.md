@@ -1,9 +1,9 @@
 ---
 title: "Portfolio Website"
-description: "Astro-based portfolio with a unified Cmd+K command palette for navigation, content search, and AI chat."
+description: "Astro-based portfolio with a Cmd+K command palette, D3 knowledge graph, and AI chatbot backend."
 date: "Mar 09 2026"
 repoURL: "https://github.com/boranuzun/portfolio"
-technologies: ["TypeScript", "Astro", "Tailwind CSS", "Cloudflare Workers", "Gemini AI"]
+technologies: ["TypeScript", "Astro", "Tailwind CSS", "D3", "Cloudflare Workers", "Gemini AI"]
 ---
 
 This is how I built my portfolio. I started with [Mark Horn's Astro Nano theme](https://astro.build/themes/details/astronano/) and heavily modified it — adding structured SEO data, a Mermaid diagram integration, and a UI redesign centered around a Cmd+K command palette.
@@ -96,6 +96,12 @@ Mermaid diagrams in fenced code blocks are rendered at build time using `rehype-
 ## Structured JSON-LD Data for SEO
 
 `src/lib/schema.ts` builds Schema.org-compliant objects for blog posts and projects. During the build, `Head.astro` calls these functions and feeds the output to `Schema.astro`, which injects the JSON-LD block into the HTML `<head>` for rich search result indexing.
+
+## D3 Knowledge Graph
+
+Each blog post page includes an embedded force-directed graph (`ForceGraph.astro`) that maps every blog post as a node and draws edges between posts that share tags. It gives a visual overview of which topics are related across the blog.
+
+The graph is rendered client-side from a data payload generated at build time — Astro collects all posts and their tags, serializes the node/link data into the page, and D3 takes over in the browser to lay out and animate the simulation.
 
 ## Content Layer API
 
