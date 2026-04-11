@@ -1,0 +1,36 @@
+---
+type Props = {
+	command: string;
+	cursor?: boolean;
+};
+
+const { command, cursor = false } = Astro.props;
+---
+
+<div class="text-[0.8rem]" role="presentation">
+	<span class="text-accent" aria-hidden="true">$</span>
+	<span> </span>
+	<span class="text-fg-bright">{command}</span>
+	{
+		cursor && (
+			<span class="cursor-blink text-accent" aria-hidden="true">
+				_
+			</span>
+		)
+	}
+</div>
+
+<style>
+	.cursor-blink {
+		animation: blink 1.2s step-end infinite;
+	}
+	@keyframes blink {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0;
+		}
+	}
+</style>

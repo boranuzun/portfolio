@@ -2,7 +2,7 @@
 	"categories": [
 		{
 			"category": "Languages",
-			"skills": ["HTML", "CSS", "JavaScript", "Python", "Java", "PHP"]
+			"skills": ["HTML", "CSS", "JavaScript", "TypeScript", "Python", "Java", "PHP"]
 		},
 		{
 			"category": "Frameworks",
@@ -22,7 +22,7 @@
 		},
 		{
 			"category": "Operating Systems",
-			"skills": ["Windows", "Linux (Debian/Ubuntu)", "macOS"]
+			"skills": ["Windows", "macOS", "Linux"]
 		}
 	]
 }

@@ -4,7 +4,6 @@ description: "Astro-based portfolio with a unified Cmd+K command palette for nav
 date: "Mar 09 2026"
 repoURL: "https://github.com/boranuzun/portfolio"
 technologies: ["TypeScript", "Astro", "Tailwind CSS", "Cloudflare Workers", "Gemini AI"]
-mermaid: true
 ---
 
 This is how I built my portfolio. I started with [Mark Horn's Astro Nano theme](https://astro.build/themes/details/astronano/) and heavily modified it — adding structured SEO data, a Mermaid diagram integration, and a UI redesign centered around a Cmd+K command palette.
@@ -92,7 +91,7 @@ Long-form content (blog posts, project pages) gets an auto-generated sticky TOC 
 
 ## Mermaid Diagrams
 
-A custom integration renders Mermaid diagrams from fenced code blocks in markdown. `MermaidSetup.astro` intercepts the blocks and converts them to SVG on the client side, keeping them functional across Astro's View Transitions and dark/light mode switches. The `mermaid: true` frontmatter flag enables it per-page.
+Mermaid diagrams in fenced code blocks are rendered at build time using `rehype-mermaid`. This generates static SVGs that ship without any client-side JavaScript. Dark mode support uses CSS filters to invert the diagram colors when the theme changes.
 
 ## Structured JSON-LD Data for SEO
 

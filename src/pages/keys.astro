@@ -1,13 +1,15 @@
 ---
 import Container from "@components/Container.astro";
-import PageLayout from "@layouts/PageLayout.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PromptLine from "@components/PromptLine.astro";
+import CommandBlock from "@components/CommandBlock.astro";
 import { KEYS } from "@consts";
 ---
 
-<PageLayout title="Keys" description="My public encryption keys.">
+<BaseLayout title="Keys" description="My public encryption keys.">
 	<Container>
 		<article class="space-y-6">
-			<h1 class="animate text-2xl font-semibold text-black dark:text-white">Keys</h1>
+			<h1 class="animate text-xl font-semibold text-black dark:text-white">Keys</h1>
 			<p class="animate text-sm opacity-60">Public keys for encrypting messages or files to me.</p>
 
 			<div
@@ -24,37 +26,27 @@ import { KEYS } from "@consts";
 				<div
 					class="space-y-4 overflow-hidden bg-neutral-50 p-5 font-mono text-xs leading-relaxed dark:bg-neutral-900"
 				>
-					<div class="text-black/70 dark:text-green-400/90">
-						<span class="text-black/40 dark:text-green-400/50">$</span>
-						<span class="text-black/50 dark:text-green-400/70">cat</span> ~/.age/key.txt
-					</div>
-					<div class="pl-4 break-all text-black/60 dark:text-green-300/80">{KEYS.AGE}</div>
+					<CommandBlock command="cat ~/.age/key.txt">
+						<div class="text-fg-bright text-xs leading-tight break-all">
+							{KEYS.AGE}
+						</div>
+					</CommandBlock>
 
-					<div class="text-black/70 dark:text-green-400/90">
-						<span class="text-black/40 dark:text-green-400/50">$</span>
-						<span class="text-black/50 dark:text-green-400/70">gpg</span> --fingerprint contact@boranuzun.ch
-					</div>
-					<div class="space-y-1 pl-4 text-black/60 dark:text-green-300/80">
-						<div>pub ed25519 2026-03-17 [SC] [expire : 2028-03-16]</div>
-						<div>{KEYS.GPG_FINGERPRINT}</div>
-					</div>
+					<CommandBlock command="gpg --fingerprint contact@boranuzun.ch">
+						<div class="space-y-1 text-xs leading-tight">
+							<div class="text-fg-muted">pub ed25519 2026-03-17 [SC] [expire : 2028-03-16]</div>
+							<div class="text-fg-bright">{KEYS.GPG_FINGERPRINT}</div>
+						</div>
+					</CommandBlock>
 
-					<div class="text-black/70 dark:text-green-400/90">
-						<span class="text-black/40 dark:text-green-400/50">$</span>
-						<span class="text-black/50 dark:text-green-400/70">gpg</span>
-						--armor --export contact@boranuzun.ch
-					</div>
-					<pre
-						class="rounded p-3 text-[10px] leading-tight break-all whitespace-pre-wrap text-black/75 dark:text-green-300/70">{KEYS.GPG}</pre>
+					<CommandBlock command="gpg --armor --export contact@boranuzun.ch">
+						<pre
+							class="text-fg-bright text-xs leading-tight break-all whitespace-pre-wrap">{KEYS.GPG}</pre>
+					</CommandBlock>
 
-					<div class="text-black/70 dark:text-green-400/90">
-						<span class="text-black/40 dark:text-green-400/50">$</span>
-						<span
-							class="cursor-blink inline-block bg-black/25 align-middle dark:bg-green-400/40"
-							style="width:0.6em;height:1.1em"></span>
-					</div>
+					<PromptLine command="" cursor={true} />
 				</div>
 			</div>
 		</article>
 	</Container>
-</PageLayout>
+</BaseLayout>

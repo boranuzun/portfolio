@@ -69,16 +69,11 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		max-width: 32rem;
 		border-radius: 0.5rem;
 		overflow: hidden;
-		font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+		font-family: var(--font-body);
 		font-size: 0.875rem;
-		background-color: #f5f5f5;
-		border: 1px solid #e0e0e0;
-		color: var(--color-terminal-light-text);
-	}
-	:global(html.dark) .cmd-modal {
-		background-color: #161616;
-		border-color: #2a2a2a;
-		color: var(--color-terminal-text);
+		background-color: var(--color-canvas);
+		border: 1px solid var(--color-border);
+		color: var(--color-fg);
 	}
 
 	@media (min-width: 640px) {
@@ -93,22 +88,16 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.75rem 1rem;
-		border-bottom: 1px solid #e0e0e0;
-	}
-	:global(html.dark) .cmd-header {
-		border-bottom-color: #2a2a2a;
+		border-bottom: 1px solid var(--color-border);
 	}
 	.cmd-header.hidden {
 		display: none;
 	}
 
 	.cmd-search-icon {
-		color: var(--color-terminal-light-accent);
+		color: var(--color-accent);
 		display: flex;
 		align-items: center;
-	}
-	:global(html.dark) .cmd-search-icon {
-		color: var(--color-terminal-accent);
 	}
 
 	.cmd-search-tag {
@@ -116,13 +105,9 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		font-weight: 600;
 		padding: 0.125rem 0.375rem;
 		border-radius: 0.25rem;
-		background-color: var(--color-terminal-light-accent);
-		color: #fff;
+		background-color: var(--color-surface);
+		color: var(--color-fg-bright);
 		flex-shrink: 0;
-	}
-	:global(html.dark) .cmd-search-tag {
-		background-color: var(--color-terminal-accent);
-		color: #000;
 	}
 	.cmd-search-tag.hidden {
 		display: none;
@@ -134,32 +119,22 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		outline: none;
 		font-family: inherit;
 		font-size: inherit;
-		color: var(--color-terminal-light-text);
+		color: var(--color-fg-bright);
 		border: none;
 		padding: 0;
 	}
 	.cmd-input::placeholder {
-		color: var(--color-terminal-light-text-secondary);
-	}
-	:global(html.dark) .cmd-input {
-		color: var(--color-terminal-text);
-	}
-	:global(html.dark) .cmd-input::placeholder {
-		color: var(--color-terminal-text-secondary);
+		color: var(--color-fg-muted);
 	}
 
 	.cmd-kbd {
 		font-size: 0.6875rem;
 		padding: 0.125rem 0.375rem;
 		border-radius: 0.25rem;
-		border: 1px solid #d0d0d0;
-		color: var(--color-terminal-light-text-secondary);
+		border: 1px solid var(--color-border);
+		color: var(--color-fg-dim);
 		font-family: inherit;
 		line-height: 1;
-	}
-	:global(html.dark) .cmd-kbd {
-		border-color: #3a3a3a;
-		color: var(--color-terminal-text-secondary);
 	}
 
 	.cmd-kbd-right {
@@ -175,28 +150,19 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		background: none;
 		border: none;
 		cursor: pointer;
-		color: var(--color-terminal-light-text-secondary);
+		color: var(--color-fg-muted);
 		display: flex;
 		align-items: center;
 		padding: 0;
 	}
-	:global(html.dark) .cmd-chat-back {
-		color: var(--color-terminal-text-secondary);
-	}
 	.cmd-chat-back:hover {
-		color: var(--color-terminal-light-text);
-	}
-	:global(html.dark) .cmd-chat-back:hover {
-		color: var(--color-terminal-text);
+		color: var(--color-fg);
 	}
 
 	.cmd-chat-title {
-		color: var(--color-terminal-light-accent);
+		color: var(--color-accent);
 		font-size: 0.8125rem;
 		font-weight: 600;
-	}
-	:global(html.dark) .cmd-chat-title {
-		color: var(--color-terminal-accent);
 	}
 
 	/* Results */
@@ -221,10 +187,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		padding: 0.375rem 0.5rem 0.25rem;
-		color: var(--color-terminal-light-accent);
-	}
-	:global(html.dark .cmd-group) {
-		color: var(--color-terminal-accent);
+		color: var(--color-accent);
 	}
 
 	/* Items */
@@ -236,11 +199,8 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		border-radius: 0.375rem;
 		cursor: pointer;
 		text-decoration: none;
-		color: var(--color-terminal-light-text);
+		color: var(--color-fg);
 		transition: background-color 0.1s;
-	}
-	:global(html.dark .cmd-item) {
-		color: var(--color-terminal-text);
 	}
 	:global(.cmd-item:hover),
 	:global(.cmd-item-active) {
@@ -260,11 +220,8 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 	:global(.cmd-icon) {
 		display: flex;
 		align-items: center;
-		color: var(--color-terminal-light-text-secondary);
+		color: var(--color-fg-muted);
 		flex-shrink: 0;
-	}
-	:global(html.dark .cmd-icon) {
-		color: var(--color-terminal-text-secondary);
 	}
 
 	:global(.cmd-item-name) {
@@ -273,14 +230,11 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 
 	:global(.cmd-item-desc) {
 		font-size: 0.75rem;
-		color: var(--color-terminal-light-text-secondary);
+		color: var(--color-fg-muted);
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		max-width: 100%;
-	}
-	:global(html.dark .cmd-item-desc) {
-		color: var(--color-terminal-text-secondary);
 	}
 
 	:global(.cmd-external),
@@ -288,32 +242,22 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		display: flex;
 		align-items: center;
 		margin-left: auto;
-		color: var(--color-terminal-light-text-secondary);
-	}
-	:global(html.dark .cmd-external),
-	:global(html.dark .cmd-item .cmd-kbd) {
-		color: var(--color-terminal-text-secondary);
+		color: var(--color-fg-muted);
 	}
 
 	:global(.cmd-item .cmd-kbd) {
 		font-size: 0.6875rem;
 		padding: 0.125rem 0.375rem;
 		border-radius: 0.25rem;
-		border: 1px solid #d0d0d0;
+		border: 1px solid var(--color-border);
 		font-family: inherit;
 		line-height: 1;
-	}
-	:global(html.dark .cmd-item .cmd-kbd) {
-		border-color: #3a3a3a;
 	}
 	:global(.cmd-no-results) {
 		padding: 1rem 0.5rem;
 		text-align: center;
 		font-size: 0.875rem;
-		color: var(--color-terminal-light-text-secondary);
-	}
-	:global(html.dark .cmd-no-results) {
-		color: var(--color-terminal-text-secondary);
+		color: var(--color-fg-muted);
 	}
 
 	/* Ask AI footer */
@@ -322,14 +266,10 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		align-items: center;
 		gap: 0.625rem;
 		padding: 0.625rem 1rem;
-		border-top: 1px solid #e0e0e0;
+		border-top: 1px solid var(--color-border);
 		cursor: pointer;
-		color: var(--color-terminal-light-text);
+		color: var(--color-fg);
 		transition: background-color 0.1s;
-	}
-	:global(html.dark) .cmd-ask-ai-footer {
-		border-top-color: #2a2a2a;
-		color: var(--color-terminal-text);
 	}
 	.cmd-ask-ai-footer:hover {
 		background-color: rgba(0, 0, 0, 0.04);
@@ -347,10 +287,7 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 	}
 
 	.cmd-ask-ai-footer svg {
-		color: var(--color-terminal-light-accent);
-	}
-	:global(html.dark) .cmd-ask-ai-footer svg {
-		color: var(--color-terminal-accent);
+		color: var(--color-accent);
 	}
 
 	.cmd-ask-ai-keys {
@@ -365,20 +302,15 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		align-items: center;
 		gap: 0.625rem;
 		padding: 0.625rem 1rem;
-		border-top: 1px solid #e0e0e0;
-	}
-	:global(html.dark) .cmd-chat-footer {
-		border-top-color: #2a2a2a;
+		border-top: 1px solid var(--color-border);
+		color: var(--color-fg);
 	}
 	.cmd-chat-footer.hidden {
 		display: none;
 	}
 
 	.cmd-chat-prompt {
-		color: var(--color-terminal-light-accent);
-	}
-	:global(html.dark) .cmd-chat-prompt {
-		color: var(--color-terminal-accent);
+		color: var(--color-accent);
 	}
 
 	/* Chat messages */
@@ -406,16 +338,10 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 	:global(.cmd-chat-msg-label) {
 		font-size: 0.6875rem;
 		margin-bottom: 0.25rem;
-		color: var(--color-terminal-light-text-secondary);
-	}
-	:global(html.dark .cmd-chat-msg-label) {
-		color: var(--color-terminal-text-secondary);
+		color: var(--color-fg-muted);
 	}
 	:global(.cmd-chat-msg-ai .cmd-chat-msg-label) {
-		color: var(--color-terminal-light-accent);
-	}
-	:global(html.dark .cmd-chat-msg-ai .cmd-chat-msg-label) {
-		color: var(--color-terminal-accent);
+		color: var(--color-accent);
 	}
 
 	:global(.cmd-chat-bubble-user) {
@@ -424,27 +350,20 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		border-radius: 0.5rem;
 		font-size: 0.875rem;
 		background-color: rgba(0, 0, 0, 0.04);
-		color: var(--color-terminal-light-text);
+		color: var(--color-fg);
 	}
 	:global(html.dark .cmd-chat-bubble-user) {
 		background-color: rgba(255, 255, 255, 0.06);
-		color: var(--color-terminal-text);
 	}
 
 	:global(.cmd-chat-bubble-ai) {
 		font-size: 0.875rem;
 		line-height: 1.5;
-		color: var(--color-terminal-light-text);
-	}
-	:global(html.dark .cmd-chat-bubble-ai) {
-		color: var(--color-terminal-text);
+		color: var(--color-fg);
 	}
 
 	:global(.cmd-chat-bubble-ai strong) {
-		color: var(--color-terminal-light-text);
-	}
-	:global(html.dark .cmd-chat-bubble-ai strong) {
-		color: var(--color-terminal-text);
+		color: var(--color-fg);
 	}
 
 	/* Chat markdown styles */
@@ -461,11 +380,8 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 	:global(.cmd-chat-link) {
 		text-decoration: underline;
 		text-underline-offset: 2px;
-		color: var(--color-terminal-light-accent);
+		color: var(--color-info);
 		transition: opacity 0.15s;
-	}
-	:global(html.dark .cmd-chat-link) {
-		color: var(--color-terminal-accent);
 	}
 	:global(.cmd-chat-link:hover) {
 		opacity: 0.8;
@@ -491,12 +407,8 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 	}
 	:global(.cmd-chat-table th),
 	:global(.cmd-chat-table td) {
-		border: 1px solid #e0e0e0;
+		border: 1px solid var(--color-border);
 		padding: 0.375rem 0.75rem;
-	}
-	:global(html.dark .cmd-chat-table th),
-	:global(html.dark .cmd-chat-table td) {
-		border-color: #2a2a2a;
 	}
 	:global(.cmd-chat-table th) {
 		font-weight: 600;
@@ -518,11 +430,8 @@ const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787"
 		width: 0.375rem;
 		height: 0.375rem;
 		border-radius: 50%;
-		background-color: var(--color-terminal-light-text-secondary);
+		background-color: var(--color-fg-muted);
 		animation: cmd-bounce 1.2s infinite;
-	}
-	:global(html.dark .cmd-chat-typing-dot) {
-		background-color: var(--color-terminal-text-secondary);
 	}
 
 	@keyframes cmd-bounce {

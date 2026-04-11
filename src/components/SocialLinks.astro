@@ -1,0 +1,58 @@
+---
+import { SOCIALS, SITE } from "@consts";
+
+type SocialLink = {
+	label: string;
+	href: string;
+	isEmail: boolean;
+};
+
+const links: SocialLink[] = [
+	...SOCIALS.map((s) => ({ label: s.NAME, href: s.HREF, isEmail: false })),
+	{ label: "email", href: "#", isEmail: true },
+];
+const emailCharCodes = Array.from(SITE.EMAIL).map((char) => char.charCodeAt(0));
+---
+
+<div class="flex flex-wrap items-center gap-x-1 gap-y-1 text-sm">
+	{
+		links.map((link, i) => (
+			<>
+				<a
+					href={link.href}
+					class="text-fg-muted hover:text-accent flex items-center no-underline transition-colors duration-150"
+					id={link.isEmail ? "social-email-link" : undefined}
+					data-email={link.isEmail ? emailCharCodes.join(",") : undefined}
+					aria-label={link.isEmail ? "Send me an email" : `Open ${link.label} profile`}
+				>
+					{link.label}
+				</a>
+				{i < links.length - 1 && (
+					<span class="text-border select-none" aria-hidden="true">
+						/
+					</span>
+				)}
+			</>
+		))
+	}
+</div>
+
+<script is:inline>
+	const emailLink = document.getElementById("social-email-link");
+	if (emailLink) {
+		emailLink.addEventListener("click", (event) => {
+			event.preventDefault();
+
+			const encodedEmail = emailLink.getAttribute("data-email");
+			if (!encodedEmail) return;
+
+			const email = encodedEmail
+				.split(",")
+				.map((code) => Number.parseInt(code, 10))
+				.map((code) => String.fromCharCode(code))
+				.join("");
+
+			window.location.href = `mailto:${email}`;
+		});
+	}
+</script>

@@ -1,8 +1,8 @@
 ---
 company: "Geneva University Hospitals (HUG)"
 role: "IT Support Level 1"
-dateStart: "01/08/2017"
-dateEnd: "01/08/2018"
+dateStart: "08/01/2017"
+dateEnd: "08/01/2018"
 ---
 
 During my internship at Geneva University Hospitals, I was responsible for providing Level 1 IT support to hospital staff. My key responsibilities included:

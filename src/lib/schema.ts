@@ -73,6 +73,8 @@ export function generateProjectSchema(
 			url: url.origin,
 		},
 		url: url.toString(),
-		programmingLanguage: project.technologies || ["TypeScript", "JavaScript"],
+		programmingLanguage: project.technologies?.length
+			? project.technologies
+			: ["TypeScript", "JavaScript"],
 	};
 }

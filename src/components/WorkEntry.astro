@@ -1,0 +1,32 @@
+---
+import Pill from "@components/Pill.astro";
+import { dateRange } from "@lib/utils";
+
+type Props = {
+	company: string;
+	role: string;
+	dateStart: Date;
+	dateEnd?: Date | string;
+	active?: boolean;
+};
+
+const { company, role, dateStart, dateEnd, active = false } = Astro.props;
+---
+
+<div class="flex gap-2 text-base">
+	<div>
+		<div class="space-x-2">
+			<span class="text-fg-bright">{role} <span class="text-fg-muted">@</span> {company}</span>
+			<span
+				><Pill
+					name={active ? "in progress" : "completed"}
+					class="border-tag/30 bg-tag/10 text-tag px-1 py-0 align-middle text-[0.6rem]"
+				/></span
+			>
+		</div>
+		<div class="text-fg-muted text-sm">{dateRange(dateStart, dateEnd)}</div>
+		<div>
+			<slot />
+		</div>
+	</div>
+</div>

@@ -1,0 +1,18 @@
+---
+type Props = {
+	command: string;
+};
+
+const { command } = Astro.props;
+---
+
+<section>
+	<div class="mb-2 text-sm" role="presentation">
+		<span class="text-accent" aria-hidden="true">$</span>
+		<span> </span>
+		<span class="prompt-command text-fg-bright">{command}</span>
+	</div>
+	<div class="command-block-output mb-9 ml-3 text-base leading-relaxed">
+		<slot />
+	</div>
+</section>

@@ -14,13 +14,17 @@ function toggleTheme(): void {
 }
 
 declare function playClickSound(): void;
-declare function toggleCRT(enabled: boolean): void;
+declare function toggleCRT(mode: string): void;
 
 function handleToggleCRT(): void {
-	const isEnabled = document.documentElement.classList.contains("crt");
-	const next = !isEnabled;
-	localStorage.setItem("crt", next ? "on" : "off");
-	toggleCRT(next);
+	const html = document.documentElement;
+	if (html.classList.contains("crt")) {
+		localStorage.setItem("crt", "off");
+		toggleCRT("off");
+	} else {
+		localStorage.removeItem("crt");
+		toggleCRT("on");
+	}
 	playClickSound();
 }
 
@@ -45,10 +49,11 @@ export function getSections(): Section[] {
 					handler: handleToggleCRT,
 					keepOpen: true,
 					keywords: ["crt", "scanlines", "overlay", "effect"],
-					badge: () =>
-						document.documentElement.classList.contains("crt")
+					badge: () => {
+						return document.documentElement.classList.contains("crt")
 							? { text: "on", variant: "green" as const }
-							: { text: "off", variant: "red" as const },
+							: { text: "off", variant: "red" as const };
+					},
 				},
 			],
 		},
@@ -91,6 +96,20 @@ export function getSections(): Section[] {
 					icon: icons.linkedin,
 					handler: () => openExternal("https://www.linkedin.com/in/boranuzun/"),
 					external: true,
+				},
+				{
+					name: "CV (English)",
+					icon: icons.fileText,
+					handler: () => openExternal("/cv/cv-eng.pdf"),
+					external: true,
+					keywords: ["resume", "curriculum", "vitae", "pdf"],
+				},
+				{
+					name: "CV (French)",
+					icon: icons.fileText,
+					handler: () => openExternal("/cv/cv.pdf"),
+					external: true,
+					keywords: ["resume", "curriculum", "vitae", "pdf", "français"],
 				},
 			],
 		},

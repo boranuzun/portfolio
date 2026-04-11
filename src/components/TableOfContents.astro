@@ -1,4 +1,6 @@
 ---
+import { ChevronRight, ChevronDown } from "@lucide/astro";
+
 type Props = {
 	headings: { depth: number; slug: string; text: string }[];
 };
@@ -9,30 +11,39 @@ const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 {
 	filteredHeadings.length > 0 && (
-		<nav id="toc-nav" aria-label="Table of contents">
-			<div class="comment-label">// toc</div>
-			<ul class="flex list-none flex-col gap-1.5 pl-0 text-sm">
-				{filteredHeadings.map((heading) => (
-					<li class:list={[heading.depth === 3 && "pl-3"]}>
-						<a
-							href={`#${heading.slug}`}
-							class="text-terminal-light-text-secondary hover:text-terminal-light-accent dark:text-terminal-text-secondary dark:hover:text-terminal-accent block py-0.5 no-underline transition-colors duration-200"
-						>
-							{heading.text}
-						</a>
-					</li>
-				))}
-			</ul>
-		</nav>
+		<details open class="group">
+			<summary class="text-fg-muted hover:text-accent mb-2 flex cursor-pointer list-none items-center gap-1 text-sm font-semibold transition-colors duration-200 select-none">
+				<span>Table of Contents</span>
+				<ChevronDown size={16} class="hidden group-open:block" />
+				<ChevronRight size={16} class="group-open:hidden" />
+			</summary>
+			<nav id="toc-nav" aria-label="Table of contents">
+				<ul class="flex list-none flex-col gap-0.5 pl-0 text-[0.75rem]">
+					{filteredHeadings.map((heading) => (
+						<li class:list={[heading.depth === 3 && "pl-3"]}>
+							<a
+								href={`#${heading.slug}`}
+								class="toc-link text-fg-muted block py-0.5 no-underline transition-colors duration-200"
+							>
+								{heading.text}
+							</a>
+						</li>
+					))}
+				</ul>
+			</nav>
+		</details>
 	)
 }
 
 <style>
-	:global(.toc-active) {
-		color: var(--color-terminal-light-accent) !important;
-		font-weight: 600;
+	summary::-webkit-details-marker {
+		display: none;
 	}
-	:global(html.dark .toc-active) {
-		color: var(--color-terminal-accent) !important;
+	.toc-link:hover,
+	:global(.toc-active) {
+		color: var(--color-accent) !important;
+	}
+	:global(.toc-active) {
+		font-weight: 600;
 	}
 </style>

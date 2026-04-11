@@ -2,7 +2,7 @@
 import "../styles/global.css";
 
 import { ClientRouter } from "astro:transitions";
-import Fonts from "./Fonts.astro";
+import { Font } from "astro:assets";
 import { SITE } from "@consts";
 import Schema from "@components/Schema.astro";
 import { generatePersonSchema } from "@lib/schema";
@@ -43,7 +43,8 @@ const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
 	media="(prefers-color-scheme: light)"
 />
 <meta name="generator" content={Astro.generator} />
-<Fonts />
+<Font cssVariable="--font-body" preload />
+<Font cssVariable="--font-mono" />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -86,14 +87,10 @@ const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
 	function init() {
 		preloadTheme();
 		preloadCRT();
-		onScroll();
 		animate();
 
 		const backToTop = document.getElementById("back-to-top");
 		backToTop?.addEventListener("click", (event) => scrollToTop(event));
-
-		const backToPrev = document.getElementById("back-to-prev");
-		backToPrev?.addEventListener("click", () => window.history.back());
 
 		const themeButton = document.getElementById("theme-button");
 
@@ -119,8 +116,6 @@ const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
 				toggleTheme(event.matches);
 			}
 		});
-
-		document.addEventListener("scroll", onScroll);
 	}
 
 	function animate() {
@@ -133,14 +128,6 @@ const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
 				element.classList.add("show");
 			}, index * staggerDelay);
 		});
-	}
-
-	function onScroll() {
-		if (window.scrollY > 0) {
-			document.documentElement.classList.add("scrolled");
-		} else {
-			document.documentElement.classList.remove("scrolled");
-		}
 	}
 
 	function scrollToTop(event) {
@@ -213,22 +200,22 @@ const connectSrc = `'self' ${chatbotUrl}${devExtra}`;
 		}
 	}
 
-	function toggleCRT(enabled) {
-		if (enabled) {
+	function toggleCRT(mode) {
+		document.documentElement.classList.remove("crt");
+		if (mode === "on") {
 			document.documentElement.classList.add("crt");
-		} else {
-			document.documentElement.classList.remove("crt");
 		}
 	}
 
 	function preloadCRT() {
-		const userCRT = localStorage.getItem("crt");
-		// Default to on; only disable if explicitly set to "off"
-		toggleCRT(userCRT !== "off");
+		if (localStorage.getItem("crt") !== "off") {
+			toggleCRT("on");
+		}
 	}
 
 	document.addEventListener("DOMContentLoaded", () => init());
 	document.addEventListener("astro:after-swap", () => init());
+
 	preloadTheme();
 	preloadCRT();
 </script>

@@ -1,8 +1,8 @@
 ---
 import { getCollection, render } from "astro:content";
-import PageLayout from "@layouts/PageLayout.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
 import Container from "@components/Container.astro";
-import { dateRange } from "@lib/utils";
+import WorkEntry from "@components/WorkEntry.astro";
 import { WORK } from "@consts";
 
 const collection = (await getCollection("work")).sort(
@@ -17,26 +17,30 @@ const work = await Promise.all(
 );
 ---
 
-<PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
+<BaseLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
 	<Container>
-		<div class="space-y-10">
-			<div class="animate text-2xl font-semibold text-black dark:text-white">Work</div>
-			<ul class="flex flex-col space-y-4">
+		<div class="space-y-6">
+			<h1 class="animate text-fg-bright text-xl font-semibold">Work</h1>
+			<div class="animate space-y-4">
 				{
-					work.map((entry) => (
-						<li class="animate">
-							<div class="font-semibold text-black dark:text-white">{entry.data.company}</div>
-							<div class="text-sm opacity-75">{entry.data.role}</div>
-							<div class="text-sm opacity-75">
-								{dateRange(entry.data.dateStart, entry.data.dateEnd)}
-							</div>
-							<article>
-								<entry.Content />
-							</article>
-						</li>
-					))
+					work.map((entry) => {
+						const isActive = entry.data.dateEnd === "Present";
+						return (
+							<WorkEntry
+								company={entry.data.company}
+								role={entry.data.role}
+								dateStart={entry.data.dateStart}
+								dateEnd={entry.data.dateEnd}
+								active={isActive}
+							>
+								<article class="text-fg-muted text-sm">
+									<entry.Content />
+								</article>
+							</WorkEntry>
+						);
+					})
 				}
-			</ul>
+			</div>
 		</div>
 	</Container>
-</PageLayout>
+</BaseLayout>

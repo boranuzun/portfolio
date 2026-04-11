@@ -2,7 +2,7 @@
 title: "How I manage my dotfiles"
 description: "How I use chezmoi to keep my shell and tools reproducible across macOS and Linux, with encrypted secrets and Go templates for machine-specific config."
 date: "Mar 15 2026"
-mermaid: true
+tags: ["dotfiles", "chezmoi"]
 ---
 
 I've set up new machines enough times to know the pattern: it goes fine until it doesn't. You think you remember your `.zshrc`, and you mostly do, and then three weeks later you're wondering why `fh` doesn't exist and slowly piecing together what you'd built.
@@ -101,7 +101,7 @@ I use OrbStack on my Mac but not on Linux. On Linux I prefer native package mana
 
 My `~/.zprofile` source file (`dot_zprofile.tmpl`) looks like this:
 
-```bash
+```go title=".zprofile"
 source ~/.profile
 
 {{- if eq .chezmoi.os "darwin" }}
@@ -135,7 +135,7 @@ The Zsh configuration is split into focused modules under `~/.config/zsh/`:
 
 The tools:
 
-- **[Starship](https://starship.rs/)** — cross-shell prompt with git status, language versions, and execution time. I picked this over Oh My Zsh themes because it works the same on every shell and every machine.
+- **[starship](https://starship.rs/)** — cross-shell prompt with git status, language versions, and execution time. I picked this over Oh My Zsh themes because it works the same on every shell and every machine.
 - **[zoxide](https://github.com/ajeetdsouza/zoxide)** — `cd` that learns. After a week it knows where you go and `z proj` beats `cd ~/Documents/Coding/Github/project` every time.
 - **[eza](https://github.com/eza-community/eza)** — `ls` with colour, icons, and git status
 - **[bat](https://github.com/sharkdp/bat)** — `cat` with syntax highlighting

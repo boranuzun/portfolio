@@ -3,29 +3,52 @@ import Container from "@components/Container.astro";
 import { SITE } from "@consts";
 import BackToTop from "@components/BackToTop.astro";
 
-const currentYear = new Date().getFullYear();
+const year = new Date().getFullYear();
 ---
 
 <footer class="animate">
 	<Container>
 		<div class="relative">
-			<div class="absolute -top-20 right-0">
+			<div id="back-to-top-wrapper" class="absolute -top-20 right-0 hidden">
 				<BackToTop />
 			</div>
 		</div>
-		<div class="mt-8 flex items-center justify-between">
-			<div class="flex items-center gap-2 text-sm tabular-nums">
-				<span>&copy; {currentYear}</span>
-				<span aria-hidden="true" class="opacity-50">&bull;</span>
-				<span class="text-terminal-light-text dark:text-terminal-text font-medium">{SITE.NAME}</span
+		<div class="bg-border/40 relative mb-3 h-[2px] w-full">
+			<div class="bg-fg-dim absolute top-0 right-0 h-full w-22"></div>
+		</div>
+		<div class="animate flex items-center justify-between gap-x-4 text-xs">
+			<div class="text-fg space-x-2 whitespace-nowrap">
+				<span> &copy; {year}</span>
+				<span class="text-fg-muted">&bull;</span>
+				<span> {SITE.NAME}</span>
+			</div>
+			<div class="flex shrink-0 items-center gap-x-2">
+				<a
+					href="/keys"
+					class="text-fg-muted hover:text-accent no-underline transition-colors duration-150"
+					>keys</a
+				>
+				<span class="text-fg-muted">&bull;</span>
+				<a
+					href="/privacy"
+					class="text-fg-muted hover:text-accent no-underline transition-colors duration-150"
+					>privacy</a
 				>
 			</div>
-			<a
-				href="/privacy"
-				class="text-terminal-light-text-secondary hover:text-terminal-light-accent dark:text-terminal-text-secondary dark:hover:text-terminal-accent text-sm font-medium underline decoration-current/20 underline-offset-4 transition-colors duration-200 ease-out hover:decoration-current/50"
-			>
-				Privacy Policy
-			</a>
 		</div>
 	</Container>
 </footer>
+
+<script>
+	const updateBackToTopVisibility = () => {
+		const wrapper = document.getElementById("back-to-top-wrapper");
+		if (!wrapper) return;
+
+		const pageExceedsViewport = document.documentElement.scrollHeight > window.innerHeight + 8;
+		wrapper.classList.toggle("hidden", !pageExceedsViewport);
+	};
+
+	updateBackToTopVisibility();
+	window.addEventListener("resize", updateBackToTopVisibility);
+	document.addEventListener("astro:page-load", updateBackToTopVisibility);
+</script>

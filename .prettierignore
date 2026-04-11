@@ -4,3 +4,6 @@ node_modules/
 public/
 pnpm-lock.yaml
 package-lock.json
+docs/superpowers/
+.superpowers
+.claude/

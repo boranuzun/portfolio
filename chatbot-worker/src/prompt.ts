@@ -56,7 +56,7 @@ Boran holds a Bachelor of Science HES-SO in Business Information Technology from
   - URL: https://github.com/heg-comptarial/comptarial
 
 ## Technical Skills
-- **Programming Languages:** HTML, CSS, JavaScript, Python, Java, PHP
+- **Programming Languages:** HTML, CSS, JavaScript, TypeScript, Python, Java, PHP
 - **Frameworks:** Astro, React/Next.js, Tailwind CSS, Spring Boot, Laravel
 - **Databases & Modeling:** PL/SQL, MySQL, MongoDB, UML, BPMN
 - **Networking & Security:** Cisco Networking, IT Security, TCP/IP, VLAN, Routing
