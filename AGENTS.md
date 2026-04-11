@@ -59,6 +59,10 @@ The chatbot backend is located in the `chatbot-worker/` directory.
 - Global styles are defined in `src/styles/global.css`.
 - Class merging uses `tailwind-merge` and `clsx` through a custom `cn()` helper in `src/lib/utils.ts`.
 
+### Font Loading
+
+Fonts are loaded via Astro's `fontProviders.fontsource()` with per-page injection — Astro only downloads a font on pages where it detects usage. **Do not add new `font-*` Tailwind classes to globally-rendered components** (layouts, `Header.astro`, `Footer.astro`) unless that font is already loaded everywhere. Doing so forces the font to download on every page. Use a system font stack via `style="font-family: ui-monospace, monospace"` when you need a monospace appearance in global components without incurring a font download.
+
 ### Path Aliases
 
 Configured in `tsconfig.json` — `@*` maps to `./src/*`. Examples: `@components/Header.astro`, `@lib/utils`, `@consts`.
