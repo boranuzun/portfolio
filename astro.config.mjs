@@ -16,6 +16,10 @@ import expressiveCode from "astro-expressive-code";
 
 export default defineConfig({
 	site: "https://boranuzun.ch/",
+	prefetch: {
+		prefetchAll: true,
+		defaultStrategy: "viewport",
+	},
 	integrations: [
 		expressiveCode({
 			themes: ["vitesse-light", "vitesse-dark"],
