@@ -211,3 +211,11 @@ html.dark svg[id^="mermaid"] {
 		@apply translate-y-0 opacity-100;
 	}
 }
+
+/* View Transitions — smooth the title morph animation */
+@media (prefers-reduced-motion: no-preference) {
+	::view-transition-group(*) {
+		animation-duration: 350ms;
+		animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	}
+}

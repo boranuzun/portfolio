@@ -9,6 +9,7 @@ import Schema from "@components/Schema.astro";
 import { generateBlogPostingSchema } from "@lib/schema";
 import { readingTime, formatDate, isSameDay } from "@lib/utils";
 import ForceGraph from "@components/ForceGraph.astro";
+import Pill from "@components/Pill.astro";
 import { buildBlogGraph } from "@lib/graph";
 
 export async function getStaticPaths() {
@@ -53,7 +54,7 @@ const { nodes: postNodes, links: postLinks } = buildBlogGraph([post]);
 				</div>
 			</aside>
 
-			<div class="animate">
+			<div>
 				<div class="mb-10 space-y-1">
 					<div class="text-fg-muted flex items-center gap-1.5 text-sm">
 						<time datetime={post.data.date.toISOString()}>
@@ -70,16 +71,17 @@ const { nodes: postNodes, links: postLinks } = buildBlogGraph([post]);
 							</div>
 						)
 					}
-					<h1 class="text-fg-bright text-3xl font-semibold">
+					<h1
+						transition:name={`post-title-${post.id}`}
+						class="text-fg-bright text-3xl font-semibold"
+					>
 						{post.data.title}
 					</h1>
 					{
 						post.data.tags && post.data.tags.length > 0 && (
-							<div class="flex flex-wrap gap-1.5 pt-1">
+							<div transition:name={`post-tags-${post.id}`} class="flex flex-wrap gap-1.5 pt-1">
 								{post.data.tags.map((tag) => (
-									<span class="bg-surface border-border text-fg-muted rounded border px-1.5 py-0.5 font-mono text-xs">
-										{tag}
-									</span>
+									<Pill name={tag} class="border-border bg-surface text-fg-muter px-1 py-0.5" />
 								))}
 							</div>
 						)

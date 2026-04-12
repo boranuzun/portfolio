@@ -1,8 +1,8 @@
 ---
-import { type CollectionEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Container from "@components/Container.astro";
-import ArrowCard from "@components/ArrowCard.astro";
+import BlogPosts from "@components/BlogPosts.astro";
 import { BLOG } from "@consts";
 import { getPublishedEntries } from "@lib/collections";
 
@@ -27,16 +27,18 @@ const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
 <BaseLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
 	<Container>
 		<div class="space-y-6">
-			<h1 class="animate text-fg-bright text-xl font-semibold">Posts</h1>
+			<h1 class="text-fg-bright text-xl font-semibold">Posts</h1>
+
 			{
-				years.map((year) => (
-					<section class="animate space-y-2">
-						<h2 class="text-fg-bright text-[0.85rem] font-semibold">{year}</h2>
-						<div>
-							{posts[year].map((post) => (
-								<ArrowCard entry={post} class="py-4" />
-							))}
+				years.map((year, i) => (
+					<section class={i > 0 ? "mt-6" : undefined}>
+						<div class="mb-2 flex items-center gap-3">
+							<span class="text-fg-dim font-mono text-xs">{year}</span>
+							<hr class="border-border/40 flex-1" />
 						</div>
+						{posts[year].map((post) => (
+							<BlogPosts entry={post} />
+						))}
 					</section>
 				))
 			}
