@@ -15,6 +15,7 @@ const { href, external, underline = true, class: className, ...rest } = Astro.pr
 	href={href}
 	target={external ? "_blank" : "_self"}
 	rel={external ? "noopener noreferrer" : undefined}
+	data-astro-prefetch={external ? "hover" : undefined}
 	class={cn(
 		"inline-block transition-colors duration-300 ease-in-out",
 		"text-fg-muted hover:text-accent",

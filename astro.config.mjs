@@ -16,6 +16,7 @@ import expressiveCode from "astro-expressive-code";
 
 export default defineConfig({
 	site: "https://boranuzun.ch/",
+	trailingSlash: "never",
 	prefetch: {
 		prefetchAll: true,
 		defaultStrategy: "viewport",
