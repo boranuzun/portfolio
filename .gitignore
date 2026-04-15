@@ -21,9 +21,9 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# Cloudflare Workers
-chatbot-worker/.wrangler/
-chatbot-worker/.dev.vars
+# Cloudflare
+.wrangler/
+.dev.vars
 
 # Node compile cache
 node-compile-cache/

@@ -120,6 +120,30 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 		});
 	} catch (error: unknown) {
 		console.error("Error in chat function:", error);
+		const message = error instanceof Error ? error.message : String(error);
+		if (
+			message.includes("503") ||
+			message.toLowerCase().includes("overloaded") ||
+			message.toLowerCase().includes("unavailable")
+		) {
+			return new Response(
+				JSON.stringify({
+					error:
+						"The AI model is currently experiencing high demand. Please try again in a moment.",
+				}),
+				{ status: 503, headers: { "Content-Type": "application/json" } },
+			);
+		}
+		if (
+			message.includes("429") ||
+			message.toLowerCase().includes("quota") ||
+			message.toLowerCase().includes("rate limit")
+		) {
+			return new Response(
+				JSON.stringify({ error: "Rate limit reached. Please wait a moment before trying again." }),
+				{ status: 429, headers: { "Content-Type": "application/json" } },
+			);
+		}
 		return new Response(
 			JSON.stringify({ error: "Something went wrong. Please try again later." }),
 			{ status: 500, headers: { "Content-Type": "application/json" } },

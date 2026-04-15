@@ -71,6 +71,7 @@ describe("Chat Pages Function", () => {
 	});
 
 	it("should return generic error message on internal failure", async () => {
+		const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 		const request = new Request("https://boranuzun.ch/api/chat", {
 			method: "POST",
 			body: JSON.stringify({ message: "Hello" }),
@@ -81,6 +82,7 @@ describe("Chat Pages Function", () => {
 		const data = (await response.json()) as { error: string };
 		expect(data.error).not.toContain("GEMINI_API_KEY");
 		expect(data.error).toBe("Something went wrong. Please try again later.");
+		consoleSpy.mockRestore();
 	});
 
 	it("should stream response text", async () => {

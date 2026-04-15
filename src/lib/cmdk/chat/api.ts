@@ -16,7 +16,13 @@ export async function streamChatResponse(
 			signal: timeoutController.signal,
 		});
 
-		if (!response.ok) throw new Error("Network response was not ok");
+		if (!response.ok) {
+			const body = await response.json().catch(() => null);
+			const message =
+				(body as { error?: string } | null)?.error ??
+				"Something went wrong. Please try again later.";
+			throw new Error(message);
+		}
 		return response;
 	} catch (error) {
 		if ((error as Error).name === "AbortError") {

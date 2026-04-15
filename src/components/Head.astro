@@ -23,7 +23,7 @@ const { title, description, image = "/og-image.webp" } = Astro.props;
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta
 	http-equiv="Content-Security-Policy"
-	content={`default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';`}
+	content={`default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://cloudflareinsights.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';`}
 />
 <link
 	rel="icon"
