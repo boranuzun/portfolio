@@ -4,6 +4,7 @@ node_modules/
 public/
 pnpm-lock.yaml
 package-lock.json
+worker-configuration.d.ts
 docs/superpowers/
 .superpowers
 .claude/

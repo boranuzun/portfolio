@@ -1,12 +1,12 @@
 ---
-const chatbotUrl = import.meta.env.PUBLIC_CHATBOT_URL || "http://127.0.0.1:8787";
+
 ---
 
 <div
 	id="cmd-palette"
 	class="fixed inset-0 z-100 hidden items-start justify-center px-3 pt-[10vh] sm:px-4 sm:pt-[20vh]"
 	style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);"
-	data-api-url={chatbotUrl}
+	data-api-url="/api/chat"
 	transition:persist
 >
 	<div class="cmd-modal">

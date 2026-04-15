@@ -6,7 +6,15 @@ import prettierConfig from "eslint-config-prettier";
 /** @type {import("eslint").FlatConfig[]} */
 export default [
 	{
-		ignores: [".vscode/", "dist/", "node_modules/", "public/", ".astro/", "docs/"],
+		ignores: [
+			".vscode/",
+			"dist/",
+			"node_modules/",
+			"public/",
+			".astro/",
+			"docs/",
+			"worker-configuration.d.ts",
+		],
 	},
 	js.configs.recommended,
 	...tseslint.configs.recommended,

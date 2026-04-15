@@ -46,34 +46,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run site tests
+      - name: Run tests
         run: npm run test:site
-
-  test-chatbot:
-    name: Test Chatbot Worker
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: "npm"
-
-      - name: Install root dependencies
-        run: npm ci
-
-      - name: Install worker dependencies
-        run: cd chatbot-worker && npm ci
-
-      - name: Run chatbot tests
-        run: npm run test:chatbot
 
   build:
     name: Build Site
-    needs: [lint-and-check, test-site, test-chatbot]
+    needs: [lint-and-check, test-site]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -102,4 +80,4 @@ jobs:
       - name: Build project
         run: npm run build
         env:
-          PUBLIC_CHATBOT_URL: ${{ vars.PUBLIC_CHATBOT_URL }}
+          PUBLIC_COMMIT_SHA: ${{ github.sha }}
