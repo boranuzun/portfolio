@@ -3,13 +3,13 @@ import Container from "@components/Container.astro";
 import { Command, Sun, Moon } from "@lucide/astro";
 import { SITE } from "@consts";
 
-const path = `/${Astro.url.pathname.split("/")[1]}`;
+const path = `/${Astro.url.pathname.split("/")[1]}/`;
 
 const navLinks = [
 	// { href: "/", label: "index" },
-	{ href: "/work", label: "work" },
-	{ href: "/projects", label: "projects" },
-	{ href: "/blog", label: "blog" },
+	{ href: "/work/", label: "work" },
+	{ href: "/projects/", label: "projects" },
+	{ href: "/blog/", label: "blog" },
 	// { href: "/keys", label: "keys" },
 ];
 ---

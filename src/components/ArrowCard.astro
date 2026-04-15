@@ -10,7 +10,7 @@ type Props = {
 };
 
 const { entry, class: className, showMeta = true } = Astro.props;
-const href = `/${entry.collection}/${entry.id}`;
+const href = `/${entry.collection}/${entry.id}/`;
 const tags = "tags" in entry.data ? entry.data.tags : undefined;
 ---
 

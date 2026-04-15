@@ -33,7 +33,9 @@ const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
 				years.map((year, i) => (
 					<section class={i > 0 ? "mt-6" : undefined}>
 						<div class="mb-2 flex items-center gap-3">
-							<span class="text-fg-dim font-mono text-xs">{year}</span>
+							<span class="text-fg-dim font-mono text-xs" aria-hidden="true">
+								{year}
+							</span>
 							<hr class="border-border/40 flex-1" />
 						</div>
 						{posts[year].map((post) => (
