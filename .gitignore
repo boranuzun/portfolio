@@ -27,3 +27,6 @@ pnpm-debug.log*
 
 # Node compile cache
 node-compile-cache/
+
+# Git worktrees
+.worktrees/
