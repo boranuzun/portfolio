@@ -1,6 +1,6 @@
 # Boran Uzun — Portfolio
 
-Personal portfolio and blog built with Astro 6, TypeScript, and Tailwind CSS 4. Includes a blog, projects showcase, work experience timeline, an AI-powered chatbot, an interactive D3 knowledge graph, a command palette, RSS feed, sitemap, and static CV redirects.
+Personal portfolio and blog built with Astro 6, TypeScript, and Tailwind CSS 4. Includes a blog, projects showcase, work experience timeline, an AI-powered chatbot, an Obsidian-style D3 knowledge graph, a command palette, RSS feed, sitemap, and static CV redirects.
 
 Live site: **https://boranuzun.ch/**
 
@@ -33,14 +33,14 @@ Live site: **https://boranuzun.ch/**
 - Full MDX support with Mermaid diagram rendering and expressive code blocks (Vitesse theme)
 - AI-powered chatbot backed by Google Gemini and deployed as a Cloudflare Worker with streaming responses
 - Cloudflare AI Gateway integration for response caching and cost reduction
-- Interactive D3 force-directed knowledge graph linking blog posts by shared tags
+- Obsidian-style D3 force graph on every blog post — sidebar local graph + expandable full-graph modal, with post-to-post edges via shared tags and explicit markdown links, and a collapsible backlinks panel
 - Command palette (`Ctrl+K` / `Cmd+K`) for fast keyboard-driven navigation
 - CRT overlay visual effect for the terminal aesthetic
 - RSS feed aggregating both blog posts and projects
 - Auto-generated sitemap and `robots.txt`
 - PGP public key page and AGE public key page
 - Dark/light mode with system preference detection
-- Deployed automatically to GitHub Pages via GitHub Actions
+- Deployed automatically to Cloudflare Pages via GitHub Actions
 
 ---
 
@@ -67,7 +67,7 @@ Live site: **https://boranuzun.ch/**
 | **Linting**            | ESLint 9 (flat config, Astro + TS + a11y rules)                  |
 | **Formatting**         | Prettier (Astro + Tailwind plugins)                              |
 | **Git hooks**          | Lefthook                                                         |
-| **CI/CD**              | GitHub Actions → GitHub Pages                                    |
+| **CI/CD**              | GitHub Actions → Cloudflare Pages                                |
 
 ---
 
@@ -166,7 +166,7 @@ portfolio/
 │   │   ├── __tests__/      # Vitest unit tests
 │   │   ├── cmdk/           # Command palette implementation (actions, icons, renderer, state)
 │   │   ├── collections.ts  # Helper to fetch only published (non-draft) entries
-│   │   ├── graph.ts        # D3 graph data builder: maps blog posts → tag hub nodes
+│   │   ├── graph.ts        # D3 graph data builder: post-to-post edges via shared tags and explicit markdown links
 │   │   ├── schema.ts       # JSON-LD structured data builders (Person, Article, etc.)
 │   │   ├── schema.types.ts # TypeScript types for schema objects
 │   │   └── utils.ts        # cn(), formatDate(), readingTime(), dateRange()
@@ -228,7 +228,10 @@ Handles all `<head>` metadata including Open Graph tags, canonical URLs, JSON-LD
 A full-featured keyboard-driven command palette (opened with `Ctrl+K` / `Cmd+K`). It fetches the `search-index.json` endpoint and uses the `src/lib/cmdk/` module for actions, keyboard navigation, and rendering. Supports navigating to pages, copying links, and toggling dark mode.
 
 **`ForceGraph.astro`**
-Renders an interactive D3 v7 force-directed graph on the blog index page. Nodes represent blog posts (leaf) and tags (hub). Posts sharing a tag are visually linked. Clicking a post node navigates to it. The graph data is built server-side by `src/lib/graph.ts`.
+Renders an interactive D3 v7 force-directed graph on each blog post page. Two modes: a compact sidebar graph showing the depth-1 neighbourhood of the current post, and a full-graph modal (opened via the expand button). Post nodes are circle-shaped and weight-scaled; edges distinguish shared-tag connections (thin) from explicit markdown links (thicker). Hover reveals the node label; double-click resets the viewport. Graph data is built server-side by `src/lib/graph.ts` and serialised as inline JSON.
+
+**`BacklinksPanel.astro`**
+Collapsible sidebar panel (matching the `TableOfContents.astro` `<details>` pattern) listing posts that link to the current post — either via shared tags or explicit markdown links. Only rendered when backlinks exist.
 
 **`CRTOverlay.astro`**
 Injects a CSS-based CRT scanline and flicker overlay for the terminal aesthetic, togglable by the user.
@@ -296,11 +299,19 @@ Create a `.md` or `.mdx` file. The filename becomes the URL slug.
 title: "My Post Title"
 description: "A short description shown in listings and meta tags."
 date: 2025-06-15
-tags: ["devops", "homelab"] # optional — used in the D3 knowledge graph
+tags: ["devops", "homelab"] # optional — creates tag-based graph connections to posts with the same tags
 draft: false # set to true to hide from all listings
 ---
 Your Markdown content here.
 ```
+
+To create explicit graph connections between posts, use standard markdown links to other blog posts:
+
+```md
+See [my other post](/blog/other-post/) for more context.
+```
+
+The build-time graph parser (`src/lib/graph.ts`) scans each post body for `/blog/<slug>` patterns and creates directed "explicit link" edges in the knowledge graph, which are styled differently from tag-based edges.
 
 MDX files can import and use Astro/React components inline.
 
@@ -449,6 +460,7 @@ npm run test:site
 
 Currently covers:
 
+- `graph.test.ts` — Knowledge graph builders (`parseExplicitLinks`, `buildLocalGraph`, `buildFullGraph`, `computeBacklinks`)
 - `markdown.test.ts` — Markdown utility helpers
 - `schema.test.ts` — JSON-LD schema generation
 
@@ -520,9 +532,9 @@ A `pre-commit` hook is configured via `lefthook.yml`. It automatically formats a
 
 ## Deployment
 
-### GitHub Pages (Production)
+### Cloudflare Pages (Production)
 
-The live site deploys to GitHub Pages automatically. See [CI/CD Pipeline](#cicd-pipeline) below for the full workflow.
+The live site deploys to Cloudflare Pages automatically. See [CI/CD Pipeline](#cicd-pipeline) below for the full workflow.
 
 ### Manual Build and Deploy
 
@@ -589,13 +601,12 @@ Runs four parallel jobs:
 
 The build job uses the `PUBLIC_CHATBOT_URL` repository variable (`vars.PUBLIC_CHATBOT_URL`).
 
-### `deploy.yml` — Deploy to GitHub Pages
+### `deploy.yml` — Deploy to Cloudflare Pages
 
 Triggers when the `Continuous Integration` workflow completes successfully on `main` (or via manual dispatch).
 
 1. Builds the site (same steps as `ci.yml` build job, including Playwright cache)
-2. Uploads `dist/` as a GitHub Pages artifact
-3. Deploys to GitHub Pages
+2. Deploys `dist/` to Cloudflare Pages via `cloudflare/wrangler-action`
 
 The deployment URL is shown in the workflow run summary.
 
